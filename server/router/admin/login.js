@@ -29,6 +29,7 @@ module.exports = app => {
                 message:'登录成功',
                 data:{
                     userID:user._id,
+                    username:user.username,
                     token:token
                 }
             })

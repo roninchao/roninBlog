@@ -44,6 +44,9 @@ export default {
             isKeep:false,
         }
     },
+    created(){
+        this.autofill()
+    },
     methods:{
         //清除密码缓存
         clearDetails(){
@@ -52,6 +55,17 @@ export default {
         //记住密码
         setKeep(){
             this.isKeep = !this.isKeep
+        },
+        //自动填写表单
+        autofill(){
+            let username = this.$cookie.get('username');
+            let password = this.$cookie.get('password');
+            if(!(username==undefined)){
+                this.form.username=username
+            }
+            if(!(password==undefined)){
+                this.form.password=password
+            }
         },
         //提交表单
         async login(){
@@ -69,12 +83,14 @@ export default {
                 type:'warning'
             })
             if(this.isKeep){
-                this.$cookie.set('password')
+                this.$cookie.set('username', this.form.username)
+                this.$cookie.set('password', this.form.password)
             }
             let res = await this.$http.post('/login', this.form)
             if(res.data.code == 0){
-                this.$cookie.set('userID',res.data.data.userID)
-                this.$cookie.set('token',res.data.data.token)
+                this.$cookie.set('userID', res.data.data.userID)
+                this.$cookie.set('username', res.data.data.username)
+                this.$cookie.set('token', res.data.data.token)
                 this.$router.push('/admin')
             }
         },

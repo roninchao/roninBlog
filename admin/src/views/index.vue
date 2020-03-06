@@ -21,8 +21,8 @@
                     <el-dropdown trigger="click" @command="handleClick">
                         <el-button type="info" class="buttons">
                             <div class="flex_box_ad">
-                                <el-avatar size="large" src="/static/images/avtar.png"></el-avatar>
-                                {{username}}
+                                <el-avatar size="large" src="@/static/images/avtar.png"></el-avatar>
+                                {{$cookie.get('username') ? $cookie.get('username') : ''}}
                             </div>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
@@ -69,6 +69,7 @@
                     // 退出登录
                     this.$cookie.remove('userId')
                     this.$cookie.remove('token')
+                    this.$cookie.remove('username')
                     this.$message({
                         type:'success',
                         message:'已退出登录！'

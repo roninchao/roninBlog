@@ -8,7 +8,7 @@
                 </el-input>
             </div>
             <div class="item">
-                <el-button type="primary" @click="openUserDialog">添加用户</el-button>
+                <el-button type="primary" @click="openUserDialog(1)">添加用户</el-button>
                 <el-button type="danger">删除用户</el-button>
             </div>
         </div>
@@ -37,15 +37,22 @@
                 label="操作"
                 width="300">
                     <template slot-scope="scope">
-                        <!-- <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button> -->
-                        <el-button type="primary" size="small">编辑</el-button>
-                        <el-button type="danger" size="small">删除</el-button>
+                        <el-button type="primary" size="small" @click="editUser(scope.row)">编辑</el-button>
+                        <el-button type="danger" size="small" @click="removeUser(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
+            <el-pagination
+            background
+            layout="prev, pager, next"
+            :page-size="100"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :total="1000">
+            </el-pagination>
         </div>
         <!-- 弹框 -->
-        <el-dialog title="添加用户" :visible.sync="dialogFormVisible" @close="closeUserDialog">
+        <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" @close="closeUserDialog">
             <el-form :model="userInfo">
                 <el-form-item label="用户名" :label-width="formLabelWidth" >
                     <el-input v-model="userInfo.username" 
@@ -71,7 +78,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addUser">确 定</el-button>
+                <el-button type="primary" @click="addUser()">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -89,7 +96,10 @@ export default {
             },
             dialogFormVisible:false,
             search:'',
-            formLabelWidth:'80px'
+            formLabelWidth:'80px',
+            dialogTitle:'',
+            isAdd:1,
+            editUserID:''
         }
     },
     created(){
@@ -97,7 +107,14 @@ export default {
     },
     methods:{
         // 开启用户弹框
-        openUserDialog(){
+        openUserDialog(e){
+            if(e == 1){
+                this.dialogTitle = '添加用户'
+                this.isAdd = e
+            }else if(e == 2){
+                this.dialogTitle = '编辑用户'
+                this.isAdd = e
+            }
             this.dialogFormVisible = true
         },
         //关闭用户弹框
@@ -118,7 +135,9 @@ export default {
             });
             this.userList = data.data.data
         },
-        // 添加用户
+        handleSizeChange(){},
+        handleCurrentChange(){},
+        // 确认提交用户
         async addUser(){
             if(this.userInfo.username == '') return this.$message({
                 message:'请输入用户名',
@@ -138,11 +157,53 @@ export default {
                 type:'warning'
             })
             console.log(this.userInfo)
-            let data = await this.$http.post('/users', this.userInfo)
-            this.$message({
-                message:'添加成功',
-                type:'success'
-            })
+            //添加用户
+            if(this.isAdd == 1){
+                let data = await this.$http.post('/users', this.userInfo)
+                this.$message({
+                    message:'添加成功',
+                    type:'success'
+                })
+            }else if(this.isAdd == 2){
+                //编辑用户
+                let res = await this.$http.put(`/users/${this.editUserID}`, this.userInfo)
+                this.$message({
+                    message:res.data.message,
+                    type:'success'
+                })
+            }
+            this.getUserList()
+            this.dialogFormVisible = false
+        },
+        //编辑用户
+        async editUser(e){
+            this.openUserDialog(2)
+            let {_id} = e
+            this.editUserID = _id
+            let res = await this.$http.get(`/users/${_id}`)
+            if(res.data.code == 0) {
+                this.userInfo.username = res.data.data.username
+                this.userInfo.password = res.data.data.password
+                this.userInfo.auth = res.data.data.auth
+            }
+        },
+        //删除用户
+        removeUser(e){
+            let {_id, username} = e
+            this.$confirm(`此操作将永久删除《${username}》 是否继续?`, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+                }).then(() => {
+                let res = this.$http.delete(`/users/${_id}`)
+                this.getUserList()
+                if(res.data.code == 0){
+                    this.$message({
+                        message:res.data.message,
+                        type:'success'
+                    })
+                }
+            });
         }
     }
 }
@@ -160,5 +221,14 @@ export default {
         justify-content: space-between;
         padding: 15px;
         margin-bottom: 10px;
+    }
+    .usersInfo-bottom{
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .el-pagination{
+            margin: 10px 0;
+        }
     }
 </style>
