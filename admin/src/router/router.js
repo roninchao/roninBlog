@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import jsCookie from 'js-cookie'
 Vue.use(Router)
 
 const router =  new Router({
@@ -16,14 +17,21 @@ const router =  new Router({
                 requireAuth:true
             },
             component:() => import('@/views/index'),
+            children:[
+                {
+                    path:'usersManage',
+                    name:'usersManage',
+                    component:() => import('@/views/childPages/usersManage/usersInfo')
+                }
+            ]
         }
     ]
 })
-// router.beforeEach((to, from, next) => {
-//     if(to.meta.requireAuth && !localStorage.token){
-//         router.push('/loginAdmin')
-//     }else{
-//         next()
-//     }
-// })
+router.beforeEach((to, from, next) => {
+    if(to.meta.requireAuth && !jsCookie.get('token')){
+        router.push('/loginAdmin')
+    }else{
+        next()
+    }
+})
 export default router

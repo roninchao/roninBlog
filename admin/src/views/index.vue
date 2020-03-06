@@ -5,10 +5,10 @@
             <div class="leftSidebarBox" :class="isCollapse? 'collapse' : '' ">
                 <!-- 顶部 -->
                 <div class="leftBox">
-                    管理系统
+                    roninBlog后台管理
                 </div>
                 <div class="scrollBox">
-                    <sidebar></sidebar>
+                    <md-sidebar></md-sidebar>
                 </div>
             </div>
             <!-- 显示子页面框 -->
@@ -22,14 +22,14 @@
                         <el-button type="info" class="buttons">
                             <div class="flex_box_ad">
                                 <el-avatar size="large" src="/static/images/avtar.png"></el-avatar>
-                                admin
+                                {{username}}
                             </div>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item command="1" icon="el-icon-edit-outline">
+                            <!-- <el-dropdown-item command="0" icon="el-icon-edit-outline">
                                 修改信息
-                            </el-dropdown-item>
-                            <el-dropdown-item command="2" icon="el-icon-refresh-left">
+                            </el-dropdown-item> -->
+                            <el-dropdown-item command="1" icon="el-icon-refresh-left">
                                 退出登录
                             </el-dropdown-item>
                         </el-dropdown-menu>
@@ -43,39 +43,6 @@
                 </div>
             </div>
         </div>
-        <!-- 对话框 -->
-        <el-dialog
-            :title="dialogData.title"
-            :visible.sync="dialogData.dialogVisible"
-            width="400px"
-            :before-close="handleClose">
-            <!-- 内容部分 -->
-            <div>
-                <el-form ref="form" label-width="80px">
-                    <el-form-item label="用户名">
-                        <el-input v-model="dialogData.userName"></el-input>
-                    </el-form-item>
-                    <el-form-item label="密码">
-                        <el-input v-model="dialogData.userName"></el-input>
-                    </el-form-item>
-                    <el-form-item label="手机号">
-                        <el-input v-model="dialogData.userName"></el-input>
-                    </el-form-item>
-                </el-form>
-            </div>
-            <!-- 底部按钮 -->
-            <span slot="footer" class="dialog-footer">
-                <el-button icon="el-icon-back" :disabled="dialogData.loading" @click="dialogData.dialogVisible = false">
-                    取 消
-                </el-button>
-                <el-button type="primary"
-                :loading="dialogData.loading"
-                icon="el-icon-check"
-                @click="confirmEvent">
-                    确 定
-                </el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
@@ -83,13 +50,8 @@
     export default {
         data(){
             return {
-                dialogData:{   // 对话框内所有数据
-                    title:'修改信息',// 对话框标题
-                    dialogVisible:false, // 对话框开关
-                    loading:false, //对话框 确认按钮动画
-                    userName:null,// 用户名
-                },
-                isCollapse:false
+                isCollapse:false,
+                username:''
             }
         },
         computed:{
@@ -101,43 +63,18 @@
 
         },
         methods: {
-            // 对话框确认事件
-            confirmEvent(){
-                // 模拟接口
-                this.dialogData.loading = true; // 开启动画
-                setTimeout(()=>{
-                    this.$message({
-                        type:'success',
-                        message:'操作成功!'
-                    });
-                    this.dialogData.loading = false; // 关闭动画
-                    this.dialogData.dialogVisible = false; // 关闭对话框
-                },3000)
-            },
             // 顶部用户头像-名字点击
             handleClick(data){
-                if(data == 2){
+                if(data == 1){
                     // 退出登录
-                    this.$Cookie.remove('userId') // 清除userId
-                    this.$Cookie.remove('token') // 清除token
-                    this.$Cookie.remove('sidebarRouter') // 清除菜单权限验证
-                    this.$Cookie.remove('defaultActive') // 清除默认激活侧边栏
+                    this.$cookie.remove('userId')
+                    this.$cookie.remove('token')
                     this.$message({
                         type:'success',
                         message:'已退出登录！'
                     });
                     // 跳转登录页
-                    this.$router.push('/login')
-                }else{
-                    // 修改信息
-                    this.dialogData.dialogVisible = true; // 开启对话框
-                }
-            },
-            // 弹框关闭前的回调
-            handleClose(done){
-                // 加载中不允许关闭
-                if(!this.dialogData.loading){
-                    done();
+                    this.$router.push('/loginAdmin')
                 }
             },
         },
@@ -150,10 +87,10 @@
     @textColoe:#fff; // 顶部条文字颜色
     .homeBox{
         width:100%;
-        min-width: 1300px;
+        // min-width: 1200px;
         height:100vh;
         min-height: 500px;
-        background:#e2e2e2;
+        background:#fff;
         .containtBox{
             height:100%;
             display: flex;
@@ -192,7 +129,7 @@
                 height:100%;
                 width:calc(100% - 230px);
                 position: relative;
-                background:#e2e2e2;
+                background:#f0f0f0;
                 transition: all linear .15s;
                 .childViewBox{
                     height:calc(100% - @topHeight);

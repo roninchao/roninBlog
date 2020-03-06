@@ -7,18 +7,20 @@ import router from './router/router'
 //引入ElementUI
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-// 注册ElementUI
 Vue.use(ElementUI);
+//引入公共组件
+import '@/public/js/components'
 //引入公共CSS
 import '@/public/css/common.css'
 //引入公共方法
 import func from '@/public/js/function'
-// 注册公共方法
 Vue.prototype.$func = func
+// 引入js-cookie
+import jsCookie from 'js-cookie'
+Vue.prototype.$cookie = jsCookie
 //引入axios
-import axios from '@/public/js/axios'
-// 注册axios实例
-Vue.prototype.$http = axios.instance
+import http from '@/public/js/axios'
+Vue.prototype.$http = http.instance
 
 Vue.config.productionTip = false
 

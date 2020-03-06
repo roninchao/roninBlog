@@ -17,6 +17,9 @@ const usersSchema = new mongoose.Schema({
             return hash
         }
     },
+    auth:{
+        type:Number
+    },
 })
 //把Schema对象转化为数据模型并导出
 module.exports = mongoose.model('usersSchema', usersSchema)
