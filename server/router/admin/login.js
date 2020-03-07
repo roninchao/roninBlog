@@ -2,9 +2,9 @@ module.exports = app => {
     const express = require('express')
     const router = express.Router()
     const usersSchema = require('../../models/usersModel')
-    app.use('/api/admin/login', router)
+    app.use('/api/admin', router)
     // 登录
-    router.post('/', async(req, res) => {
+    router.post('/login', async(req, res) => {
         const {username, password} = req.body
         // select()会将默认不查的数据查找出来
         let user = await usersSchema.findOne({username}).select('+password')

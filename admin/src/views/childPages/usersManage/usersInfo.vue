@@ -3,8 +3,8 @@
         <!-- 顶部 -->
         <div class="usersInfo-top usersInfo">
             <div class="item">
-                <el-input placeholder="请输入用户名" v-model="search" class="input-with-select">
-                    <el-button slot="append" icon="el-icon-search"></el-button>
+                <el-input placeholder="请输入用户名" v-model="searchText" maxlength=20 class="input-with-select">
+                    <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                 </el-input>
             </div>
             <div class="item">
@@ -20,13 +20,11 @@
             style="width: 100%">
                 <el-table-column
                 prop="_id"
-                label="ID"
-                width="300">
+                label="ID">
                 </el-table-column>
                 <el-table-column
                 prop="username"
-                label="用户名"
-                width="300">
+                label="用户名">
                 </el-table-column>
                 <el-table-column
                 prop="auth"
@@ -35,22 +33,27 @@
                 <el-table-column
                 fixed="right"
                 label="操作"
-                width="300">
+                width="200">
                     <template slot-scope="scope">
                         <el-button type="primary" size="small" @click="editUser(scope.row)">编辑</el-button>
                         <el-button type="danger" size="small" @click="removeUser(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
+        </div>
+        <div class="pagination usersInfo">
             <el-pagination
             background
             layout="prev, pager, next"
-            :page-size="100"
+            :page-size="pageSize"
+            :total="totalSize"
+            :current-page.sync="currentPage"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :total="1000">
+            >
             </el-pagination>
         </div>
+        
         <!-- 弹框 -->
         <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" @close="closeUserDialog">
             <el-form :model="userInfo">
@@ -88,18 +91,31 @@
 export default {
     data() {
         return{
+            // 用户列表
             userList: [],
+            // 用户信息
             userInfo:{
                 username:"",
                 password:"",
                 auth:""
             },
+            // 弹框是否显示
             dialogFormVisible:false,
-            search:'',
+            //搜索内容
+            searchText:'',
             formLabelWidth:'80px',
+            // 弹框标题
             dialogTitle:'',
+            //表示添加用户
             isAdd:1,
-            editUserID:''
+            // 编辑用户ID
+            editUserID:'',
+            //当前页面
+            currentPage:1,
+            //页面数据条数
+            pageSize:12,
+            //用户总数
+            totalSize:0
         }
     },
     created(){
@@ -125,18 +141,44 @@ export default {
         },
         // 获取用户列表
         async getUserList(){
-            let data = await this.$http.get('/users')
-            data.data.data.forEach(item => {
-                if(item.auth == 1){
-                    item.auth = "超级管理员"
-                }else{
-                    item.auth = "普通用户"
-                }
-            });
-            this.userList = data.data.data
+            let res = await this.$http.post('/users/getList', {currentPage:this.currentPage, pageSize:this.pageSize})
+            if(res.data.code == 0){
+                res.data.data.forEach(item => {
+                    if(item.auth == 1){
+                        item.auth = "超级管理员"
+                    }else{
+                        item.auth = "普通用户"
+                    }
+                });
+                this.totalSize = res.data.total
+                this.userList = res.data.data
+            }
         },
-        handleSizeChange(){},
-        handleCurrentChange(){},
+        //模糊搜索用户
+        async search(){
+            if(this.searchText == '') return this.getUserList()
+            this.currentPage = 1
+            let res = await this.$http.post('/users/search', {search:this.searchText,currentPage:this.currentPage, pageSize:this.pageSize})
+            if(res.data.code == 0) {
+                res.data.data.forEach(item => {
+                    if(item.auth == 1){
+                        item.auth = "超级管理员"
+                    }else{
+                        item.auth = "普通用户"
+                    }
+                });
+                this.totalSize = res.data.total
+                this.userList = res.data.data
+            }
+        },
+        handleSizeChange(val){
+            console.log('size',val)
+        },
+        handleCurrentChange(val){
+            console.log('currentPage',val)
+            this.currentPage = val
+            this.getUserList()
+        },
         // 确认提交用户
         async addUser(){
             if(this.userInfo.username == '') return this.$message({
@@ -210,25 +252,34 @@ export default {
 </script>
 
 <style lang='less' scoped>
+    .usersInfo-box{
+        height: calc(100% - 20px);
+        position: relative;
+    }
     .usersInfo{
         border-radius: 5px;
         overflow: hidden;
         box-shadow: 0 0 5px #e2e2e2;
+        background: #fff;
     }
     .usersInfo-top{
         display: flex;
-        background: #fff;
         justify-content: space-between;
         padding: 15px;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
     }
-    .usersInfo-bottom{
-        background: #fff;
+    .usersInfo-bottom{   
         display: flex;
         flex-direction: column;
         align-items: center;
+        
+    }
+    .pagination{
+         display: flex;
+         justify-content: center;
+         margin-top:15px;
         .el-pagination{
-            margin: 10px 0;
+            padding: 10px 0;
         }
     }
 </style>

@@ -22,6 +22,16 @@ const router =  new Router({
                     path:'usersManage',
                     name:'usersManage',
                     component:() => import('@/views/childPages/usersManage/usersInfo')
+                },
+                {
+                    path:'category',
+                    name:'category',
+                    component:() => import('@/views/childPages/articleManage/category')
+                },
+                {
+                    path:'article',
+                    name:'article',
+                    component:() => import('@/views/childPages/articleManage/article')
                 }
             ]
         }

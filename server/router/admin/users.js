@@ -3,9 +3,9 @@ module.exports = app => {
     const router = express.Router()
     const usersSchema = require('../../models/usersModel')
     const midAuth = require('../../middleware/auth')
-    app.use('/api/admin/users', router)
+    app.use('/api/admin', router)
     //新增用户
-    router.post('/', midAuth(), async (req, res) => {
+    router.post('/users', midAuth(), async (req, res) => {
         // console.log(req.body)
         let {username, password, auth} = req.body
         let user = await usersSchema.findOne({username})
@@ -20,7 +20,7 @@ module.exports = app => {
         })
     })
     //删除用户
-    router.delete('/:id', midAuth(), async (req, res) => {
+    router.delete('/users/:id', midAuth(), async (req, res) => {
         await usersSchema.findByIdAndRemove(req.params.id)
         res.send({
             code:0,
@@ -28,7 +28,7 @@ module.exports = app => {
         })
     })
     //修改用户
-    router.put('/:id', midAuth(), async (req, res) => {
+    router.put('/users/:id', midAuth(), async (req, res) => {
         let {username, password, auth} = req.body
         console.log(req.params.id,{username, password, auth})
         await usersSchema.findByIdAndUpdate(req.params.id,{username, password, auth})
@@ -37,16 +37,34 @@ module.exports = app => {
             message:"修改成功"
         })
     })
-    // 查找用户
-    router.get('/', midAuth(), async (req, res) => {
-        let data = await usersSchema.find().limit(10)
+    // 分页查找用户
+    router.post('/users/getList', midAuth(), async (req, res) => {
+        let {currentPage, pageSize} = req.body
+        //获取数据总数
+        let total = await usersSchema.countDocuments()
+        //skip表示跳过数据
+        let data = await usersSchema.find().skip((currentPage-1)*pageSize).limit(pageSize)
         res.send({
             code:0,
-            data
+            data,
+            total
+        })
+    })
+    //模糊查询
+    router.post('/users/search', midAuth(), async (req, res) => {
+        let {search, currentPage, pageSize} = req.body
+        //获取数据总数
+        let total = await usersSchema.countDocuments({username:new RegExp(search)})
+        //skip表示跳过数据
+        let data = await usersSchema.find({username:new RegExp(search)}).skip((currentPage-1)*pageSize).limit(pageSize)
+        res.send({
+            code:0,
+            data,
+            total
         })
     })
     //根据ID查找用户
-    router.get('/:id', midAuth(), async (req, res) => {
+    router.get('/users/:id', midAuth(), async (req, res) => {
         let data = await usersSchema.findById(req.params.id)
         res.send({
             code:0,

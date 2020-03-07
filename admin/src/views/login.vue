@@ -22,7 +22,7 @@
                     </el-form>
                 </div>
                 <div class="handle">
-                    <el-checkbox v-model="isKeep" @click="setKeep"><span>记住密码</span></el-checkbox>
+                    <el-checkbox v-model="isKeep"><span>记住密码</span></el-checkbox>
                     <span  class="clear" @click="clearDetails">清除密码缓存</span>
                 </div>
                 <div class="btn">
@@ -52,19 +52,19 @@ export default {
         clearDetails(){
             this.$cookie.remove('password')
         },
-        //记住密码
-        setKeep(){
-            this.isKeep = !this.isKeep
-        },
         //自动填写表单
         autofill(){
-            let username = this.$cookie.get('username');
-            let password = this.$cookie.get('password');
-            if(!(username==undefined)){
-                this.form.username=username
+            let username = this.$cookie.get('username')
+            let password = this.$cookie.get('password')
+            let isKeep = this.$cookie.get('isKeep')
+            if(!(username == undefined)){
+                this.form.username = username
             }
-            if(!(password==undefined)){
-                this.form.password=password
+            if(!(password == undefined)){
+                this.form.password = password
+            }
+            if(!(isKeep == undefined)){
+                this.isKeep = JSON.parse(isKeep)
             }
         },
         //提交表单
@@ -82,6 +82,8 @@ export default {
                 message:'密码为6~20位数字字母下划线',
                 type:'warning'
             })
+            this.$cookie.set('isKeep', this.isKeep)
+            console.log(this.$cookie.get('isKeep'))
             if(this.isKeep){
                 this.$cookie.set('username', this.form.username)
                 this.$cookie.set('password', this.form.password)
