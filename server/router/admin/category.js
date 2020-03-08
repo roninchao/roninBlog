@@ -2,6 +2,7 @@ module.exports = app => {
     const express = require('express')
     const router  = express.Router()
     const categorySchema = require('../../models/categoryModel')
+    const articleSchema = require('../../models/articleModel')
     const midAuth = require('../../middleware/auth')
     app.use('/api/admin', router)
     //新增分类
@@ -20,6 +21,11 @@ module.exports = app => {
     })
     //删除分类
     router.delete('/category/:id', midAuth(), async (req, res) =>{
+        let isValid = await articleSchema.countDocuments({category: req.params.id})
+        if(isValid) return res.status('422').send({
+            code:-1,
+            message:'该分类含有关联的文章，禁止删除'
+        })
         await categorySchema.findByIdAndRemove(req.params.id)
         res.send({
             code:0,

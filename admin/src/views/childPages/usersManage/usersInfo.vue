@@ -230,22 +230,21 @@ export default {
             }
         },
         //删除用户
-        removeUser(e){
+        async removeUser(e){
             let {_id, username} = e
-            this.$confirm(`此操作将永久删除《${username}》 是否继续?`, '提示', {
+            await this.$confirm(`此操作将永久删除《${username}》 是否继续?`, '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-                }).then(() => {
-                let res = this.$http.delete(`/users/${_id}`)
+            })
+            let res = await this.$http.delete(`/users/${_id}`)
+            if(res.data.code == 0){
                 this.getUserList()
-                if(res.data.code == 0){
-                    this.$message({
-                        message:res.data.message,
-                        type:'success'
-                    })
-                }
-            });
+                this.$message({
+                    message:res.data.message,
+                    type:'success'
+                })
+            }
         }
     }
 }

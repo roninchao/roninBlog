@@ -155,7 +155,6 @@ export default {
                     item.category = item.category.category
                     item.time = this.getTime(parseInt(item.time))
                 });
-                console.log(data)
                 this.totalSize = res.data.total
                 this.articleList = data
             }
@@ -185,21 +184,20 @@ export default {
                 return `${Y}-${Mon}-${Day} ${H}:${Min}:${S}`
             }
         },
-        //模糊搜索用户
+        //模糊搜索文章
         async search(){
             if(this.searchText == '') return this.getArticleList()
             this.currentPage = 1
             let res = await this.$http.post('/article/search', {search:this.searchText,currentPage:this.currentPage, pageSize:this.pageSize})
             if(res.data.code == 0) {
-                res.data.data.forEach(item => {
-                    if(item.auth == 1){
-                        item.auth = "超级管理员"
-                    }else{
-                        item.auth = "普通用户"
-                    }
+                let data = [];
+                data = JSON.parse(JSON.stringify(res.data.data))
+                data.forEach(item => {
+                    item.category = item.category.category
+                    item.time = this.getTime(parseInt(item.time))
                 });
                 this.totalSize = res.data.total
-                this.userList = res.data.data
+                this.articleList = data
             }
         },
         //获取文章分类
@@ -231,7 +229,6 @@ export default {
                 message:'请输入文章内容',
                 type:'warning'
             })
-            console.log(this.article)
             //添加文章
             if(this.isAdd == 1){
                 let res = await this.$http.post('/article', this.article)
@@ -250,7 +247,7 @@ export default {
             this.getArticleList()
             this.dialogFormVisible = false
         },
-        //编辑用户
+        //编辑文章
         async editArticle(e){
             this.openArticleDialog(2)
             let {_id} = e
@@ -262,29 +259,28 @@ export default {
                 this.article.content = res.data.data.content
             }
         },
-        //删除用户
-        removeArticle(e){
+        //删除文章
+        async removeArticle(e){
             let {_id, title} = e
-            this.$confirm(`此操作将永久删除《${title}》 是否继续?`, '提示', {
+            await this.$confirm(`此操作将永久删除《${title}》 是否继续?`, '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-                }).then(() => {
-                let res = this.$http.delete(`/article/${_id}`)
+            })
+            let res =  await this.$http.delete(`/article/${_id}`)
+            if(res.data.code == 0){
                 this.getArticleList()
-                if(res.data.code == 0){
-                    this.$message({
-                        message:res.data.message,
-                        type:'success'
-                    })
-                }
-            });
+                this.$message({
+                    message:res.data.message,
+                    type:'success'
+                })
+            }
         },
         // 富文本上传图片
         async handleImageAdded(file, Editor, cursorLocation, resetUploader) {
             var formData = new FormData();
             formData.append("file", file);
-            let res = await this.$http.post('/image', formData)
+            let res = await this.$http.post('/uploadImage', formData)
             console.log("sdfsafgas",res.data.url)
             Editor.insertEmbed(cursorLocation, "image", res.data.url);
             resetUploader();

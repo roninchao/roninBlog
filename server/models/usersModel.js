@@ -22,4 +22,4 @@ const usersSchema = new mongoose.Schema({
     },
 })
 //把Schema对象转化为数据模型并导出
-module.exports = mongoose.model('usersSchema', usersSchema)
+module.exports = mongoose.model('users', usersSchema)

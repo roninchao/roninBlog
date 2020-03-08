@@ -20,7 +20,7 @@ module.exports = app => {
         })
     })
      //删除文章
-     router.delete('/article/:id', midAuth(), async (req, res) => {
+    router.delete('/article/:id', midAuth(), async (req, res) => {
         await articleSchema.findByIdAndRemove(req.params.id)
         res.send({
             code:0,
@@ -30,7 +30,6 @@ module.exports = app => {
      //修改文章
      router.put('/article/:id', midAuth(), async (req, res) => {
         let {title, category, content} = req.body
-        console.log(req.params.id,{title, category, content})
         await articleSchema.findByIdAndUpdate(req.params.id,{title, category, content})
         res.send({
             code:0,
@@ -50,8 +49,21 @@ module.exports = app => {
             total
         })
     })
-     //根据ID获取文章
-     router.get('/article/:id', midAuth(), async (req, res) =>{
+    //模糊查询
+    router.post('/article/search', midAuth(), async (req, res) =>{
+        let {search, currentPage, pageSize} = req.body
+        //获取数据总数
+        let total = await articleSchema.countDocuments({title:new RegExp(search)})
+        //skip表示跳过数据
+        let data = await articleSchema.find({title:new RegExp(search)}).populate('category').skip((currentPage-1)*pageSize).limit(pageSize)
+        res.send({
+            code:0,
+            data,
+            total
+        })
+    })
+    //根据ID获取文章
+    router.get('/article/:id', midAuth(), async (req, res) =>{
         let data = await articleSchema.findById(req.params.id)
         res.send({
             code:0,
