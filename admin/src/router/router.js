@@ -16,8 +16,16 @@ const router =  new Router({
             meta:{
                 requireAuth:true
             },
+            redirect:{
+                path:'/admin/index'
+            },
             component:() => import('@/views/index'),
-            children:[
+            children:[ 
+                {
+                    path: 'index',
+                    name: 'index',
+                    component: resolve => require(['@/views/childPages/index'], resolve),
+                },
                 {
                     path:'usersManage',
                     name:'usersManage',
