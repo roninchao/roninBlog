@@ -21,7 +21,12 @@ const router =  new Router({
                 {
                     path: 'index',
                     name: 'index',
-                    component: resolve => require(['@/views/childPages/index'], resolve),
+                    component: resolve => require(['@/views/childPages/articleList'], resolve),
+                },
+                {
+                    path: 'detail',
+                    name: 'detail',
+                    component: resolve => require(['@/views/childPages/articleDetail'], resolve),
                 }
             ]
         }
