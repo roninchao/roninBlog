@@ -1,7 +1,7 @@
 <template>
     <div class="desc">
-        <h4 class="item-title" @clilk="go()">标题标题</h4>
-        <p class="item-content" @clilk="go()">内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</p>
+        <h4 class="item-title">{{article.title}}</h4>
+        <p class="item-content" v-html="article.content"></p>
         <div class="icon-box">
             <div class="icon">
                 <i class="el-icon-document"></i>
@@ -14,18 +14,23 @@
             <div class="icon">
                 <i class="el-icon-chat-line-round"></i>
                 <span>111</span>
-            </div>    
+            </div>  
+            <div class="icon">
+                <i class="el-icon-timer"></i>
+                <span>{{article.time}}</span>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    methods:{
-        go(){
-            console.log('ddddd')
-            this.$router.push({path:'/index/detail'})
+    props:{
+        article:{
+            type:Object
         }
+    },
+    methods:{
     }
 }
 </script>

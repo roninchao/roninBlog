@@ -4,48 +4,20 @@
             <i class="el-icon-document"></i>
             <span>全部分类</span>
         </div>
-        <div class="item">
+        <div class="item" v-for="(v, k) in categoryList" :key="k">
             <i class="el-icon-document"></i>
-            <span>javaScript</span>
-        </div>
-        <div class="item">
-            <i class="el-icon-document"></i>
-            <span>javaScript</span>
-        </div>
-        <div class="item">
-            <i class="el-icon-document"></i>
-            <span>javaScript</span>
-        </div>
-        <div class="item">
-            <i class="el-icon-document"></i>
-            <span>javaScript</span>
-        </div>
-        <div class="item">
-            <i class="el-icon-document"></i>
-            <span>javaScript</span>
-        </div>
-        <div class="item">
-            <i class="el-icon-document"></i>
-            <span>javaScript</span>
-        </div>
-        <div class="item">
-            <i class="el-icon-document"></i>
-            <span>javaScript</span>
-        </div>
-        <div class="item">
-            <i class="el-icon-document"></i>
-            <span>javaScript</span>
-        </div>
-        <div class="item">
-            <i class="el-icon-document"></i>
-            <span>javaScript</span>
+            <span>{{v.category}}</span>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-
+    props:{
+        categoryList:{
+            type:Array
+        }
+    }
 }
 </script>
 

@@ -13,9 +13,9 @@
                 </div>
             </div>
             <div class="items">
-                <div class="item" v-for="(v, k) in 20" :key='k'>
-                    <div @click="go">
-                        <md-artistDesc></md-artistDesc>
+                <div class="item" v-for="(v, k) in articleList" :key='k'>
+                    <div @click="go(v._id)">
+                        <md-artistDesc :article="v"></md-artistDesc>
                     </div>
                 </div>
             </div>
@@ -29,16 +29,31 @@ export default {
         return{
             search:'',
             radio:'',
-            activeColor:'#ccc'
+            activeColor:'#ccc',
+            articleList:[]
         }
+    },
+    created(){
+        this.getArtcleList()
     },
     methods:{
         clearSearch(){
             this.search = ''
         },
-        go(){
-            this.$router.push('/detail')
-        }
+        go(e){
+            this.$router.push({path:"detail", query:{id:e}})
+        },
+        async getArtcleList(){
+            let res = await this.$http.get('/article')
+            console.log(res)
+            if(res.data.code == 0){
+                res.data.articleList.map(item => {
+                    item.time = this.$func.getTime(parseInt(item.time))
+                });
+                this.articleList = res.data.articleList
+                console.log(this.articleList)
+            }
+        },
     }
 }
 </script>

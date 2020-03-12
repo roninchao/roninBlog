@@ -2,7 +2,7 @@
     <div class="index">
         <md-header></md-header>
         <div class="container">
-            <md-asider></md-asider>
+            <md-asider :categoryList="categoryList"></md-asider>
             <div class="content" id="content">
                 <div class="content-content">
                     <router-view></router-view>
@@ -17,9 +17,23 @@
 export default {
     data() {
         return{
-            
+            categoryList:[],
         }
     },
+    created(){
+        this.getCategory()
+  
+    },
+    methods:{
+        async getCategory(){
+            let res = await this.$http.get('/category')
+            console.log(res.data.code)
+            if(res.data.code == 0){
+                console.log(res.data)
+                this.categoryList = res.data.cate
+            }
+        }
+    }
    
 }
 </script>
