@@ -3,7 +3,7 @@
         <div class="login-box">
             <el-card shadow="always">
                 <div class="title">
-                    <p>登陆</p>
+                    <p>注册</p>
                 </div>
                 <div class="form">
                     <el-form ref="form" :model="form" label-width="60px">
@@ -11,26 +11,31 @@
                             <el-input v-model="form.username" maxlength=20 placeholder="请输入用户名"></el-input>
                         </el-form-item>
                         <el-form-item label="密码">
-                            <el-input v-model="form.password" 
+                            <el-input v-model="form.password1" 
                             show-password 
                             minlength=6  
                             maxlength=20 
-                            @keyup.enter="login"
+                            @keyup.enter="register"
                             placeholder="请输入密码">
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="密码">
+                            <el-input v-model="form.password2" 
+                            show-password 
+                            minlength=6  
+                            maxlength=20 
+                            @keyup.enter="register"
+                            placeholder="请再次输入密码">
                             </el-input>
                         </el-form-item>
                     </el-form>
                 </div>
-                <div class="handle">
-                    <el-checkbox v-model="isKeep"><span>记住密码</span></el-checkbox>
-                    <span  class="clear" @click="clearDetails">清除密码缓存</span>
-                </div>
                 <div class="btn">
-                    <el-button type="primary" @click="login">登录</el-button>
+                    <el-button type="primary" @click="register">注册</el-button>
                 </div>
             </el-card>
-            <div class="go" @click="$router.push('/register')">
-                <span>还没有账号？前往注册</span>
+            <div class="go" @click="$router.push('/login')">
+                <span>返回登录</span>
             </div>
         </div>
     </div>
@@ -42,61 +47,39 @@ export default {
         return {
             form:{
                 username:'',
-                password:''
+                password1:'',
+                password2:''
             },
-            isKeep:false,
         }
     },
-    created(){
-        this.autofill()
-    },
     methods:{
-        //清除密码缓存
-        clearDetails(){
-            this.$cookie.remove('password')
-        },
-        //自动填写表单
-        autofill(){
-            let username = this.$cookie.get('username')
-            let password = this.$cookie.get('password')
-            let isKeep = this.$cookie.get('isKeep')
-            if(!(username == undefined)){
-                this.form.username = username
-            }
-            if(!(password == undefined)){
-                this.form.password = password
-            }
-            if(!(isKeep == undefined)){
-                this.isKeep = JSON.parse(isKeep)
-            }
-        },
         //提交表单
-        async login(){
+        async register(){
             if(this.form.username == '') return this.$message({
                 message:'请输入用户名',
                 type:'warning'
             })
-            if(this.form.password == '') return this.$message({
+            if(this.form.password1 == '' || this.form.password2 == '') return this.$message({
                 message:'请输入密码',
                 type:'warning'
             })
+            if(this.form.password1 !== this.form.password2)return this.$message({
+                message:'两次出入密码不一致',
+                type:'warning'
+            })
             let reg = /^[A-Za-z0-9]{6,20}$/
-            if(!reg.test(this.form.password)) return this.$message({
+            if(!reg.test(this.form.password1) || !reg.test(this.form.password2))return this.$message({
                 message:'密码为6~20位数字字母下划线',
                 type:'warning'
             })
-            this.$cookie.set('isKeep', this.isKeep)
-            console.log(this.$cookie.get('isKeep'))
-            if(this.isKeep){
-                this.$cookie.set('username', this.form.username)
-                this.$cookie.set('password', this.form.password)
-            }
-            let res = await this.$http.post('/login', this.form)
+            this.$cookie.set('username', this.form.username)
+            let res = await this.$http.post('/register', {username:this.form.username, password: this.form.password2})
             if(res.data.code == 0){
-                this.$cookie.set('userID', res.data.data.userID)
-                this.$cookie.set('username', res.data.data.username)
-                this.$cookie.set('token', res.data.data.token)
-                this.$router.push('/index')
+                this.$message({
+                    type:'success',
+                    message:"注册成功"
+                })
+                this.$router.push('/login')
             }
         },
     }
@@ -133,9 +116,6 @@ export default {
                         color: #409EFF;
                     }
                 }
-                .clear{
-                    cursor: pointer;
-                }
             }
             .btn{
                 width: 100%;
@@ -146,7 +126,7 @@ export default {
                 }
             }
         }
-        .go{
+         .go{
             font-size: 14px;
             line-height: 16px;
             text-decoration: underline;

@@ -6,10 +6,15 @@ Vue.use(Router)
 const router =  new Router({
     mode:'hash',
     routes:[
-        {
+        {   //登录
             path:'/login',
             name:'login',
             component:() => import('@/views/otherPages/login'),
+        },
+        {   //注册
+            path:'/register',
+            name:'register',
+            component:() => import('@/views/otherPages/register'),
         },
         {
             path:'/',
@@ -18,12 +23,12 @@ const router =  new Router({
             },
             component:() => import('@/views/index'),
             children:[ 
-                {
+                {   //文章列表
                     path: 'index',
                     name: 'index',
                     component: resolve => require(['@/views/childPages/articleList'], resolve),
                 },
-                {
+                {   //文章详情
                     path: 'detail',
                     name: 'detail',
                     component: resolve => require(['@/views/childPages/articleDetail'], resolve),
