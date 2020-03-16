@@ -5,11 +5,11 @@
         <div class="icon-box">
             <div class="icon">
                 <i class="el-icon-document"></i>
-                <span>111</span>
+                <span>{{article.category.category}}</span>
             </div>
             <div class="icon">
                 <i class="el-icon-view"></i>
-                <span>111</span>
+                <span>{{article.visits}}</span>
             </div>
             <div class="icon">
                 <i class="el-icon-chat-line-round"></i>
@@ -61,9 +61,11 @@ export default {
         .icon{
             display: flex;
             padding-right: 10px;
+            align-items: center;
             span{
                 font-size: 12px;
                 color: #999;
+                padding: 0 5px;
             }
         }
     }

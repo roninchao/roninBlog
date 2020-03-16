@@ -18,8 +18,9 @@ export default {
     @activeColor:#ff6600;
     @padding:20px;
     .content-asider{
-        width: 220px;
+        width: 100%;
         padding: 0 @padding;
+        box-sizing: border-box;
         .item{
             margin-bottom: @padding;
             background: #fff;

@@ -1,21 +1,48 @@
 <template>
     <div class="asider">
-        <div class="item active">
+        <div class="item" :class="isActive?'':'active'" @click="changeCategory()">
             <i class="el-icon-document"></i>
             <span>全部分类</span>
         </div>
-        <div class="item" v-for="(v, k) in categoryList" :key="k">
-            <i class="el-icon-document"></i>
-            <span>{{v.category}}</span>
+        <div v-loading="loadingCategory">
+             <div class="item"
+            :class="isActive == v._id ?'active':''"
+            v-for="(v, k) in categoryList" :key="k" 
+            @click="changeCategory(v._id)">
+                <i class="el-icon-document"></i>
+                <span>{{v.category}}</span>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import {mapState, mapMutations, mapActions} from 'vuex'
 export default {
     props:{
         categoryList:{
             type:Array
+        }
+    },
+    data(){
+        return{
+            isActive:''
+        }
+    },
+    computed:{
+        ...mapState('category', ['currentCategoryID', 'loadingCategory'])
+    },
+    methods:{
+        ...mapMutations('category', ['setCurrentCategoryID']),
+        ...mapActions('category', ['getArticleList']),
+        changeCategory(e){
+            this.setCurrentCategoryID(e)
+            this.isActive = e
+            // console.log(this.$store.currentCategoryID,'dddddddddd')
+            if(this.$route.path != '/index'){
+                this.$router.push('/index')
+            }
+            this.getArticleList()
         }
     }
 }

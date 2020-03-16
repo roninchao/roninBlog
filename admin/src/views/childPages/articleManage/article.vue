@@ -31,6 +31,14 @@
                 label="文章分类">
                 </el-table-column>
                 <el-table-column
+                prop="desc"
+                label="文章简介">
+                </el-table-column>
+                <el-table-column
+                prop="visits"
+                label="浏览量">
+                </el-table-column>
+                <el-table-column
                 prop="time"
                 label="编辑时间">
                 </el-table-column>
@@ -74,6 +82,16 @@
                         </div>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="文章简介" :label-width="formLabelWidth" >
+                    <el-input v-model="article.desc" 
+                    type="textarea"
+                    autocomplete="off"
+                    :rows="5"
+                    maxlength=140
+                    show-word-limit
+                    placeholder="请输入文章简介">
+                    </el-input>
+                </el-form-item>
                 <el-form-item label="内容" :label-width="formLabelWidth">
                     <vue-editor v-model="article.content" useCustomImageHandler @image-added="handleImageAdded"></vue-editor>
                 </el-form-item>
@@ -96,6 +114,7 @@ export default {
             // 文章信息
             article:{
                 title:"",
+                desc:"",
                 content:"",
                 category:""
             },
@@ -200,7 +219,11 @@ export default {
                 message:'请选择文章分类',
                 type:'warning'
             })
-             if(this.article.content == '') return this.$message({
+            if(this.article.desc == '') return this.$message({
+                message:'请输入文章简介',
+                type:'warning'
+            })
+            if(this.article.content == '') return this.$message({
                 message:'请输入文章内容',
                 type:'warning'
             })
@@ -231,6 +254,7 @@ export default {
             if(res.data.code == 0) {
                 this.article.title = res.data.data.title
                 this.article.category = res.data.data.category
+                this.article.desc = res.data.data.desc
                 this.article.content = res.data.data.content
             }
         },

@@ -23,24 +23,5 @@ h1,h2,h3,h4,h5,h6,p{
 /* body::-webkit-scrollbar-track, */
 #content::-webkit-scrollbar-track{
     border-radius: 6px;
-    background: #ddd;
-}
-/* 文字选中颜色 */
-h4::selection,
-span::selection,
-p::selection {
-    color: #fff;
-    background:#aaa;
-}
-h4::-moz-selection
-span::-moz-selection,
-p::-moz-selection {
-    color: #fff;
-    background:#aaa;
-}
-h4::-webkit-selection,
-span::-webkit-selection,
-p::-webkit-selection {
-    color: #fff;
-    background:#aaa;
+    background: #e6e6e6;
 }

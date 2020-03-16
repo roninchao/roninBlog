@@ -1,59 +1,52 @@
 <template>
     <div class="article-list">
-        <div class="content-content">
-            <div class="items-header">
-                <div class="item radio">
-                    <el-radio-group v-model="radio" size="medium" :fill="activeColor">
-                        <el-radio-button label="时间"></el-radio-button>
-                        <el-radio-button label="标题"></el-radio-button>
-                    </el-radio-group>
-                </div>
-                <div class="item search">
-                   <md-search></md-search>
-                </div>
+        <div class="items-header">
+            <div class="item radio">
+                <el-radio-group v-model="radio" size="medium" :fill="activeColor">
+                    <el-radio-button label="时间"></el-radio-button>
+                    <el-radio-button label="标题"></el-radio-button>
+                </el-radio-group>
             </div>
-            <div class="items">
-                <div class="item" v-for="(v, k) in articleList" :key='k'>
-                    <div @click="go(v._id)">
-                        <md-artistDesc :article="v"></md-artistDesc>
-                    </div>
+            <div class="item search">
+                <md-search></md-search>
+            </div>
+        </div>
+        <div class="items" v-loading="loadingArticleList">
+            <div class="item" v-for="(v, k) in articleList" :key='k'>
+                <div @click="go(v._id)">
+                    <md-artistDesc :article="v"></md-artistDesc>
                 </div>
             </div>
         </div>
+        <div class="more">{{loadingArticleList?"":"-- 没有更多数据 --"}}</div>
     </div>
 </template>
 
 <script>
+import {mapState,mapActions} from 'vuex'
 export default {
     data(){
         return{
             search:'',
             radio:'',
             activeColor:'#ccc',
-            articleList:[]
         }
     },
     created(){
-        this.getArtcleList()
+        this.getArticleList()
+    },
+    computed:{
+        ...mapState('category', ['articleList', 'loadingArticleList'])
     },
     methods:{
+        ...mapActions('category', ['getArticleList']),
         clearSearch(){
             this.search = ''
         },
         go(e){
             this.$router.push({path:"detail", query:{id:e}})
         },
-        async getArtcleList(){
-            let res = await this.$http.get('/article')
-            console.log(res)
-            if(res.data.code == 0){
-                res.data.articleList.map(item => {
-                    item.time = this.$func.getTime(parseInt(item.time))
-                });
-                this.articleList = res.data.articleList
-                console.log(this.articleList)
-            }
-        },
+       
     }
 }
 </script>
@@ -62,34 +55,47 @@ export default {
     @headerHeight:70px;
     @activeColor:#ff6600;
     @padding:20px;
-    .content-content{
+    .article-list{
+        height: 100%;
+        background: #fff;
+        width: 100%;
         .items-header{
             height: 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 @padding;
+            box-sizing: border-box;
             font-size: 14px;
             color: #666;
-            background: #fff;
+            // background: #fff;
             border-top-right-radius: 5px;
         }
         .items{
             background: #fff;
-            padding: 0 @padding ;
+            padding: 0 @padding;
+            box-sizing: border-box;
             font-size: 16px;
             color: #333;
             .item{
                 padding: @padding 10px;
+                box-sizing: border-box;
                 border-bottom: 1px dashed #ccc;
                 transition: all 0.4s;
                 border-radius: 5px;
                 cursor: pointer;
                 &:hover{
-                    box-shadow: inset 0 0 10px #ccc;
+                    background: #f0f0f0;
                     transform: translateX(-10px);
                 }
             }
+        }
+        .more{
+            width: 100%;
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+            padding: 20px 0;
         }
     }
 </style>

@@ -7,32 +7,29 @@
                 <div class="content-content">
                     <router-view></router-view>
                 </div>
-                <md-contentAsider></md-contentAsider>
+                <div class="content-aside">
+                    <md-contentAsider></md-contentAsider>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import { mapState, mapGetters, mapMutations, mapActions} from 'vuex'
 export default {
     data() {
         return{
-            categoryList:[],
         }
     },
     created(){
-        this.getCategory()
-  
+        this.getCategoryList()
+    },
+    computed:{
+        ...mapState('category', ['categoryList'])
     },
     methods:{
-        async getCategory(){
-            let res = await this.$http.get('/category')
-            console.log(res.data.code)
-            if(res.data.code == 0){
-                console.log(res.data)
-                this.categoryList = res.data.cate
-            }
-        }
+        ...mapActions('category', ['getCategoryList']),
     }
    
 }
@@ -49,7 +46,7 @@ export default {
         background: #f0f0f0;
         box-shadow: 0 0 5px #ccc;
         .content{
-            flex: 1;
+            // flex: 1;
             display: flex;
             justify-content: space-between;
             height: calc(100vh - @headerHeight);
@@ -57,7 +54,10 @@ export default {
             box-sizing: border-box;
             overflow-y:scroll;
             .content-content{
-                flex: 1;
+                width: 744px;
+            }
+            .content-aside{
+                width: 220px;
             }
         }
     }

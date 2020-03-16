@@ -6,14 +6,15 @@ module.exports = app => {
     app.use('/api/admin', router)
     //新增文章
     router.post('/article', midAuth(), async (req, res) =>{
-        let {title, category, content} = req.body
+        let {title, category, desc, content} = req.body
         let count = await articleSchema.findOne({title})
         if(count) return res.status(422).send({
             code:-1,
             message:"文章已经存在"
         })
         let time = new Date().getTime()
-        let data = await articleSchema.create({title, category, content, time})
+        let visits = 0
+        let data = await articleSchema.create({title, category, content, desc, visits, time})
         res.send({
             code:0,
             message:'文章添加成功'
@@ -29,8 +30,8 @@ module.exports = app => {
     })
      //修改文章
      router.put('/article/:id', midAuth(), async (req, res) => {
-        let {title, category, content} = req.body
-        await articleSchema.findByIdAndUpdate(req.params.id,{title, category, content})
+        let {title, category, desc, content} = req.body
+        await articleSchema.findByIdAndUpdate(req.params.id,{title, category, desc, content})
         res.send({
             code:0,
             message:"修改成功"
