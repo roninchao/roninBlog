@@ -19,6 +19,9 @@
                 <div class="item" @click="next(1)">下一篇<i class="el-icon-d-arrow-right icon"></i></div>
             </div>
         </div>
+        <div class="comments-box">
+            <md-comments></md-comments>
+        </div>
     </div>
 </template>
 
@@ -53,9 +56,11 @@ export default {
 <style lang='less' scoped>
     @activeColor:#ff6600;
     .detail{
-        background-color: #fff;
-        padding: 15px 20px;
         .article{
+            padding: 15px 20px;
+            border-radius: 5px;
+            border-top-left-radius: 0%;
+            background-color: #fff;
             .back{
                 cursor: pointer;
                 font-size: 14px;
@@ -148,6 +153,12 @@ export default {
                     }
                 }
             }
+        }
+        .comments-box{
+            margin: 30px 0;
+            padding: 15px 20px;
+            border-radius: 5px;
+            background-color: #fff;
         }
     }
 </style>
