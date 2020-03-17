@@ -2,10 +2,10 @@
     <div class="article-list">
         <div class="items-header">
             <div class="item radio">
-                <el-radio-group v-model="radio" size="medium" :fill="activeColor">
+                <!-- <el-radio-group v-model="radio" size="medium" :fill="activeColor">
                     <el-radio-button label="时间"></el-radio-button>
                     <el-radio-button label="标题"></el-radio-button>
-                </el-radio-group>
+                </el-radio-group> -->
             </div>
             <div class="item search">
                 <md-search></md-search>

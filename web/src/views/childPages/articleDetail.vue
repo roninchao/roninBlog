@@ -2,43 +2,46 @@
     <div class="detail">
         <div class="article">
             <div @click="goBack" class="back"><i class="el-icon-back icon"></i>返回</div>
-            <div class="header">
+            <div class="article-box" v-loading="loadingArticle">
+                <div class="header">
                 <h4 class="title">{{article.title}}</h4>
-                <div class="desc">
-                    <span><i class="el-icon-document"></i>{{article.category?article.category.category:''}}</span>
-                    <span><i class="el-icon-view"></i>{{article.visits}}</span>
-                    <span><i class="el-icon-chat-line-round"></i>1232</span> 
-                    <span><i class="el-icon-timer"></i>{{article.time}}</span>
+                    <div class="desc">
+                        <span><i class="el-icon-document"></i>{{article.category?article.category.category:''}}</span>
+                        <span><i class="el-icon-view"></i>{{article.visits}}</span>
+                        <span><i class="el-icon-chat-line-round"></i>1232</span> 
+                        <span><i class="el-icon-timer"></i>{{article.time}}</span>
+                    </div>
                 </div>
+                <div class="content" id="article-content" v-html="article.content"></div>
             </div>
-            <div class="content" v-html="article.content"></div>
             <div class="btn">
-                <div class="item">&lt;&lt;上一篇</div>
-                <div class="item">下一篇&gt;&gt;</div>
+                <div class="item" @click="next(-1)"><i class="el-icon-d-arrow-left icon"></i>上一篇</div>
+                <div class="item" @click="next(1)">下一篇<i class="el-icon-d-arrow-right icon"></i></div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import {mapState, mapActions} from 'vuex'
 export default {
     data(){
         return{
-            article:{}
         }
     },
     created(){
-        this.getArticle()
+        if(this.$route.query.id){
+            this.getArticle({id:this.$route.query.id})
+        }
+    },
+    computed:{
+        ...mapState('category', ['article', 'loadingArticle'])
     },
     methods:{
-        async getArticle(){
-            let id = this.$route.query.id
-            let res = await this.$http.get(`/article/${id}`)
-            if(res.data.code == 0) {
-                res.data.article.time = this.$func.getTime(parseInt(res.data.article.time))
-                this.article = res.data.article
-            }
-            console.log(res)
+        ...mapActions('category', ['getArticle']),
+        next(e){
+            console.log(this.article._id)
+            this.getArticle({id:this.article._id, next: e})
         },
         goBack() {
             this.$router.go(-1)
@@ -51,18 +54,19 @@ export default {
     @activeColor:#ff6600;
     .detail{
         background-color: #fff;
-        padding: 20px;
+        padding: 15px 20px;
         .article{
             .back{
                 cursor: pointer;
                 font-size: 14px;
                 color: #666;
                 transition: all 0.4s;
-                border: 1px solid #ccc;
+                border: 1px solid #f0f0f0;
                 border-radius: 5px;
-                width: 60px;
-                padding: 8px;
+                display: inline-block;
+                padding: 8px 20px;
                 text-align: center;
+                user-select: none;
                 .icon{
                     transition: all 0.4s;
                     padding-right: 5px;
@@ -74,47 +78,73 @@ export default {
                     }
                 }
             }
-            .header{
-                .title{
-                    font-size: 24px;
-                    color: #666;
-                    font-weight: normal;
-                    text-align: center;
-                    padding-bottom: 20px;
+            .article-box{
+                .header{
+                    margin: 15px 0;
+                    padding-top: 15px;
+                    border-top: 1px dashed #f0f0f0;
+                    .title{
+                        font-size: 24px;
+                        color: #666;
+                        font-weight: normal;
+                        text-align: center;
+                        padding-bottom: 20px;
+                    }
+                    .desc{
+                        margin: 0 auto;
+                        font-size: 14px;
+                        color: #999;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        padding-bottom: 10px;
+                        span{
+                            margin-right: 10px;
+                        }
+                        i{
+                            padding-right: 3px;
+                        }
+                    }
                 }
-                .desc{
-                    margin: 0 auto;
+                .content{
                     font-size: 14px;
-                    color: #999;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    padding-bottom: 10px;
-                    span{
-                        margin-right: 10px;
-                    }
-                    i{
-                        padding-right: 3px;
-                    }
+                    color: #666;
                 }
-            }
-            .content{
-                font-size: 14px;
-                color: #666;
             }
             .btn{
                 display: flex;
-                font-size: 16px;
-                color: #333;
+                margin-top: 30px;
                 padding-top: 20px;
                 justify-content: space-between;
-                cursor: pointer;
-                
+                border-top: 1px dashed #f0f0f0;
                 .item{
                     transition: all 0.4s;
                     user-select: none;
+                    cursor: pointer;
+                    font-size: 14px;
+                    color: #666;
+                    transition: all 0.4s;
+                    border: 1px solid #f0f0f0;
+                    border-radius: 5px;
+                    padding: 8px 10px;
+                    text-align: center;
+                    .icon{
+                        transition: all 0.4s;
+                        &:first-child{
+                            padding-right: 5px;
+                        }
+                        &:last-child{
+                            padding-left: 5px;
+                        }
+                    }
                     &:hover{
-                        color: @activeColor;
+                        background: #f0f0f0;
+                        .el-icon-d-arrow-left{   
+                            transform: translateX(-10px);
+                        }
+                        .el-icon-d-arrow-right{   
+                            transform: translateX(10px);
+                        }
                     }
                 }
             }

@@ -7,8 +7,10 @@ const state = {
     categoryList:[],
     currentCategoryID:'',
     articleList:[],
+    article:{},
     loadingCategory:false,
-    loadingArticleList:false
+    loadingArticleList:false,
+    loadingArticle:false,
 }
 const mutations = {
 	getCategoryList(state, payLoad){
@@ -28,9 +30,16 @@ const mutations = {
     },
     setCurrentCategoryID(state, payLoad){
         state.currentCategoryID = payLoad
+    },
+    getArticle(state, payLoad){
+        setTimeout(() => {
+            state.article = payLoad
+            state.loadingArticle = false
+        }, 500)
     }
 }
 const actions = {
+    //获取文章分类
     async getCategoryList({commit}){
         state.loadingCategory = true
         let res = await Vue.prototype.$http.get('/category')
@@ -38,12 +47,33 @@ const actions = {
             commit('getCategoryList',res.data.cate)
         }
     },
+    //获取文章列表
     async getArticleList({state, commit}){
         console.log(state.currentCategoryID,'dd')
         state.loadingArticleList = true
-        let res = await Vue.prototype.$http.post('/article',{id:state.currentCategoryID})
+        let res = await Vue.prototype.$http.post('/articleList',{id:state.currentCategoryID, currentPage:1, pageSize:10})
         if(res.data.code == 0){
             commit('getArticleList',res.data.articleList)
+        }
+    },
+    //根据搜索获取文章列表
+    async searchArticle({state, commit}, payLoad){
+        console.log(payLoad)
+        state.loadingArticleList = true
+        let res = await Vue.prototype.$http.post('/search',{search: payLoad.search, currentPage:1, pageSize:10})
+        if(res.data.code == 0){
+            commit('getArticleList',res.data.articleList)
+        }
+    },
+    //获取文章详情
+    async getArticle({state, commit}, payLoad){
+        let {id, next} = payLoad
+        next = next || 0
+        state.loadingArticle = true
+        let res =  await Vue.prototype.$http.post('/article', {id, next})
+        if(res.data.code == 0) {
+            res.data.article.time = Vue.prototype.$func.getTime(parseInt(res.data.article.time))
+            commit('getArticle', res.data.article)
         }
     },
 }

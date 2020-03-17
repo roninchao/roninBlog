@@ -2,23 +2,36 @@
     <div class="search">
         <div class="search-box">
             <i class="el-icon-search left"></i>
-            <input class="text" v-model="search">
+            <input class="text" v-model="searchText" ref="input" placeholder="请输入文章标题">
             <i class="el-icon-circle-close right" v-show="search" @click="clearSearch"></i>
         </div>
-        <div class="btn">搜索</div>
+        <div class="btn" @click="search">搜索</div>
     </div>
 </template>
 
 <script>
+import {mapState, mapActions} from 'vuex'
 export default {
     data(){
         return{
-            search:'',
+            searchText:'',
         }
     },
     methods:{
+        ...mapActions('category', ['searchArticle']),
         clearSearch(){
-            this.search = ''
+            this.searchText = ''
+        },
+        search() {
+            if(this.searchText == ''){
+                this.$refs.input.focus()
+                this.$message({
+                    type:"warning",
+                    message:"请输入搜索内容"
+                })
+                return
+            }
+            this.searchArticle({search: this.searchText})
         }
     }
 }

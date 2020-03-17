@@ -53,7 +53,7 @@ export default {
     @activeColor:#ff6600;
     @padding:20px;
     .asider{
-        width: 230px;
+        width: 250px;
         height: calc( 100% - @headerHeight);
         padding-top: @padding;
         overflow: hidden;

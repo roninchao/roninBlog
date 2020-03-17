@@ -1,16 +1,19 @@
 <template>
     <div class="content-asider">
         <div class="item">
-            <p>ddddddddd</p>
-            <p>ddddddddd</p>
-            <p>ddddddddd</p>
+            <el-calendar v-model="value">
+            </el-calendar>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-
+    data() {
+        return {
+            value: new Date()
+        }
+    }
 }
 </script>
 
