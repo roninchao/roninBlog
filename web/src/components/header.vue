@@ -15,7 +15,7 @@ export default {
     @headerHeight:70px;
     .header{
         height: @headerHeight;
-        width: 1366px;
+        width: 1300px;
         position: fixed;
         top: 0;
         display: flex;

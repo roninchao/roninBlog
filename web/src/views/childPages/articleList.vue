@@ -58,7 +58,7 @@ export default {
     .article-list{
         height: 100%;
         background: #fff;
-        width: 100%;
+        width: 750px;
         .items-header{
             height: 60px;
             display: flex;

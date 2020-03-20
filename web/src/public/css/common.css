@@ -27,5 +27,22 @@ h1,h2,h3,h4,h5,h6,p{
 }
 
 #article-content img{
-    max-width: 756px;
+    max-width: 706px;
+}
+.comments .el-textarea__inner:focus{
+    border-color: #ff6600;
+}
+.comments .el-button--primary{
+    color: #666;
+    border-color: #ccc;
+    background-color:#f0f0f0;
+}
+.comments .el-button--primary:hover{
+    border-color: #ccc;
+    background-color: #ccc;
+}
+.comments .el-button--default:hover{
+    color: #fff;
+    border-color: #ccc;
+    background-color: #ccc;
 }

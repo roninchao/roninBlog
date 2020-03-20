@@ -54,10 +54,10 @@ export default {
             box-sizing: border-box;
             overflow-y:scroll;
             .content-content{
-                width: 800px;
+                width: 750px;
             }
             .content-aside{
-                width: 316px;
+                width: 300px;
             }
         }
     }

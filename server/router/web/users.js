@@ -8,7 +8,6 @@ module.exports = app => {
         const {username, password} = req.body
         // select()会将默认不查的数据查找出来
         let user = await usersSchema.findOne({username, auth:0}).select('+password')
-        console.log(user)
         if(!user) return res.status(422).send({
             code:-1,
             message:'用户账号不存在'
@@ -42,7 +41,6 @@ module.exports = app => {
         const {username, password} = req.body
         // select()会将默认不查的数据查找出来
         let user = await usersSchema.findOne({username})
-        console.log(user)
         if(user) return res.status(422).send({
             code:-1,
             message:'该用户名已经被注册'
