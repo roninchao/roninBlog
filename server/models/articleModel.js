@@ -6,6 +6,7 @@ const articleSchema = new mongoose.Schema({
     desc:{type:String},
     content:{type:String},
     visits:{type:Number},
+    comments:{type:Number},
     time:{type:String}
 })
 

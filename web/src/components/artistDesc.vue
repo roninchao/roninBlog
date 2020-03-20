@@ -13,7 +13,7 @@
             </div>
             <div class="icon">
                 <i class="el-icon-chat-line-round"></i>
-                <span>111</span>
+                <span>{{article.comments}}</span>
             </div>  
             <div class="icon">
                 <i class="el-icon-timer"></i>

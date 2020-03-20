@@ -8,7 +8,7 @@
                     <div class="desc">
                         <span><i class="el-icon-document"></i>{{article.category?article.category.category:''}}</span>
                         <span><i class="el-icon-view"></i>{{article.visits}}</span>
-                        <span><i class="el-icon-chat-line-round"></i>1232</span> 
+                        <span><i class="el-icon-chat-line-round"></i>{{article.comments}}</span> 
                         <span><i class="el-icon-timer"></i>{{article.time}}</span>
                     </div>
                 </div>
@@ -19,7 +19,7 @@
                 <div class="item" @click="next(1)">下一篇<i class="el-icon-d-arrow-right icon"></i></div>
             </div>
         </div>
-        <div class="comments-box">
+        <div class="comments-box" v-if="!loadingArticle">
             <md-comments></md-comments>
         </div>
     </div>
@@ -30,6 +30,7 @@ import {mapState, mapActions} from 'vuex'
 export default {
     data(){
         return{
+            isShow:false
         }
     },
     created(){

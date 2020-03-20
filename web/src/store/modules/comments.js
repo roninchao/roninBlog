@@ -5,20 +5,28 @@ Vue.prototype.$http = http.instance
 const state = {
     comment:{},
     commentsList:[],
+    commentListLoading:false,
 }
-const mutations = {}
+const mutations = {
+    getCommentList(state, payLoad) {
+        setTimeout(() => {
+            state.commentsList = payLoad
+            state.commentListLoading = false
+        }, 500)
+    }
+}
 const actions = {
     async addComment({state, commit}, payLoad){
         let {articleId, reviewerId, commentatorId, content} = payLoad
-        console.log({articleId, reviewerId, commentatorId, content} )
         let res = await Vue.prototype.$http.post('/comments', {articleId, reviewerId, commentatorId, content})
-        console.log('fff')
-        // if(res.data.code == 0){
-        //     console.log(res.data.data)
-        // } 
     },
-    async getCommentList(){
-        await Vue.prototype.$http.post('/getCommentList')
+    async getCommentList({state, commit}, payLoad){
+        let {articleId, currentpage, pageSize} = payLoad
+        state.commentListLoading = true
+        let res = await Vue.prototype.$http.post('/commentList',{articleId, currentpage, pageSize})
+        if(res.data.code == 0) {
+            commit('getCommentList', res.data.data)
+        }
     }
 }
 export default {

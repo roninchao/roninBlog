@@ -1,78 +1,19 @@
 <template>
     <div class="comments">
-        <div class="header">评论<span>（6条）</span></div>
-        <div class="send-comments">
-            <div class="head">
-                <div class="left">
-                    <div class="image">
-                        <i class="el-icon-user"></i>
+        <div v-if="$cookie.get('token')">
+            <div class="header">评论<span>（6条）</span></div>
+            <div class="send-comments">
+                <div class="head">
+                    <div class="left">
+                        <div class="image">
+                            <i class="el-icon-user"></i>
+                        </div>
+                        <div class="username">用户名：{{$cookie.get('username')}}</div>
                     </div>
-                    <div class="username">用户名：pengchao</div>
-                </div>
-                <div>
-                    <div class="btn" @click="submitComment">发表</div>
-                </div>
-            </div>
-            <div class="comment-input">
-                <el-input
-                type="textarea"
-                placeholder="请输入内容"
-                :autosize="{ minRows: 4, maxRows: 10}"
-                v-model="commentVal"
-                maxlength="140"
-                show-word-limit>
-                </el-input>
-            </div>
-            <div class="comment-content">
-                <div class="item">
-                    <div class="item-item">
-                        <div class="item-head">
-                            <div class="image">
-                                <i class="el-icon-user"></i>
-                            </div>
-                            <div class="username"><span>pengchao</span>：</div>
-                        </div>
-                        <div class="item-content">撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事</div>
-                         <div class="btn-box">
-                             <div class="btn" @click="openCommentsBox()">回复</div>
-                        </div>
-                    </div>
-                    <div class="item-item">
-                        <div class="item-head">
-                            <div class="image">
-                                <i class="el-icon-user"></i>
-                            </div>
-                            <div class="username"><span>admin</span> 回复 <span>pengchao</span>：</div>
-                        </div>
-                        <div class="item-content">撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事</div>
-                        <div class="btn-box">
-                             <div class="btn">回复</div>
-                        </div>
+                    <div>
+                        <div class="btn" @click="submitComment()">发表</div>
                     </div>
                 </div>
-                <div class="item">
-                    <div class="item-item">
-                        <div class="item-head">
-                            <div class="image">
-                                <i class="el-icon-user"></i>
-                            </div>
-                            <div class="username">admin：</div>
-                        </div>
-                        <div class="item-content">撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事撒地方撒发撒地方萨嘎噶事</div>
-                    </div>
-                </div>
-                <el-pagination
-                background
-                layout="prev, pager, next"
-                :total="1000">
-                </el-pagination>
-            </div>
-            <el-dialog
-            title="回复pengchao"
-            :visible.sync="dialogVisible"
-            top="25vh"
-            width="40%"
-            :before-close="handleClose">
                 <div class="comment-input">
                     <el-input
                     type="textarea"
@@ -83,11 +24,59 @@
                     show-word-limit>
                     </el-input>
                 </div>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="dialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-                </span>
-            </el-dialog>
+                <div class="comment-content" v-if="commentsList.length>0" v-loading="commentListLoading">
+                    <div class="item" >
+                        <div class="item-item"  v-for="(v,k) in commentsList" :key="k">
+                            <div class="item-head">
+                                <div class="image">
+                                    <i class="el-icon-user"></i>
+                                </div>
+                                <div class="username"><span>{{v.reviewerId.username}}</span>
+                                    <i v-if="v.commentatorId">
+                                        回复 <span>{{v.commentatorId.username}}</span>
+                                    </i>
+                                ：</div>
+                            </div>
+                            <div class="item-content">{{v.content}}</div>
+                            <div class="btn-box">
+                                <div class="btn" @click="openCommentsBox(v.reviewerId._id)">回复</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <el-pagination
+                    background
+                    layout="prev, pager, next"
+                    :total="1000">
+                    </el-pagination>
+                <el-dialog
+                title="回复pengchao"
+                :visible.sync="dialogVisible"
+                top="25vh"
+                width="40%"
+                :before-close="handleClose">
+                    <div class="comment-input">
+                        <el-input
+                        type="textarea"
+                        placeholder="请输入内容"
+                        :autosize="{ minRows: 4, maxRows: 10}"
+                        v-model="commentVal2"
+                        maxlength="140"
+                        show-word-limit>
+                        </el-input>
+                    </div>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="dialogVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="submitComment">确 定</el-button>
+                    </span>
+                </el-dialog>
+            </div>
+        </div>
+        <div v-else>
+            <div class="not-login">
+                <div class="text">评论</div>
+                <div class="btn" @click="$router.push('/login')">您还没有登录，赶快去登录吧！</div>
+            </div>
         </div>
     </div>
 </template>
@@ -98,39 +87,57 @@ export default {
     data(){
         return{
             commentVal:'',
-            dialogVisible:false
+            commentVal2:'',
+            dialogVisible:false,
+            commentatorId:'',
+            currentPage:1,
+            pageSize:10
         }
     },
     created(){
-        // this.nextTick(() => {
-        //     if(this.$cookie.get('token')){
-        //         this.getCommentList()
-        //     }
-        // })
-        if(this.$cookie.get('token')){
-            this.getCommentList()
-        }
+        this.getCommentList({articleId:this.article._id, currentPage:this.currentPage, pageSize:this.pageSize})
     },
     computed:{
         ...mapState('category',['article']),
+        ...mapState('comments',['commentsList', 'commentListLoading']),
     },
     methods:{
-        ...mapActions('comments', ['addComment, getCommentList']),
-        openCommentsBox() {
+        ...mapActions('comments', ['addComment', 'getCommentList']),
+        openCommentsBox(e) {
             this.dialogVisible = true
+            this.commentatorId = e
         },
         handleClose() {},
         //发表评论
         submitComment() {
+            console.log(this.commentsList)
             if(!this.$cookie.get('token')) return this.$message({
                 type:'warning',
                 message:'请登录后再评论'
             })
-            if(this.commentVal == '') return this.$message({
-                type:'warning',
-                message:'请输入评论内容'
-            })
-            this.addComment({articleId:this.article._id, reviewerId:this.$cookie.get('userID'), commentatorId:'', content:this.commentVal})
+            let content = ""
+            if(this.commentatorId){
+                content = this.commentVal2
+                if(this.commentVal2 == '') return this.$message({
+                    type:'warning',
+                    message:'请输入评论内容'
+                })
+            }else{
+                content = this.commentVal
+                if(this.commentVal == '') return this.$message({
+                    type:'warning',
+                    message:'请输入评论内容'
+                })
+            }
+            this.addComment({articleId:this.article._id, reviewerId:this.$cookie.get('userID'), commentatorId:this.commentatorId, content})
+            if(this.commentatorId){
+                this.commentVal2 = ''
+            }else{
+                this.commentVal = ''
+            }
+            this.commentatorId = ''
+            this.dialogVisible = false
+            this.getCommentList({articleId:this.article._id, currentPage:this.currentPage, pageSize:this.pageSize})
         }
     }
 }
@@ -138,16 +145,14 @@ export default {
 
 <style lang='less' scoped>
     .comments{
-        // height: 500px;
         .header{
             font-size: 24px;
-            font-size: #666;
+            color: #666;
             span{
                 font-size: 14px;
             }
         }
         .send-comments{
-            // margin-top: 20px;
             .head{
                 font-size: 30px;
                 color: #333;
@@ -195,21 +200,28 @@ export default {
             .comment-content{
                 .item{
                     margin: 10px 0;
-                    padding: 10px;
+                    padding: 10px 10px 0;
                     border: 1px solid #ccc;
                     border-radius: 5px;
-                    background: #f0f0f0;
                     .item-item{
                         border-bottom: 1px dashed #ccc;
-                        padding: 10px 0;
+                        padding: 10px;
+                        transition: all 0.4s;
                         &:last-child{
                             border-bottom:none;
+                        }
+                        &:hover .btn{
+                            transform: translateY(0px);
+                            opacity: 1;
                         }
                         .btn-box{
                             display: flex;
                             justify-content: flex-end;
                         }
                         .btn{
+                            transition: all 0.4s;
+                            transform: translateY(50px);
+                            opacity: 0;
                             width: 70px;
                             box-sizing: border-box;
                             font-size: 14px;
@@ -229,7 +241,6 @@ export default {
                     }
                     .item-head{
                         display: inline-block;
-                        // align-items: center;
                         font-size: 16px; 
                         color: #333;
                         .image{
@@ -263,10 +274,24 @@ export default {
                         font-size: 14px;
                         color: #666;
                         line-height: 25px;
+                        word-wrap:break-word
                     }
                 }
             }
             
+        }
+        .not-login{
+            font-size: 24px;
+            color: #666;
+            .btn{
+                font-size: 14px;
+                padding-top: 10px;
+                display: inline-block;
+                cursor: pointer;
+                &:hover{
+                    text-decoration: underline;
+                }
+            }
         }
     }
 </style>

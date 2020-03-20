@@ -14,7 +14,8 @@ module.exports = app => {
         })
         let time = new Date().getTime()
         let visits = 0
-        let data = await articleSchema.create({title, category, content, desc, visits, time})
+        let comments = 0
+        let data = await articleSchema.create({title, category, content, desc, visits, comments, time})
         res.send({
             code:0,
             message:'文章添加成功'
