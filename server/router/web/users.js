@@ -7,7 +7,7 @@ module.exports = app => {
     router.post('/login', async(req, res) => {
         const {username, password} = req.body
         // select()会将默认不查的数据查找出来
-        let user = await usersSchema.findOne({username, auth:0}).select('+password')
+        let user = await usersSchema.findOne({username}).select('+password')
         if(!user) return res.status(422).send({
             code:-1,
             message:'用户账号不存在'

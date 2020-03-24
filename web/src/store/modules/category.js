@@ -11,6 +11,7 @@ const state = {
     loadingCategory:false,
     loadingArticleList:false,
     loadingArticle:false,
+    isMore:true,
 }
 const mutations = {
 	getCategoryList(state, payLoad){
@@ -20,11 +21,20 @@ const mutations = {
         }, 500)
     },
     getArticleList(state, payLoad){
-        payLoad.map(item => {
+        console.log(payLoad.data.length)
+        console.log(payLoad.pageSize)
+        if(payLoad.data.length < payLoad.pageSize) {
+            state.isMore = false
+        }
+        payLoad.data.map(item => {
             item.time = Vue.prototype.$func.getTime(parseInt(item.time))
         });
         setTimeout(() => {
-            state.articleList = payLoad
+            if(payLoad.currentPage == 1){
+                state.articleList = payLoad.data
+            }else{
+                state.articleList.concat(payLoad.data)
+            }
             state.loadingArticleList = false
         }, 500)
     },
@@ -48,12 +58,12 @@ const actions = {
         }
     },
     //获取文章列表
-    async getArticleList({state, commit}){
-        console.log(state.currentCategoryID,'dd')
+    async getArticleList({state, commit}, payLoad){
+        let { currentPage, pageSize} = payLoad
         state.loadingArticleList = true
-        let res = await Vue.prototype.$http.post('/articleList',{id:state.currentCategoryID, currentPage:1, pageSize:10})
+        let res = await Vue.prototype.$http.post('/articleList',{id:state.currentCategoryID, currentPage, pageSize})
         if(res.data.code == 0){
-            commit('getArticleList',res.data.articleList)
+            commit('getArticleList',{data:res.data.articleList, currentPage, pageSize})
         }
     },
     //根据搜索获取文章列表

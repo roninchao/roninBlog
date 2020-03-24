@@ -6,11 +6,13 @@ const state = {
     comment:{},
     commentsList:[],
     commentListLoading:false,
+    total:0
 }
 const mutations = {
     getCommentList(state, payLoad) {
         setTimeout(() => {
-            state.commentsList = payLoad
+            state.commentsList = payLoad.data
+            state.total = payLoad.total
             state.commentListLoading = false
         }, 500)
     }
@@ -21,11 +23,11 @@ const actions = {
         let res = await Vue.prototype.$http.post('/comments', {articleId, reviewerId, commentatorId, content})
     },
     async getCommentList({state, commit}, payLoad){
-        let {articleId, currentpage, pageSize} = payLoad
+        let {articleId, currentPage, pageSize} = payLoad
         state.commentListLoading = true
-        let res = await Vue.prototype.$http.post('/commentList',{articleId, currentpage, pageSize})
+        let res = await Vue.prototype.$http.post('/commentList',{articleId, currentPage, pageSize})
         if(res.data.code == 0) {
-            commit('getCommentList', res.data.data)
+            commit('getCommentList', res.data)
         }
     }
 }

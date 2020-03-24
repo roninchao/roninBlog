@@ -161,6 +161,7 @@ export default {
         //关闭用户弹框
         closeArticleDialog(){
             this.article.title = ""
+            this.article.desc = ""
             this.article.content = ""
             this.article.category = ""
         },

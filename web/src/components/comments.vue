@@ -1,7 +1,7 @@
 <template>
     <div class="comments">
         <div v-if="$cookie.get('token')">
-            <div class="header">评论<span>（6条）</span></div>
+            <div class="header">评论<span>（{{total}}条）</span></div>
             <div class="send-comments">
                 <div class="head">
                     <div class="left">
@@ -44,13 +44,16 @@
                         </div>
                     </div>
                 </div>
-                 <el-pagination
+                <div class="pages">
+                    <el-pagination
                     background
                     layout="prev, pager, next"
-                    :total="1000">
+                    @current-change="handleCurrentChange"
+                    :total="total">
                     </el-pagination>
+                </div>
                 <el-dialog
-                title="回复pengchao"
+                title = '回复评论'
                 :visible.sync="dialogVisible"
                 top="25vh"
                 width="40%"
@@ -99,7 +102,7 @@ export default {
     },
     computed:{
         ...mapState('category',['article']),
-        ...mapState('comments',['commentsList', 'commentListLoading']),
+        ...mapState('comments',['commentsList', 'commentListLoading','total']),
     },
     methods:{
         ...mapActions('comments', ['addComment', 'getCommentList']),
@@ -107,7 +110,14 @@ export default {
             this.dialogVisible = true
             this.commentatorId = e
         },
-        handleClose() {},
+        handleCurrentChange(e){
+            this.currentPage = e
+            this.getCommentList({articleId:this.article._id, currentPage:this.currentPage, pageSize:this.pageSize})
+        },
+        handleClose() {
+            this.commentVal2 = ''
+            this.dialogVisible = false
+        },
         //发表评论
         submitComment() {
             console.log(this.commentsList)
@@ -278,7 +288,10 @@ export default {
                     }
                 }
             }
-            
+            .pages{
+               display: flex;
+               justify-content: center;
+            }
         }
         .not-login{
             font-size: 24px;

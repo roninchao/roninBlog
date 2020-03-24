@@ -11,7 +11,7 @@
                 <md-search></md-search>
             </div>
         </div>
-        <div class="items" v-loading="loadingArticleList">
+        <div class="items" id="items" v-loading="loadingArticleList">
             <div class="item" v-for="(v, k) in articleList" :key='k'>
                 <div @click="go(v._id)">
                     <md-artistDesc :article="v"></md-artistDesc>
@@ -30,13 +30,21 @@ export default {
             search:'',
             radio:'',
             activeColor:'#ccc',
+            currentPage:1,
+            pageSize:10,
         }
     },
     created(){
-        this.getArticleList()
+        this.getArticleList({currentPage:this.currentPage, pageSize:this.pageSize})
+        
+    },
+    updated(){
+        this.$nextTick(() => {
+            this.scrollLoadMore()
+        })
     },
     computed:{
-        ...mapState('category', ['articleList', 'loadingArticleList'])
+        ...mapState('category', ['articleList', 'loadingArticleList', 'isMore'])
     },
     methods:{
         ...mapActions('category', ['getArticleList']),
@@ -46,7 +54,23 @@ export default {
         go(e){
             this.$router.push({path:"detail", query:{id:e}})
         },
-       
+        scrollLoadMore(data){
+            document.querySelector('#content').onscroll = () => {
+                 //可滚动容器的高度
+                let innerHeight = document.querySelector('#items').clientHeight;
+                //屏幕尺寸高度
+                let outerHeight = document.documentElement.clientHeight;
+                //可滚动容器超出当前窗口显示范围的高度
+                let scrollTop = document.querySelector('#content').scrollTop;
+                if (innerHeight <= (outerHeight + scrollTop)) {
+                    //加载更多操作
+                    if(!this.loadingArticleList && this.isMore){
+                        this.currentPage++;
+                        this.getArticleList({currentPage:this.currentPage, pageSize:this.pageSize})
+                    }
+                }
+            }
+        }
     }
 }
 </script>
