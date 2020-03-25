@@ -12,8 +12,16 @@ const state = {
     loadingArticleList:false,
     loadingArticle:false,
     isMore:true,
+    currentPage:1,
+    pageSize:10
 }
 const mutations = {
+    addCurrentPage(state) {
+        state.currentPage = state.currentPage+1
+    },
+    clearCurrentPage(state) {
+        state.currentPage = 1
+    },
 	getCategoryList(state, payLoad){
         setTimeout(() => {
             state.categoryList = payLoad
@@ -21,24 +29,27 @@ const mutations = {
         }, 500)
     },
     getArticleList(state, payLoad){
-        console.log(payLoad.data.length)
-        console.log(payLoad.pageSize)
-        if(payLoad.data.length < payLoad.pageSize) {
+        //设置没有更多数据
+        if(payLoad.length < state.pageSize) {
             state.isMore = false
         }
-        payLoad.data.map(item => {
+        payLoad.map(item => {
             item.time = Vue.prototype.$func.getTime(parseInt(item.time))
         });
         setTimeout(() => {
-            if(payLoad.currentPage == 1){
-                state.articleList = payLoad.data
+            if(state.currentPage == 1){
+                state.articleList = payLoad
             }else{
-                state.articleList.concat(payLoad.data)
+                state.articleList = state.articleList.concat(payLoad)
             }
             state.loadingArticleList = false
         }, 500)
     },
     setCurrentCategoryID(state, payLoad){
+        if(!payLoad){
+            payLoad = ''
+        }
+        state.isMore = true
         state.currentCategoryID = payLoad
     },
     getArticle(state, payLoad){
@@ -58,19 +69,20 @@ const actions = {
         }
     },
     //获取文章列表
-    async getArticleList({state, commit}, payLoad){
-        let { currentPage, pageSize} = payLoad
+    async getArticleList({state, commit}){
         state.loadingArticleList = true
-        let res = await Vue.prototype.$http.post('/articleList',{id:state.currentCategoryID, currentPage, pageSize})
+        // console.log({id:state.currentCategoryID, currentPage:state.currentPage, pageSize:state.pageSize})
+        let res = await Vue.prototype.$http.post('/articleList',{id:state.currentCategoryID, currentPage:state.currentPage, pageSize:state.pageSize})
         if(res.data.code == 0){
-            commit('getArticleList',{data:res.data.articleList, currentPage, pageSize})
+            commit('getArticleList', res.data.articleList)
         }
     },
     //根据搜索获取文章列表
     async searchArticle({state, commit}, payLoad){
-        console.log(payLoad)
+        let { search } = payLoad
         state.loadingArticleList = true
-        let res = await Vue.prototype.$http.post('/search',{search: payLoad.search, currentPage:1, pageSize:10})
+        console.log(search)
+        let res = await Vue.prototype.$http.post('/search',{search, currentPage:state.currentPage, pageSize:state.pageSize})
         if(res.data.code == 0){
             commit('getArticleList',res.data.articleList)
         }

@@ -49,7 +49,7 @@ export default {
             // flex: 1;
             display: flex;
             justify-content: space-between;
-            height: calc(100vh - @headerHeight);
+            max-height: calc(100vh - @headerHeight);
             padding-top: @padding;
             box-sizing: border-box;
             overflow-y:scroll;

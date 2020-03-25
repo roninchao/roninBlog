@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import {mapState, mapActions} from 'vuex'
+import {mapState, mapMutations, mapActions} from 'vuex'
 export default {
     data(){
         return{
@@ -18,6 +18,7 @@ export default {
         }
     },
     methods:{
+        ...mapMutations('category', ['clearCurrentPage']),
         ...mapActions('category', ['searchArticle']),
         clearSearch(){
             this.searchText = ''
@@ -31,6 +32,7 @@ export default {
                 })
                 return
             }
+            this.clearCurrentPage()
             this.searchArticle({search: this.searchText})
         }
     }

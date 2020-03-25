@@ -26,23 +26,26 @@ export default {
     },
     data(){
         return{
-            isActive:''
+            isActive:'',
+            pageSize:10,
+            currentPage:1,
         }
     },
     computed:{
         ...mapState('category', ['currentCategoryID', 'loadingCategory'])
     },
     methods:{
-        ...mapMutations('category', ['setCurrentCategoryID']),
+        ...mapMutations('category', ['setCurrentCategoryID','clearCurrentPage']),
         ...mapActions('category', ['getArticleList']),
         changeCategory(e){
+            this.clearCurrentPage()
             this.setCurrentCategoryID(e)
             this.isActive = e
             // console.log(this.$store.currentCategoryID,'dddddddddd')
             if(this.$route.path != '/index'){
                 this.$router.push('/index')
             }
-            this.getArticleList()
+            this.getArticleList({currentPage:this.currentPage, pageSize:this.pageSize})
         }
     }
 }

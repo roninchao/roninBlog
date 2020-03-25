@@ -23,22 +23,22 @@
 </template>
 
 <script>
-import {mapState,mapActions} from 'vuex'
+import {mapState,mapActions, mapMutations} from 'vuex'
 export default {
     data(){
         return{
             search:'',
             radio:'',
             activeColor:'#ccc',
-            currentPage:1,
-            pageSize:10,
+            // currentPage:1,
+            // pageSize:10,
         }
     },
     created(){
-        this.getArticleList({currentPage:this.currentPage, pageSize:this.pageSize})
-        
+        this.getArticleList()
     },
     updated(){
+       
         this.$nextTick(() => {
             this.scrollLoadMore()
         })
@@ -47,6 +47,7 @@ export default {
         ...mapState('category', ['articleList', 'loadingArticleList', 'isMore'])
     },
     methods:{
+        ...mapMutations('category', ['addCurrentPage']),
         ...mapActions('category', ['getArticleList']),
         clearSearch(){
             this.search = ''
@@ -55,8 +56,10 @@ export default {
             this.$router.push({path:"detail", query:{id:e}})
         },
         scrollLoadMore(data){
+            
             document.querySelector('#content').onscroll = () => {
                  //可滚动容器的高度
+                //   console.log('ddwwd')
                 let innerHeight = document.querySelector('#items').clientHeight;
                 //屏幕尺寸高度
                 let outerHeight = document.documentElement.clientHeight;
@@ -65,8 +68,8 @@ export default {
                 if (innerHeight <= (outerHeight + scrollTop)) {
                     //加载更多操作
                     if(!this.loadingArticleList && this.isMore){
-                        this.currentPage++;
-                        this.getArticleList({currentPage:this.currentPage, pageSize:this.pageSize})
+                        this.addCurrentPage()
+                        this.getArticleList()
                     }
                 }
             }
@@ -81,7 +84,7 @@ export default {
     @padding:20px;
     .article-list{
         height: 100%;
-        background: #fff;
+        // background: #fff;
         width: 750px;
         .items-header{
             height: 60px;
@@ -92,12 +95,12 @@ export default {
             box-sizing: border-box;
             font-size: 14px;
             color: #666;
-            // background: #fff;
+            background: #fff;
             border-top-right-radius: 5px;
         }
         .items{
             background: #fff;
-            padding: 0 @padding;
+            padding: 0 @padding @padding;
             box-sizing: border-box;
             font-size: 16px;
             color: #333;
