@@ -4,6 +4,7 @@ const articleSchema = new mongoose.Schema({
     title:{type:String},
     category:{type: mongoose.SchemaTypes.ObjectId,ref:"category"},
     desc:{type:String},
+    img:{type:String},
     content:{type:String},
     visits:{type:Number},
     comments:{type:Number},

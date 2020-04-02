@@ -41,7 +41,7 @@
                     <el-input v-model="category.category" 
                     autocomplete="off" 
                     maxlength=20
-                    placeholder="请输入文章标题">
+                    placeholder="请输入分类名称">
                     </el-input>
                 </el-form-item>
             </el-form>

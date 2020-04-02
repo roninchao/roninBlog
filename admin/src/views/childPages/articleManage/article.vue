@@ -68,21 +68,33 @@
         <!-- 弹框 -->
         <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" @close="closeArticleDialog">
             <el-form :model="article">
-                <el-form-item label="文章标题" :label-width="formLabelWidth" >
+                <el-form-item label="标题" :label-width="formLabelWidth" >
                     <el-input v-model="article.title" 
                     autocomplete="off" 
                     maxlength=20
                     placeholder="请输入文章标题">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="文章分类" :label-width="formLabelWidth">
+                <el-form-item label="分类" :label-width="formLabelWidth">
                     <el-select v-model="article.category" placeholder="请选择文章分类">
                         <div v-for="(v, k) in categoryList" :key='k'>
                             <el-option :label="v.category" :value="v._id" ></el-option>
                         </div>
                     </el-select>
+                </el-form-item> 
+                <el-form-item label="图片" :label-width="formLabelWidth">
+                    <el-upload
+                    action="https://jsonplaceholder.typicode.com/posts/"
+                    list-type="picture-card"
+                    :on-preview="handlePictureCardPreview"
+                    :on-remove="handleRemove">
+                        <i class="el-icon-plus"></i>
+                    </el-upload>
+                    <!-- <el-dialog :visible.sync="dialogVisible">
+                        <img width="100%" :src="dialogImageUrl" alt="">
+                    </el-dialog> -->
                 </el-form-item>
-                <el-form-item label="文章简介" :label-width="formLabelWidth" >
+                <el-form-item label="简介" :label-width="formLabelWidth" >
                     <el-input v-model="article.desc" 
                     type="textarea"
                     autocomplete="off"
@@ -281,7 +293,6 @@ export default {
             var formData = new FormData();
             formData.append("file", file);
             let res = await this.$http.post('/uploadImage', formData)
-            console.log("sdfsafgas",res.data.url)
             Editor.insertEmbed(cursorLocation, "image", res.data.url);
             resetUploader();
         }

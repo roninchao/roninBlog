@@ -6,6 +6,11 @@ module.exports = app => {
     // 登录
     router.post('/login', async(req, res) => {
         const {username, password} = req.body
+        //如果数据库没有admin，先自动创建一个
+        let admin = await usersSchema.findOne({username:'admin'})
+        if(!admin){
+            await usersSchema.create({username:'admin', password:'123456', auth: 1})
+        }
         // select()会将默认不查的数据查找出来
         let user = await usersSchema.findOne({username}).select('+password')
         if(!user) return res.status(422).send({

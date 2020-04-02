@@ -1,128 +1,61 @@
 <template>
-    <div class="article-list">
-        <div class="items-header">
-            <div class="item radio">
-                <!-- <el-radio-group v-model="radio" size="medium" :fill="activeColor">
-                    <el-radio-button label="时间"></el-radio-button>
-                    <el-radio-button label="标题"></el-radio-button>
-                </el-radio-group> -->
+    <div>
+        <div class="swiper  wow fadeInUp">
+            <md-articleSwiper></md-articleSwiper>
+        </div>
+        <!-- 文章列表 -->
+        <div class="article-list">
+            <div class="title wow fadeInUp" data-wow-duration ="1s" data-wow-delay ="0.3s"></div>
+            <div class="wow fadeInUp" v-for="(v, k) in 10" :key="k" data-wow-duration ="1s" data-wow-delay ="0s">
+                <md-articleDesc></md-articleDesc>
             </div>
-            <div class="item search">
-                <md-search></md-search>
+            <div class="load-more wow fadeInUp"  data-wow-duration ="1s" data-wow-delay ="0.3s">
+                <span>加载更多</span>
             </div>
         </div>
-        <div class="items" id="items" v-loading="loadingArticleList">
-            <div class="item" v-for="(v, k) in articleList" :key='k'>
-                <div @click="go(v._id)">
-                    <md-artistDesc :article="v"></md-artistDesc>
-                </div>
-            </div>
-        </div>
-        <div class="more">{{loadingArticleList?"":"-- 没有更多数据 --"}}</div>
     </div>
 </template>
 
 <script>
-import {mapState,mapActions, mapMutations} from 'vuex'
+import {WOW} from 'wowjs'
 export default {
-    data(){
-        return{
-            search:'',
-            radio:'',
-            activeColor:'#ccc',
-            // currentPage:1,
-            // pageSize:10,
-        }
-    },
-    created(){
-        this.getArticleList()
-    },
-    updated(){
-       
+    mounted(){
+        // 在项目加载完成之后初始化wow
         this.$nextTick(() => {
-            this.scrollLoadMore()
+            let wow = new WOW({
+                live:true
+            })
+            wow.init()
         })
     },
-    computed:{
-        ...mapState('category', ['articleList', 'loadingArticleList', 'isMore'])
-    },
-    methods:{
-        ...mapMutations('category', ['addCurrentPage']),
-        ...mapActions('category', ['getArticleList']),
-        clearSearch(){
-            this.search = ''
-        },
-        go(e){
-            this.$router.push({path:"detail", query:{id:e}})
-        },
-        scrollLoadMore(data){
-            
-            document.querySelector('#content').onscroll = () => {
-                 //可滚动容器的高度
-                //   console.log('ddwwd')
-                let innerHeight = document.querySelector('#items').clientHeight;
-                //屏幕尺寸高度
-                let outerHeight = document.documentElement.clientHeight;
-                //可滚动容器超出当前窗口显示范围的高度
-                let scrollTop = document.querySelector('#content').scrollTop;
-                if (innerHeight <= (outerHeight + scrollTop)) {
-                    //加载更多操作
-                    if(!this.loadingArticleList && this.isMore){
-                        this.addCurrentPage()
-                        this.getArticleList()
-                    }
-                }
-            }
-        }
-    }
 }
 </script>
 
 <style lang='less' scoped>
-    @headerHeight:70px;
-    @activeColor:#ff6600;
-    @padding:20px;
+    .swiper{
+        width: 100%;
+        height: 250px;
+        background: #fff;
+        border-radius: 5px;
+    }
     .article-list{
-        height: 100%;
-        // background: #fff;
-        width: 750px;
-        .items-header{
-            height: 60px;
+        .title{
+            width: 100%;
+            height: 40px;
+            margin: 15px 0;
+            background: #fff;
+            border-radius: 5px;
+        }
+        .load-more{
+            width: 100%;
+            height: 40px;
+            background: #fff;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            padding: 0 @padding;
-            box-sizing: border-box;
             font-size: 14px;
             color: #666;
-            background: #fff;
-            border-top-right-radius: 5px;
-        }
-        .items{
-            background: #fff;
-            padding: 0 @padding @padding;
-            box-sizing: border-box;
-            font-size: 16px;
-            color: #333;
-            .item{
-                padding: @padding 10px;
-                box-sizing: border-box;
-                border-bottom: 1px dashed #ccc;
-                transition: all 0.4s;
-                border-radius: 5px;
-                cursor: pointer;
-                &:hover{
-                    background: #f0f0f0;
-                    transform: translateX(-10px);
-                }
-            }
-        }
-        .more{
-            width: 100%;
-            font-size: 12px;
-            color: #999;
-            text-align: center;
-            padding: 20px 0;
+            cursor: pointer;
         }
     }
 </style>

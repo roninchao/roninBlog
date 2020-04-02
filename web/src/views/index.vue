@@ -1,64 +1,87 @@
 <template>
-    <div class="index">
-        <md-header></md-header>
-        <div class="container">
-            <md-asider :categoryList="categoryList"></md-asider>
-            <div class="content" id="content">
-                <div class="content-content">
-                    <router-view></router-view>
-                </div>
-                <div class="content-aside">
-                    <md-contentAsider></md-contentAsider>
-                </div>
+    <div class="container">
+        <div class="header"></div>
+        <div class="main">
+            <!-- 侧边导航栏 -->
+            <div class="nav">
+                <md-navAside></md-navAside>
             </div>
+            <div class="content">
+                <router-view></router-view>
+            </div>
+            <div class="aside wow fadeInRight"></div>
         </div>
+        <div class="footer"></div>
     </div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+import {WOW} from 'wowjs'
 export default {
-    data() {
+    data(){
         return{
+            selectedCate: 0,
         }
     },
-    created(){
-        this.getCategoryList()
-    },
-    computed:{
-        ...mapState('category', ['categoryList'])
+    mounted(){
+        // 在项目加载完成之后初始化wow
+        this.$nextTick(() => {
+            let wow = new WOW({
+                live:true
+            })
+            wow.init()
+        })
     },
     methods:{
-        ...mapActions('category', ['getCategoryList']),
+        selectCate(e) {
+            console.log(e,this.selectedCate)
+            this.selectedCate = e
+        }
     }
-   
 }
 </script>
 
 <style lang='less' scoped>
-    @headerHeight:70px;
-    @activeColor:#ff6600;
-    @padding:20px;
     .container{
-        display: flex;
-        justify-content: space-between;
-        margin-top: @headerHeight;
         background: #f0f0f0;
-        box-shadow: 0 0 5px #ccc;
-        .content{
-            // flex: 1;
+        .header{
+            width: 100%;
+            height: 60px;
+            background: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 3;
+            box-shadow: 0 0 5px #ccc;
+        }
+        .main{
+            width: 1200px;
             display: flex;
-            justify-content: space-between;
-            max-height: calc(100vh - @headerHeight);
-            padding-top: @padding;
-            box-sizing: border-box;
-            overflow-y:scroll;
-            .content-content{
-                width: 750px;
+            margin: 15px auto;
+            padding-top: 60px;
+            .nav{
+                width: 200px;
+                height: auto;
+                // background: #f0f0f0;
+                position: relative;
+              
             }
-            .content-aside{
-                width: 300px;
+            .content{
+                // flex: 1;
+                width: 700px;
+                margin: 0 15px;
+                
             }
+            .aside{
+                width: 250px;
+                height: 700px;
+                background: #fff;
+            }
+        }
+        .footer{
+            width: 100%;
+            height: 100px;
+            background: #fff;
         }
     }
 </style>

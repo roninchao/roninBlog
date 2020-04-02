@@ -13,6 +13,7 @@ Vue.use(ElementUI);
 import '@/public/js/components'
 //引入公共CSS
 import '@/public/css/common.css'
+import 'animate.css'
 //引入公共方法
 import func from '@/public/js/function'
 Vue.prototype.$func = func
