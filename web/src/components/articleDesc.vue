@@ -1,29 +1,29 @@
 <template>
-    <div class="article-item">
+    <div class="article-item wow fadeInUp"  data-wow-duration ="1s" data-wow-delay ="0s">
         <div class="img-box">
-            <div class="img" style="backgroundImage:url(https://static.surmon.me/FrkYADJJj0kFwHEkUXl14ZHj5YMS?x-oss-process=style/blog.list.item.pc)"></div>  
+            <div class="img" :style="{backgroundImage:`url(${article.imgUrl})`}"></div>  
         </div>
         <div class="article">
             <div class="article-desc">
-                <p class="top">标题</p>
-                <p class="bottom">简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简简介简介简介简介简介简介简介简介简介简介简介简介简简介简介简介简介简介简介简介简介简介简介简介简介简简介简介简介简介简介简介简介简介简介简介简介简介简简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介</p>
+                <p class="top">{{article.title}}</p>
+                <p class="bottom">{{article.desc}}</p>
             </div>
             <div class="article-other">
                 <div class="icon">
                     <i class="el-icon-document"></i>
-                    <span>111</span>
+                    <span>{{article.category.category}}</span>
                 </div>
                 <div class="icon">
                     <i class="el-icon-view"></i>
-                    <span>111</span>
+                    <span>{{article.visits}}</span>
                 </div>
                 <div class="icon">
                     <i class="el-icon-chat-line-round"></i>
-                    <span>11</span>
+                    <span>{{article.comments}}</span>
                 </div>  
                 <div class="icon">
                     <i class="el-icon-timer"></i>
-                    <span>111</span>
+                    <span>{{article.time}}</span>
                 </div>
             </div>
         </div>
@@ -31,8 +31,23 @@
 </template>
 
 <script>
+import {WOW} from 'wowjs'
 export default {
-
+    props:{
+        article:{}
+    },
+    data() {
+        return {}
+    },
+    mounted(){
+        // 在项目加载完成之后初始化wow
+        this.$nextTick(() => {
+            let wow = new WOW({
+                live:true
+            })
+            wow.init()
+        })
+    },
 }
 </script>
 
@@ -100,10 +115,13 @@ export default {
             }
             .article-other{
                 display: flex;
+                align-items: center;
+                // justify-content: space-between;
                 .icon{
                     font-size: 12px;
                     color: #999;
                     padding-right: 15px;
+                    // width: 80px;
                 }
                 // justify-content: space-between; 
             }

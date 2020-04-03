@@ -1,27 +1,18 @@
 <template>
     <el-carousel trigger="click" height="250px">
-        <el-carousel-item v-for="(v, k) in list" :key="k">
-            <div class="img" :style="{backgroundImage:`url(${v.url})`}"></div>
+        <el-carousel-item v-for="(v, k) in articleSwiper" :key="k">
+            <div class="img" :style="{backgroundImage:`url(${v.imgUrl})`}"></div>
         </el-carousel-item>
     </el-carousel>
 </template>
 
 <script>
 export default {
+    props:{
+        articleSwiper:[]
+    },
     data() {
-        return {
-            list:[
-                {
-                    url:'https://static.surmon.me/FrkYADJJj0kFwHEkUXl14ZHj5YMS?x-oss-process=style/blog.list.item.pc'
-                },
-                {
-                    url:'https://static.surmon.me/thumbnail/cloud-logo-thumb.jpg'
-                },
-                {
-                    url:'https://static.surmon.me/Fn3cbhQGzyjdeRF6CvI2VpUjMazF'
-                }
-            ]
-        }
+        return {}
     }
 }
 </script>
@@ -36,5 +27,9 @@ export default {
         background-position: center;
         background-size: cover;
         cursor: pointer;
+        transition: all 0.3s;
+        &:hover{
+            transform: scale(1.05);
+        }
     }
 </style>

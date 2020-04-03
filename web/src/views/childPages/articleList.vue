@@ -1,13 +1,13 @@
 <template>
     <div>
         <div class="swiper  wow fadeInUp">
-            <md-articleSwiper></md-articleSwiper>
+            <md-articleSwiper :articleSwiper="articleSwiper"></md-articleSwiper>
         </div>
         <!-- 文章列表 -->
         <div class="article-list">
             <div class="title wow fadeInUp" data-wow-duration ="1s" data-wow-delay ="0.3s"></div>
-            <div class="wow fadeInUp" v-for="(v, k) in 10" :key="k" data-wow-duration ="1s" data-wow-delay ="0s">
-                <md-articleDesc></md-articleDesc>
+            <div v-for="(v, k) in articleList" :key="k">
+                <md-articleDesc :article="v"></md-articleDesc>
             </div>
             <div class="load-more wow fadeInUp"  data-wow-duration ="1s" data-wow-delay ="0.3s">
                 <span>加载更多</span>
@@ -18,7 +18,14 @@
 
 <script>
 import {WOW} from 'wowjs'
+import {mapState, mapMutations, mapActions} from 'vuex'
 export default {
+    data() {
+        return {}
+    },
+    created(){
+        this.getArticleList()
+    },
     mounted(){
         // 在项目加载完成之后初始化wow
         this.$nextTick(() => {
@@ -28,6 +35,12 @@ export default {
             wow.init()
         })
     },
+    computed:{
+        ...mapState('category', ['articleList','articleSwiper'])
+    },
+    methods:{
+        ...mapActions('category', ['getArticleList']),
+    }
 }
 </script>
 

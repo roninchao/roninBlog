@@ -10,6 +10,7 @@ module.exports = app => {
         const file = req.file
         // let location = file.mimetype.indexOf('/')+1
         // let ext = file.mimetype.substr(location)
+        // console.log(file)
         file.url = `http://localhost:3000/uploads/${file.filename}`
         res.send(file)
     })

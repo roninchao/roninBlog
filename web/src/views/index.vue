@@ -1,17 +1,17 @@
 <template>
     <div class="container">
-        <div class="header"></div>
+        <div class="header wow fadeInDown" data-wow-duration ="1s" data-wow-delay ="0.3s"></div>
         <div class="main">
             <!-- 侧边导航栏 -->
-            <div class="nav">
+            <div class="nav wow fadeInLeft" data-wow-duration ="1s" data-wow-delay ="0.3s">
                 <md-navAside></md-navAside>
             </div>
             <div class="content">
                 <router-view></router-view>
             </div>
-            <div class="aside wow fadeInRight"></div>
+            <div class="aside wow fadeInRight" data-wow-duration ="1s" data-wow-delay ="0.3s"></div>
         </div>
-        <div class="footer"></div>
+        <div class="footer wow fadeInUp" data-wow-duration ="1s" data-wow-delay ="0.3s"></div>
     </div>
 </template>
 
@@ -68,9 +68,8 @@ export default {
             }
             .content{
                 // flex: 1;
-                width: 700px;
+                width: 720px;
                 margin: 0 15px;
-                
             }
             .aside{
                 width: 250px;

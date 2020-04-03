@@ -1,7 +1,6 @@
 <template>
     <div class="nav-list">
-        <div class="item wow fadeInLeft" :class="selectedCate==k ? 'active':''" 
-        data-wow-duration ="1s" data-wow-delay ="0.3s"
+        <div class="item" :class="selectedCate==k ? 'active':''" 
         v-for="(v, k) in categoryList" :key="k"
         @click="selectCate(k)">
             <i class="el-icon-document"></i>
@@ -11,22 +10,13 @@
 </template>
 
 <script>
-import {WOW} from 'wowjs'
+
 import {mapState, mapMutations, mapActions} from 'vuex'
 export default { 
     data(){
         return{
             selectedCate: 0,
         }
-    },
-    mounted(){
-        // 在项目加载完成之后初始化wow
-        this.$nextTick(() => {
-            let wow = new WOW({
-                live:true
-            })
-            wow.init()
-        })
     },
     created(){
         this.getCategoryList()

@@ -5,12 +5,30 @@ import func from '@/public/js/function'
 Vue.prototype.$func = func
 
 const state = {
+    // 分类列表
     categoryList:[],
+    // 文章列表轮播
+    articleSwiper:[],
+    // 文章列表
+    articleList:[],
+    // 当前页
+    currentPage:1,
+    // 每页大小
+    pageSize:10
 }
 const mutations = {
 	getCategoryList(state, payLoad){
         state.categoryList = payLoad
-        // state.loadingCategory = false
+    },
+    getArticleList(state, payLoad){
+        // 将时间戳转化为标准时间
+        payLoad.map(item => {
+            item.time = Vue.prototype.$func.getTime(parseInt(item.time))
+        })
+        for(let i=0; i<4; i++) {
+            state.articleSwiper.push(payLoad[i])
+        }
+        state.articleList = payLoad
     },
 }
 const actions = {
@@ -19,9 +37,15 @@ const actions = {
         let res = await Vue.prototype.$http.get('/category')
         if(res.data.code == 0){
             commit('getCategoryList',res.data.cate)
-
         }
     },
+    //获取文章列表
+    async getArticleList({state, commit}){
+        let res = await Vue.prototype.$http.post('/articleList', {id:'', currentPage: state.currentPage, pageSize:state.pageSize})
+        if(res.data.code == 0){
+            commit('getArticleList',res.data.articleList)
+        }
+    }
  
 }
 

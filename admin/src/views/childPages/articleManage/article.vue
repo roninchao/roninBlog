@@ -84,10 +84,14 @@
                 </el-form-item> 
                 <el-form-item label="图片" :label-width="formLabelWidth">
                     <el-upload
-                    action="https://jsonplaceholder.typicode.com/posts/"
+                    action=""
+                    :limit=1
                     list-type="picture-card"
-                    :on-preview="handlePictureCardPreview"
-                    :on-remove="handleRemove">
+                    :on-remove="handleRemove"
+                    :on-exceed="uploadImgExceed"
+                    :file-list="uploadImg"
+                    :before-upload="beforeUploadImg"
+                    :http-request="handleUploadImg">
                         <i class="el-icon-plus"></i>
                     </el-upload>
                     <!-- <el-dialog :visible.sync="dialogVisible">
@@ -126,6 +130,7 @@ export default {
             // 文章信息
             article:{
                 title:"",
+                imgUrl:"",
                 desc:"",
                 content:"",
                 category:""
@@ -148,7 +153,9 @@ export default {
             //文章总数
             totalSize:0,
             //文章分类
-            categoryList:[]
+            categoryList:[],
+            //上传图片
+            uploadImg:[]
         }
     },
     components: {
@@ -176,8 +183,10 @@ export default {
             this.article.desc = ""
             this.article.content = ""
             this.article.category = ""
+            this.article.imgUrl = ''
+            this.uploadImg = []
         },
-        // 获取用户列表
+        //获取用户列表
         async getArticleList(){
             let res = await this.$http.post('/article/getList', {currentPage:this.currentPage, pageSize:this.pageSize})
             if(res.data.code == 0){
@@ -232,6 +241,10 @@ export default {
                 message:'请选择文章分类',
                 type:'warning'
             })
+            if(this.article.imgUrl == '') return this.$message({
+                message:'请上传图片',
+                type:'warning'
+            })
             if(this.article.desc == '') return this.$message({
                 message:'请输入文章简介',
                 type:'warning'
@@ -265,10 +278,15 @@ export default {
             this.editArticleID = _id
             let res = await this.$http.get(`/article/${_id}`)
             if(res.data.code == 0) {
+                console.log(res.data.data)
                 this.article.title = res.data.data.title
                 this.article.category = res.data.data.category
                 this.article.desc = res.data.data.desc
                 this.article.content = res.data.data.content
+                console.log(res.data.data.imgUrl)
+                this.article.imgUrl = res.data.data.imgUrl
+                this.uploadImg.push({url:res.data.data.imgUrl})
+               
             }
         },
         //删除文章
@@ -287,6 +305,38 @@ export default {
                     type:'success'
                 })
             }
+        },
+        // 移除上传图片
+        handleRemove(e){
+            this.article.imgUrl = ''
+            this.uploadImg = []
+        },
+        // 上传图片超过数量限制
+        uploadImgExceed(e){
+            // 只允许上传一张
+            if(this.article.imgUrl) return this.$message({
+                type:'error',
+                message:'只允许上传一张图片'
+            })
+        },
+        //图片上传前处理
+        beforeUploadImg(e){
+             // 限制图片格式和大小
+            let patten = /(jpeg|png|gif|jpg|webp)$/
+            let isValid = patten.test(e.name)
+            if (!isValid) this.$message.error('上传图片格式不正确!');
+            let isLt5M = e.size / (1024*1024) < 5;
+            if (!isLt5M) this.$message.error('上传图片大小不能超过 5MB!');
+            return isValid && isLt5M;
+        },
+        // 上传图片
+        async handleUploadImg(e) {
+            let file = e.file
+            let formData = new FormData();
+            formData.append("file", file)
+            let res = await this.$http.post('/uploadImage', formData)
+            console.log(res.data.url)
+            this.article.imgUrl = res.data.url
         },
         // 富文本上传图片
         async handleImageAdded(file, Editor, cursorLocation, resetUploader) {
