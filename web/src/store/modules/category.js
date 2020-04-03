@@ -11,6 +11,8 @@ const state = {
     articleSwiper:[],
     // 文章列表
     articleList:[],
+    //文章详情
+    articleDetail:{},
     // 当前页
     currentPage:1,
     // 每页大小
@@ -30,6 +32,9 @@ const mutations = {
         }
         state.articleList = payLoad
     },
+    getArticleDetail(state, payLoad){
+        state.articleDetail = payLoad
+    }
 }
 const actions = {
     //获取文章分类
@@ -45,8 +50,17 @@ const actions = {
         if(res.data.code == 0){
             commit('getArticleList',res.data.articleList)
         }
+    },
+    //获取文章详情
+    async getArticleDetail({commit}, payLoad){
+        let {id, next} = payLoad
+        next = next || 0
+        let res =  await Vue.prototype.$http.post('/article', {id, next})
+        if(res.data.code == 0) {
+            res.data.article.time = Vue.prototype.$func.getTime(parseInt(res.data.article.time))
+            commit('getArticleDetail', res.data.article)
+        }
     }
- 
 }
 
 export default {

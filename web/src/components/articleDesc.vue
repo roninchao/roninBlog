@@ -5,7 +5,7 @@
         </div>
         <div class="article">
             <div class="article-desc">
-                <p class="top">{{article.title}}</p>
+                <p class="top" @click="go(article._id)">{{article.title}}</p>
                 <p class="bottom">{{article.desc}}</p>
             </div>
             <div class="article-other">
@@ -48,6 +48,11 @@ export default {
             wow.init()
         })
     },
+    methods:{
+        go(e){
+            this.$router.push({path:'/detail', query:{id:e}})
+        }
+    }
 }
 </script>
 

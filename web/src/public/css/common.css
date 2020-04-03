@@ -62,3 +62,8 @@ body::-webkit-scrollbar-track{
     border-radius: 6px;
     background: #fff;
 }
+
+#article-content img{
+    max-width: 690px;
+    margin: 0 auto;
+}

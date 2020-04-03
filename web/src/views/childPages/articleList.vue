@@ -1,15 +1,15 @@
 <template>
     <div>
-        <div class="swiper wow fadeInDown" data-wow-duration ="1s" data-wow-delay ="0s">
+        <div class="swiper wow fadeInDown" data-wow-duration =".5s" data-wow-delay ="0s">
             <md-articleSwiper :articleSwiper="articleSwiper"></md-articleSwiper>
         </div>
         <!-- 文章列表 -->
         <div class="article-list">
-            <div class="title wow fadeInUp" data-wow-duration ="1s" data-wow-delay ="0s"></div>
+            <div class="title wow fadeInUp" data-wow-duration =".5s" data-wow-delay ="0s"></div>
             <div v-for="(v, k) in articleList" :key="k">
                 <md-articleDesc :article="v"></md-articleDesc>
             </div>
-            <div class="load-more wow fadeInUp"  data-wow-duration ="1s" data-wow-delay ="0s">
+            <div class="load-more wow fadeInUp"  data-wow-duration =".5s" data-wow-delay ="0s">
                 <span>加载更多</span>
             </div>
         </div>
@@ -25,6 +25,9 @@ export default {
     },
     created(){
         this.getArticleList()
+        
+    },
+    mounted(){
         // 在项目加载完成之后初始化wow
         this.$nextTick(() => {
             let wow = new WOW({
@@ -50,6 +53,7 @@ export default {
         border-radius: 5px;
     }
     .article-list{
+        min-height: 800px;
         .title{
             width: 100%;
             height: 40px;

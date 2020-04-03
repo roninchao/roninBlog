@@ -1,25 +1,32 @@
 <template>
     <div class="container">
-        <div class="header wow fadeInDown" data-wow-duration ="1s" data-wow-delay ="0s"></div>
+        <!-- 页头 -->
+        <div class="header wow fadeInDown" data-wow-duration =".5s" data-wow-delay ="0s"></div>
         <div class="main">
             <!-- 侧边导航栏 -->
-            <div class="nav wow fadeInLeft" data-wow-duration ="1s" data-wow-delay ="0s">
+            <div class="nav wow fadeInLeft" data-wow-duration =".5s" data-wow-delay ="0s">
                 <md-navAside></md-navAside>
             </div>
+            <!-- 主体 -->
             <div class="content">
                 <router-view></router-view>
             </div>
-            <div class="aside wow fadeInRight" data-wow-duration ="1s" data-wow-delay ="0s">
+            <!-- 侧边栏 -->
+            <div class="aside wow fadeInRight" data-wow-duration =".5s" data-wow-delay ="0s">
                 <md-ranking rankingName="热评榜" :ranking="articleList"></md-ranking>
                 <md-ranking rankingName="新增榜" :ranking="articleList"></md-ranking>
             </div>
+            <!-- 回到顶部 -->
             <el-backtop :bottom="150">
                 <div class="back">
                     <i class="el-icon-caret-top"></i>
                 </div>
             </el-backtop>
         </div>
-        <div class="footer wow fadeInUp" data-wow-duration ="1s" data-wow-delay ="0s"></div>
+        <!-- 页脚 -->
+        <div class="footer wow fadeInUp" data-wow-duration =".5s" data-wow-delay ="0s">
+            <md-footer></md-footer>
+        </div>
     </div>
 </template>
 
@@ -32,7 +39,16 @@ export default {
             selectedCate: 0,
         }
     },
-    created(){
+    mounted(){
+        // 在项目加载完成之后初始化wow
+        this.$nextTick(() => {
+            let wow = new WOW({
+                live:true
+            })
+            wow.init()
+        })
+    },
+    updated(){
         // 在项目加载完成之后初始化wow
         this.$nextTick(() => {
             let wow = new WOW({
@@ -68,6 +84,7 @@ export default {
         }
         .main{
             width: 1200px;
+            min-height: 100vh;
             display: flex;
             margin: 15px auto;
             padding-top: 60px;
@@ -75,7 +92,6 @@ export default {
                 width: 200px;
                 height: auto;
                 position: relative;
-              
             }
             .content{
                 width: 720px;
@@ -83,7 +99,6 @@ export default {
             }
             .aside{
                 width: 250px;
-                height: 700px;
             }
             .back{
                 height: 100%;
@@ -102,8 +117,11 @@ export default {
         }
         .footer{
             width: 100%;
-            height: 100px;
-            background: #fff;
+            height: 60px;
+            background: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     }
 </style>
