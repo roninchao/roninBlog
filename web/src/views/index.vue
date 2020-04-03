@@ -1,29 +1,38 @@
 <template>
     <div class="container">
-        <div class="header wow fadeInDown" data-wow-duration ="1s" data-wow-delay ="0.3s"></div>
+        <div class="header wow fadeInDown" data-wow-duration ="1s" data-wow-delay ="0s"></div>
         <div class="main">
             <!-- 侧边导航栏 -->
-            <div class="nav wow fadeInLeft" data-wow-duration ="1s" data-wow-delay ="0.3s">
+            <div class="nav wow fadeInLeft" data-wow-duration ="1s" data-wow-delay ="0s">
                 <md-navAside></md-navAside>
             </div>
             <div class="content">
                 <router-view></router-view>
             </div>
-            <div class="aside wow fadeInRight" data-wow-duration ="1s" data-wow-delay ="0.3s"></div>
+            <div class="aside wow fadeInRight" data-wow-duration ="1s" data-wow-delay ="0s">
+                <md-ranking rankingName="热评榜" :ranking="articleList"></md-ranking>
+                <md-ranking rankingName="新增榜" :ranking="articleList"></md-ranking>
+            </div>
+            <el-backtop :bottom="150">
+                <div class="back">
+                    <i class="el-icon-caret-top"></i>
+                </div>
+            </el-backtop>
         </div>
-        <div class="footer wow fadeInUp" data-wow-duration ="1s" data-wow-delay ="0.3s"></div>
+        <div class="footer wow fadeInUp" data-wow-duration ="1s" data-wow-delay ="0s"></div>
     </div>
 </template>
 
 <script>
 import {WOW} from 'wowjs'
+import {mapState} from 'vuex'
 export default {
     data(){
         return{
             selectedCate: 0,
         }
     },
-    mounted(){
+    created(){
         // 在项目加载完成之后初始化wow
         this.$nextTick(() => {
             let wow = new WOW({
@@ -31,6 +40,9 @@ export default {
             })
             wow.init()
         })
+    },
+    computed:{
+        ...mapState('category', ['articleList'])
     },
     methods:{
         selectCate(e) {
@@ -62,19 +74,30 @@ export default {
             .nav{
                 width: 200px;
                 height: auto;
-                // background: #f0f0f0;
                 position: relative;
               
             }
             .content{
-                // flex: 1;
                 width: 720px;
                 margin: 0 15px;
             }
             .aside{
                 width: 250px;
                 height: 700px;
+            }
+            .back{
+                height: 100%;
+                width: 100%;
                 background: #fff;
+                text-align: center;
+                line-height: 40px;
+                border-radius: 5px;
+                color: #666;
+                transition: all 0.3s;
+                &:hover{
+                    background: #ccc;
+                    color: #fff;
+                }
             }
         }
         .footer{

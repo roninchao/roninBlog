@@ -106,6 +106,7 @@ export default {
                     }
                 }
                 .bottom{
+                    cursor: default;
                     overflow : hidden;
                     text-overflow: ellipsis;
                     display: -webkit-box;
@@ -116,14 +117,12 @@ export default {
             .article-other{
                 display: flex;
                 align-items: center;
-                // justify-content: space-between;
                 .icon{
                     font-size: 12px;
                     color: #999;
                     padding-right: 15px;
-                    // width: 80px;
+                    cursor: default;
                 }
-                // justify-content: space-between; 
             }
         }
     }

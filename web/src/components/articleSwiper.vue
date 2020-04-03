@@ -9,7 +9,7 @@
 <script>
 export default {
     props:{
-        articleSwiper:[]
+        articleSwiper:''
     },
     data() {
         return {}

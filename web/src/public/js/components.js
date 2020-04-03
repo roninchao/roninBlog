@@ -19,4 +19,6 @@ Vue.component('md-navAside', resolve => require(['@/components/navAside'], resol
 Vue.component('md-articleDesc', resolve => require(['@/components/articleDesc'], resolve))
 /* 文章列表轮播 */
 Vue.component('md-articleSwiper', resolve => require(['@/components/articleSwiper'], resolve))
+/* 文章列表轮播 */
+Vue.component('md-ranking', resolve => require(['@/components/ranking'], resolve))
 

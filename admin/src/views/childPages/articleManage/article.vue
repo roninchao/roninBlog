@@ -94,9 +94,6 @@
                     :http-request="handleUploadImg">
                         <i class="el-icon-plus"></i>
                     </el-upload>
-                    <!-- <el-dialog :visible.sync="dialogVisible">
-                        <img width="100%" :src="dialogImageUrl" alt="">
-                    </el-dialog> -->
                 </el-form-item>
                 <el-form-item label="简介" :label-width="formLabelWidth" >
                     <el-input v-model="article.desc" 
