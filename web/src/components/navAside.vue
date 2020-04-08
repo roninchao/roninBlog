@@ -1,8 +1,8 @@
 <template>
     <div class="nav-list">
-        <div class="item" :class="selectedCate==k ? 'active':''" 
+        <div class="item" :class="selectedCateID==v._id ? 'active':''" 
         v-for="(v, k) in categoryList" :key="k"
-        @click="selectCate(k)">
+        @click="selectCate(v._id)">
             <i class="el-icon-document"></i>
             <span>{{v.category}}</span>
         </div>
@@ -14,20 +14,25 @@ import {mapState, mapMutations, mapActions} from 'vuex'
 export default { 
     data(){
         return{
-            selectedCate: 0,
+            
         }
     },
     created(){
         this.getCategoryList()
     },
     computed:{
-        ...mapState('category', ['categoryList'])
+        ...mapState('category', ['categoryList', 'selectedCateID'])
     },
     methods:{
+        ...mapMutations('category', ['setSelectedCateID']),
         ...mapActions('category', ['getCategoryList']),
         selectCate(e) {
-            console.log(e,this.selectedCate)
-            this.selectedCate = e
+            this.setSelectedCateID(e)
+            // console.log(this.$route)
+            if(this.$route.path != 'index'){
+                this.$router.push('/index')
+            }
+            window.scrollTo(0,0)
         }
     }
 }

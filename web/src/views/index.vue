@@ -1,10 +1,10 @@
 <template>
     <div class="container">
         <!-- 页头 -->
-        <div class="header wow fadeInDown" data-wow-duration =".5s" data-wow-delay ="0s"></div>
+        <div class="header"></div>
         <div class="main">
             <!-- 侧边导航栏 -->
-            <div class="nav wow fadeInLeft" data-wow-duration =".5s" data-wow-delay ="0s">
+            <div class="nav">
                 <md-navAside></md-navAside>
             </div>
             <!-- 主体 -->
@@ -12,9 +12,9 @@
                 <router-view></router-view>
             </div>
             <!-- 侧边栏 -->
-            <div class="aside wow fadeInRight" data-wow-duration =".5s" data-wow-delay ="0s">
-                <md-ranking rankingName="热评榜" :ranking="articleList"></md-ranking>
-                <md-ranking rankingName="新增榜" :ranking="articleList"></md-ranking>
+            <div class="aside">
+                <md-ranking rankingName="热评榜" :ranking="commentsRanking"></md-ranking>
+                <md-ranking rankingName="新增榜" :ranking="newRanking"></md-ranking>
             </div>
             <!-- 回到顶部 -->
             <el-backtop :bottom="150">
@@ -24,43 +24,37 @@
             </el-backtop>
         </div>
         <!-- 页脚 -->
-        <div class="footer wow fadeInUp" data-wow-duration =".5s" data-wow-delay ="0s">
+        <div class="footer">
             <md-footer></md-footer>
         </div>
     </div>
 </template>
 
 <script>
-import {WOW} from 'wowjs'
-import {mapState} from 'vuex'
+import {mapState, mapActions, mapMutations} from 'vuex'
 export default {
     data(){
         return{
             selectedCate: 0,
         }
     },
-    mounted(){
-        // 在项目加载完成之后初始化wow
-        this.$nextTick(() => {
-            let wow = new WOW({
-                live:true
-            })
-            wow.init()
-        })
+    created() {
+        this.getCommentsRanking()
+        this.getNewRanking()
     },
-    updated(){
-        // 在项目加载完成之后初始化wow
-        this.$nextTick(() => {
-            let wow = new WOW({
-                live:true
-            })
-            wow.init()
-        })
+    watch:{
+        $route(to, from){
+            if(from.path == '/detail'){
+                this.setIsFrom(true)
+            }
+        }
     },
     computed:{
-        ...mapState('category', ['articleList'])
+        ...mapState('category', ['articleList', 'commentsRanking', 'newRanking'])
     },
     methods:{
+        ...mapActions('category', ['getCommentsRanking', 'getNewRanking']),
+        ...mapMutations('category', ['setIsFrom']),
         selectCate(e) {
             console.log(e,this.selectedCate)
             this.selectedCate = e

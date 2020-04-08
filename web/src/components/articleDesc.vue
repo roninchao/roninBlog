@@ -1,6 +1,6 @@
 <template>
     <div class="article-item wow fadeInUp"  data-wow-duration ="1s" data-wow-delay ="0s">
-        <div class="img-box">
+        <div class="img-box" @click="go(article._id)">
             <div class="img" :style="{backgroundImage:`url(${article.imgUrl})`}"></div>  
         </div>
         <div class="article">

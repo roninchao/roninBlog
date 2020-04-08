@@ -12,6 +12,12 @@ const router =  new Router({
             component:() => import('@/views/login'),
         },
         {
+            path:'/',
+            redirect:{
+                path:'/admin'
+            },
+        },
+        {
             path:'/admin',
             meta:{
                 requireAuth:true

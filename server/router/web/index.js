@@ -12,11 +12,44 @@ module.exports = app => {
             cate
         }) 
     })
-    //获取各分类下文章
+    //获取热评排行榜
+    router.get('/commentsRanking', async (req, res) => {
+        let commentsRanking = []
+        await articleSchema.find({}).sort({comments:-1}).limit(10).exec(function(err,docs){
+            commentsRanking = docs
+            res.send({
+                code:0,
+                commentsRanking
+            }) 
+        });
+    })
+    //获取新增排行榜
+    router.get('/newRanking', async (req, res) => {
+        let newRanking = []
+        await articleSchema.find({}).sort({time:-1}).limit(10).exec(function(err,docs){
+            newRanking = docs
+            res.send({
+                code:0,
+                newRanking
+            }) 
+        });
+    })
+    // 获取轮播图
+    router.get('/swiper', async (req, res) => {
+        let swiper = []
+        await articleSchema.find({}).sort({visits:-1}).limit(4).exec(function(err,docs){
+            swiper = docs
+            res.send({
+                code:0,
+                swiper
+            }) 
+        });
+    })
+    //获取文章列表
     router.post('/articleList', async (req, res) => {
         let {id, currentPage, pageSize} = req.body
         let articleList = []
-        if(id){
+        if(!id == 0){
             articleList = await articleSchema.find({category:id}).populate('category').skip((currentPage-1)*pageSize).limit(pageSize)
         }else{
             articleList = await articleSchema.find().populate('category').skip((currentPage-1)*pageSize).limit(pageSize)

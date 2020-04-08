@@ -1,7 +1,7 @@
 <template>
     <el-carousel trigger="click" height="250px">
         <el-carousel-item v-for="(v, k) in articleSwiper" :key="k">
-            <div class="img" :style="{backgroundImage:`url(${v.imgUrl})`}"></div>
+            <div class="img" :style="{backgroundImage:`url(${v.imgUrl})`}" @click="go(v._id)"></div>
         </el-carousel-item>
     </el-carousel>
 </template>
@@ -13,6 +13,11 @@ export default {
     },
     data() {
         return {}
+    },
+    methods:{
+        go(e){
+            this.$router.push({path:'/detail', query:{id:e}})
+        }
     }
 }
 </script>

@@ -7,8 +7,8 @@
                 <span>{{statistics.todayVisits}}</span>
             </div>
             <div class="item">
-                <span>总访问量</span>
-                <span>{{statistics.allVisits}}</span>
+                <span>用户总量</span>
+                <span>{{statistics.allUsers}}</span>
             </div>
             <div class="item">
                 <span>文章总量</span>
@@ -41,7 +41,7 @@ import echarts from 'echarts'
                 // 顶部统计数据
                 statistics:{ 
                     todayVisits:0,//今日访问量
-                    allVisits:0,//总访问量
+                    allUsers:0,//用户总量
                     allComments:0,//评论总量
                     allArticles:0,//文章总量
                 },
@@ -62,8 +62,8 @@ import echarts from 'echarts'
                     // 设置顶部总数据
                     this.statistics = {
                         todayVisits: 999,//今日访问量
-                        allVisits: 109873,//总访问量
-                        allComments:578463547,//评论总量
+                        allUsers: res.data.data.allUsers,//用户总量
+                        allComments:res.data.data.allComments,//评论总量
                         allArticles:res.data.data.allArticle//文章总量
                     }
                     console.log(res.data)

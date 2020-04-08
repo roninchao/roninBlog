@@ -4,7 +4,7 @@
         <div class="content">
             <div class="item" v-for="(v,k) in ranking" :key="k">
                 <div>{{k+1}}</div>
-                <div>{{v.title}}</div>
+                <div @click="go(v._id)">{{v.title}}</div>
             </div>
         </div>
     </div>
@@ -15,6 +15,11 @@ export default {
     props:{
         rankingName:'',
         ranking:''
+    },
+    methods:{
+        go(e){
+            this.$router.push({path:'/detail', query:{id:e}})
+        }
     }
 }
 </script>

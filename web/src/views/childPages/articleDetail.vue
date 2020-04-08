@@ -1,26 +1,32 @@
 <template>
-    <div class="detail">
-        <div @click="goBack" class="back"><i class="el-icon-back icon"></i>返回</div>
-        <div class="article-box">
-            <div class="header">
-            <h4 class="title">{{articleDetail.title}}</h4>
-                <div class="desc">
-                    <span><i class="el-icon-document"></i>{{articleDetail.category?articleDetail.category.category:''}}</span>
-                    <span><i class="el-icon-view"></i>{{articleDetail.visits}}</span>
-                    <span><i class="el-icon-chat-line-round"></i>{{articleDetail.comments}}</span> 
-                    <span><i class="el-icon-timer"></i>{{articleDetail.time}}</span>
+    <div>
+        <div class="detail">
+            <div @click="goBack" class="back"><i class="el-icon-back icon"></i>返回</div>
+            <div class="article-box">
+                <div class="header">
+                <h4 class="title">{{articleDetail.title}}</h4>
+                    <div class="desc">
+                        <span><i class="el-icon-document"></i>{{articleDetail.category?articleDetail.category.category:''}}</span>
+                        <span><i class="el-icon-view"></i>{{articleDetail.visits}}</span>
+                        <span><i class="el-icon-chat-line-round"></i>{{articleDetail.comments}}</span> 
+                        <span><i class="el-icon-timer"></i>{{articleDetail.time}}</span>
+                    </div>
                 </div>
+                <div class="img-box">
+                    <div class="img" :style="{backgroundImage:`url(${articleDetail.imgUrl})`}"></div>
+                </div>
+                <div class="content" id="article-content" v-html="articleDetail.content"></div>
             </div>
-            <div class="img-box">
-                <div class="img" :style="{backgroundImage:`url(${articleDetail.imgUrl})`}"></div>
+            <div class="btn">
+                <div class="item" @click="next(-1)"><i class="el-icon-d-arrow-left icon"></i>上一篇</div>
+                <div class="item" @click="next(1)">下一篇<i class="el-icon-d-arrow-right icon"></i></div>
             </div>
-            <div class="content" id="article-content" v-html="articleDetail.content"></div>
         </div>
-        <div class="btn">
-            <div class="item" @click="next(-1)"><i class="el-icon-d-arrow-left icon"></i>上一篇</div>
-            <div class="item" @click="next(1)">下一篇<i class="el-icon-d-arrow-right icon"></i></div>
+        <div>
+            <md-comments></md-comments>
         </div>
     </div>
+   
 </template>
 
 <script>
@@ -35,6 +41,7 @@ export default {
         if(this.$route.query.id){
             this.getArticleDetail({id:this.$route.query.id})
         }
+        window.scroll(0,0)
     },
     computed:{
         ...mapState('category', ['articleDetail',])
