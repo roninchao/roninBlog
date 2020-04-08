@@ -31,7 +31,7 @@ export default {
             }
             this.setSelectedCateID(e)
             // console.log(this.$route)
-            if(this.$route.path != 'index'){
+            if(this.$route.path != '/index'){
                 this.$router.push('/index')
             }
             window.scrollTo(0,0)

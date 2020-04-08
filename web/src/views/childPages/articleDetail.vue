@@ -17,10 +17,10 @@
                 </div>
                 <div class="content" id="article-content" v-html="articleDetail.content"></div>
             </div>
-            <div class="btn">
+            <!-- <div class="btn">
                 <div class="item" @click="next(-1)"><i class="el-icon-d-arrow-left icon"></i>上一篇</div>
                 <div class="item" @click="next(1)">下一篇<i class="el-icon-d-arrow-right icon"></i></div>
-            </div>
+            </div> -->
         </div>
         <div>
             <md-comments></md-comments>

@@ -1,7 +1,11 @@
 <template>
     <div class="container">
         <!-- 页头 -->
-        <div class="header"></div>
+        <div class="header">
+            <div class="content">
+                <md-header></md-header>
+            </div>
+        </div>
         <div class="main">
             <!-- 侧边导航栏 -->
             <div class="nav">
@@ -75,6 +79,11 @@ export default {
             left: 0;
             z-index: 3;
             box-shadow: 0 0 5px #ccc;
+            display: flex;
+            justify-content: center;
+            .content{
+                width: 1200px;
+            }
         }
         .main{
             width: 1200px;

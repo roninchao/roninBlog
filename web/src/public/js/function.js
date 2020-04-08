@@ -1,6 +1,5 @@
 import Vue from 'vue'
-import Router from 'vue-router'
-Vue.use(Router)
+
 // 通过时间戳获取正常的时间显示
 function getTime(data,type){
     var _data = data;
@@ -26,17 +25,7 @@ function getTime(data,type){
         return `${Y}-${Mon}-${Day} ${H}:${Min}:${S}`
     }
 }
-// 路由跳转
-function go(path, query) {
-    console.log(path)
-    if(query){
-        Router.push({path,query})
-    }else{
-        Router.push({path:path})
-    }
-    
-}
+
 export default {
     getTime,
-    go
 }

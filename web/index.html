@@ -6,6 +6,17 @@
     <title>web</title>
   </head>
   <body>
+    <!--[if lt IE 10]>
+    <script type="text/javascript">
+        var str = "你的浏览器版本太low了,已经和时代脱轨了 :(";
+        var str2 = "推荐使用:<a href='https://www.google.cn/chrome/' target='_blank' style='color:#ff6600;'>谷歌浏览器</a>,"
+                + "<a href='http://www.firefox.com.cn/' target='_blank' style='color:#ff6600;'>火狐浏览器</a>";
+        document.writeln("<pre style='text-align:center;color:#666;background-color:#f0f0f0; height:100%;border:0;position:fixed;top:0;left:0;width:100%;z-index:1234'>" +
+                "<h2 style='padding-top:200px;margin:0'><strong>" + str + "<br/></strong></h2><h2>" +
+                str2 + "</h2><h2 style='margin:0'><strong>如果你的使用的是双核浏览器,请切换到极速模式访问<br/></strong></h2></pre>");
+        document.execCommand("Stop");
+    </script>
+    <![endif]-->
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>

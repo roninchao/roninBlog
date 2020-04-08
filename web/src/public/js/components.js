@@ -1,7 +1,8 @@
 import Vue from 'vue'
 
 // 自定义组件   ============开始
-
+/* 页头 */
+Vue.component('md-header', resolve => require(['@/components/header'], resolve))
 /* 侧边导航栏 */
 Vue.component('md-navAside', resolve => require(['@/components/navAside'], resolve))
 /* 文章简介 */
