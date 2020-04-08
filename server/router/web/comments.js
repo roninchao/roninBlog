@@ -25,7 +25,6 @@ module.exports = app => {
     //获取评论列表
     router.post('/commentList', async(req, res) => {
         let {articleId, currentPage, pageSize} = req.body
-        console.log({articleId,currentPage, pageSize})
         //获取数据总数
         let total = await commentSchema.countDocuments({articleId})
         if(total <= 0) return res.send({

@@ -14,7 +14,6 @@ import {mapState, mapMutations, mapActions} from 'vuex'
 export default { 
     data(){
         return{
-            
         }
     },
     created(){
@@ -24,9 +23,12 @@ export default {
         ...mapState('category', ['categoryList', 'selectedCateID'])
     },
     methods:{
-        ...mapMutations('category', ['setSelectedCateID']),
+        ...mapMutations('category', ['setSelectedCateID','setIsFrom']),
         ...mapActions('category', ['getCategoryList']),
         selectCate(e) {
+            if(this.selectedCateID != e){
+                this.setIsFrom(false)
+            }
             this.setSelectedCateID(e)
             // console.log(this.$route)
             if(this.$route.path != 'index'){

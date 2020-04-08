@@ -44,7 +44,7 @@ export default {
     },
     watch:{
         $route(to, from){
-            if(from.path == '/detail'){
+            if(to.path == '/detail'){
                 this.setIsFrom(true)
             }
         }

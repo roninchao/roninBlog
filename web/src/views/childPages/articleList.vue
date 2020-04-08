@@ -5,13 +5,20 @@
         </div>
         <!-- 文章列表 -->
         <div class="article-list">
-            <div class="title"></div>
+            <div class="title">
+                <div class="item">文章列表</div>
+                <!-- <div class="item"></div> -->
+            </div>
             <div v-for="(v, k) in articleList" :key="k">
                 <md-articleDesc :article="v"></md-articleDesc>
             </div>
             <div>
                 <div class="load-more" :class="isMore?'':'not-data'" @click="addMore">
-                    <span>{{isMore?'加载更多':'已经到底了'}}</span>
+                    <span v-if="articleList.length>0">{{isMore?'加载更多':'已经到底了'}}</span>
+                    <span v-else class="no-data">
+                        <i class="el-icon-document"></i>
+                        <span>暂无数据</span>
+                    </span>
                 </div>
             </div>
         </div>
@@ -24,7 +31,6 @@ import {mapState, mapMutations, mapActions} from 'vuex'
 export default {
     data() {
         return {
-         
         }
     },
     created(){
@@ -35,7 +41,7 @@ export default {
         this.setIsFrom(false)
     },
     computed:{
-        ...mapState('category', ['articleList', 'selectedCateID', 'swiper', 'currentPage', 'pageSize', 'isMore', 'isFrom']),
+        ...mapState('category', ['categoryList','articleList', 'selectedCateID', 'swiper', 'currentPage', 'pageSize', 'isMore', 'isFrom']),
     },
     watch:{
         selectedCateID(v1, v2){
@@ -80,10 +86,24 @@ export default {
             margin: 15px 0;
             background: #fff;
             border-radius: 5px;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            box-sizing: border-box;
+            .item{
+                border-left: 3px solid #ff6600;
+                padding-left: 5px;
+                font-weight: bold;
+                cursor: default;
+            }
         }
         .load-more{
             width: 100%;
-            height: 40px;
+            padding: 10px 0;
+            border-radius: 5px;
+            // height: 40px;
             background: #fff;
             display: flex;
             justify-content: center;
@@ -99,6 +119,15 @@ export default {
             }
             &:active{
                 opacity: 0.6;
+            }
+            .no-data{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                i{
+                    font-size: 48px;
+                }
             }
         }
         .not-data{

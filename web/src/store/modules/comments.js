@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import http from '@/public/js/axios'
 Vue.prototype.$http = http.instance
+import func from '@/public/js/function'
+Vue.prototype.$func = func
 
 const state = {
     comment:{},
@@ -11,10 +13,15 @@ const state = {
 const mutations = {
     getCommentList(state, payLoad) {
         setTimeout(() => {
+            if(payLoad.data){
+                payLoad.data.map(item => {
+                    item.time = Vue.prototype.$func.getTime(parseInt(item.time))
+                })
+            }
             state.commentsList = payLoad.data
             state.total = payLoad.total
             state.commentListLoading = false
-        }, 500)
+        }, 200)
     }
 }
 const actions = {

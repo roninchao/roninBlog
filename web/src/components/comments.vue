@@ -1,7 +1,7 @@
 <template>
     <div class="comments">
-        <div v-if="$cookie.get('token')">
-            <div class="header">评论<span>（{{total}}条）</span></div>
+        <div v-if="$cookie.get('webToken')">
+            <div class="header">评论<span v-show="total">（{{total}}条）</span></div>
             <div class="send-comments">
                 <div class="head">
                     <div class="left">
@@ -24,7 +24,7 @@
                     show-word-limit>
                     </el-input>
                 </div>
-                <div class="comment-content" v-if="commentsList.length>0" v-loading="commentListLoading">
+                <div class="comment-content" v-if="commentsList" v-loading="commentListLoading">
                     <div class="item" >
                         <div class="item-item"  v-for="(v,k) in commentsList" :key="k">
                             <div class="item-head">
@@ -33,18 +33,22 @@
                                 </div>
                                 <div class="username"><span>{{v.reviewerId.username}}</span>
                                     <i v-if="v.commentatorId">
-                                        回复 <span>{{v.commentatorId.username}}</span>
+                                        回复 <span>@{{v.commentatorId.username}}</span>
                                     </i>
                                 ：</div>
                             </div>
                             <div class="item-content">{{v.content}}</div>
-                            <div class="btn-box">
+                            <div class="item-item-bottom">
+                                <div class="time">
+                                    <i class="el-icon-timer"></i>
+                                    <span>{{v.time}}</span>
+                                </div>
                                 <div class="btn" @click="openCommentsBox(v.reviewerId._id)">回复</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="pages">
+                <div class="pages" v-if="commentsList">
                     <el-pagination
                     background
                     layout="prev, pager, next"
@@ -98,11 +102,11 @@ export default {
         }
     },
     created(){
-        this.getCommentList({articleId:this.article._id, currentPage:this.currentPage, pageSize:this.pageSize})
+        this.getCommentList({articleId:this.$route.query.id, currentPage:this.currentPage, pageSize:this.pageSize})
     },
     computed:{
-        ...mapState('category',['article']),
-        ...mapState('comments',['commentsList', 'commentListLoading','total']),
+        ...mapState('category',['articleDetail']),
+        ...mapState('comments',['commentsList', 'commentListLoading', 'total']),
     },
     methods:{
         ...mapActions('comments', ['addComment', 'getCommentList']),
@@ -112,7 +116,7 @@ export default {
         },
         handleCurrentChange(e){
             this.currentPage = e
-            this.getCommentList({articleId:this.article._id, currentPage:this.currentPage, pageSize:this.pageSize})
+            this.getCommentList({articleId:this.$route.query.id, currentPage:this.currentPage, pageSize:this.pageSize})
         },
         handleClose() {
             this.commentVal2 = ''
@@ -139,7 +143,7 @@ export default {
                     message:'请输入评论内容'
                 })
             }
-            this.addComment({articleId:this.article._id, reviewerId:this.$cookie.get('userID'), commentatorId:this.commentatorId, content})
+            this.addComment({articleId:this.$route.query.id, reviewerId:this.$cookie.get('userID'), commentatorId:this.commentatorId, content})
             if(this.commentatorId){
                 this.commentVal2 = ''
             }else{
@@ -147,7 +151,7 @@ export default {
             }
             this.commentatorId = ''
             this.dialogVisible = false
-            this.getCommentList({articleId:this.article._id, currentPage:this.currentPage, pageSize:this.pageSize})
+            this.getCommentList({articleId:this.$route.query.id, currentPage:this.currentPage, pageSize:this.pageSize})
         }
     }
 }
@@ -155,9 +159,14 @@ export default {
 
 <style lang='less' scoped>
     .comments{
+        background: #fff;
+        margin: 15px 0;
+        border-radius: 5px;
+        padding: 15px;
         .header{
             font-size: 24px;
             color: #666;
+            cursor: default;
             span{
                 font-size: 14px;
             }
@@ -168,7 +177,7 @@ export default {
                 color: #333;
                 display: flex;
                 justify-content: space-between;
-                padding: 20px 0 10px;
+                padding: 15px 0 15px;
                 .left{
                     display: flex;
                     align-items: center;
@@ -187,20 +196,22 @@ export default {
                         color: #666;
                         box-sizing: border-box;
                         padding: 0 10px;
+                        cursor: default;
                     }
                 }
                 .btn{
                     font-size: 14px;
                     color: #666;
                     padding: 8px 29px;
-                    border: 1px solid #ccc;
+                    border: 1px solid #f0f0f0;
                     border-radius: 5px;
                     text-align: center;
                     cursor: pointer;
                     user-select: none;
-                    transition: all 0.4s;
+                    transition: all 0.3s;
                     &:hover{
-                        background: #f0f0f0;
+                        color: #fff;
+                        background: #ccc;
                     }
                 }
             }
@@ -211,12 +222,13 @@ export default {
                 .item{
                     margin: 10px 0;
                     padding: 10px 10px 0;
-                    border: 1px solid #ccc;
+                    border: 1px solid #f0f0f0;
                     border-radius: 5px;
                     .item-item{
-                        border-bottom: 1px dashed #ccc;
+                        border-bottom: 1px dashed #f0f0f0;
                         padding: 10px;
-                        transition: all 0.4s;
+                        overflow: hidden;
+                        transition: all 0.3s;
                         &:last-child{
                             border-bottom:none;
                         }
@@ -224,12 +236,19 @@ export default {
                             transform: translateY(0px);
                             opacity: 1;
                         }
-                        .btn-box{
+                        .item-item-bottom{
                             display: flex;
-                            justify-content: flex-end;
+                            justify-content: space-between;
+                            align-items: center;
+                            .time{
+                                padding-left: 35px;
+                                font-size: 12px;
+                                color: #999;
+                                cursor: default;
+                            }
                         }
                         .btn{
-                            transition: all 0.4s;
+                            transition: all 0.3s;
                             transform: translateY(50px);
                             opacity: 0;
                             width: 70px;
@@ -238,14 +257,15 @@ export default {
                             color: #666;
                             padding: 5px 0;
                             background: #fff;
-                            border: 1px solid #ccc;
+                            border: 1px solid #f0f0f0;
                             border-radius: 5px;
                             cursor: pointer;
                             user-select: none;
                             text-align: center;
-                            transition: all 0.4s;
+                            transition: all 0.3s;
                             &:hover{
-                                background: #f0f0f0;
+                                color: #fff;
+                                background: #ccc;
                             }
                         }
                     }
@@ -254,7 +274,7 @@ export default {
                         font-size: 16px; 
                         color: #333;
                         .image{
-                            border: 1px solid #999;
+                            border: 1px solid #ccc;
                             width: 25px;
                             height: 25px;
                             display: inline-block;
@@ -271,10 +291,11 @@ export default {
                             color: #666;
                             box-sizing: border-box;
                             padding-left: 5px;
+                            cursor: default;
                             span{
-                            display: inline-block;
-
+                                display: inline-block;
                                 color: #ff6743;
+                                opacity: 0.8;
                             }
                         }
                         
@@ -284,7 +305,8 @@ export default {
                         font-size: 14px;
                         color: #666;
                         line-height: 25px;
-                        word-wrap:break-word
+                        word-wrap:break-word;
+                        cursor: default;
                     }
                 }
             }
