@@ -16,6 +16,11 @@ const router =  new Router({
             name:'register',
             component:() => import('@/views/otherPages/register'),
         },
+        {   //聊天室
+            path:'/chatRoom',
+            name:'chatRoom',
+            component:() => import('@/views/otherPages/chatRoom'),
+        },
         {
             path:'/',
             redirect:{
