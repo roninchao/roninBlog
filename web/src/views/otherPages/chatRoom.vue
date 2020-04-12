@@ -4,18 +4,21 @@
             <div class="top">
                 <div class="title">在线聊天室</div>
                 <div class="count">
-                    （在线人数：22）
+                    在线人数：{{count}}
                 </div>
             </div>
-            <div class="middle">
-                <div class="item" v-for="(v,k) in List" :key="k">
-                    <div class="others item-item">
-                        <div class="user">{{$cookie.get('username')}}</div>
-                        <div class="text">{{v}}</div>
+            <div class="middle" ref="chatContent">
+                <div class="item" v-for="(v,k) in chatList" :key="k">
+                    <div class="me item-item" v-if="v.nameId == $cookie.get('userID')">
+                        <div class="text">{{v.content}}</div>
+                        <div class="user">{{v.name}}</div>
                     </div>
-                    <div class="me item-item">
-                        <div class="text">{{v}}</div>
-                        <div class="user">{{$cookie.get('username')}}</div>
+                    <div class="others item-item" v-else>
+                        <div class="user">{{v.name}}</div>
+                        <div class="text">{{v.content}}</div>
+                    </div>
+                    <div class="time" v-if="v.time">
+                        <span>{{v.time}}</span>
                     </div>
                 </div>
             </div>
@@ -34,12 +37,13 @@
 </template>
 
 <script>
+import {mapState, mapMutations, mapActions} from 'vuex'
 export default {
     data(){
         return{
             socket:"",
             val:"",
-            List:[]
+            count:""
         }
     },
     sockets: {
@@ -50,21 +54,47 @@ export default {
             this.$socket.emit('message', data);
         },
         notice (data) {
-            this.List.push(data)
+            this.addChatItem(data)
         },
         close(){
             console.log("socket已经断开连接");
+        },
+        online(data){
+            console.log(data)
+            this.count = data.count
         }
     },
     mounted () {
         this.$socket.emit('connection')
+        this.$refs.chatContent.scrollTop = this.$refs.chatContent.scrollHeight
     },
     created(){
+        this.getOnline()
+        this.getChatList()
+    },
+    destroyed(){
+        // this.$http.post('/onlineList',{userId:this.$cookie.get('userID'),username:this.$cookie.get('username'),e:0})
+        this.$socket.emit('close')
+    },
+    computed:{
+        ...mapState('chatroom', ['chatList'])
     },
     methods:{
+        ...mapMutations('chatroom', ['addChatItem']),
+        ...mapActions('chatroom', ['getChatList']),
         sendMessage(){
-            this.$socket.emit('message', this.val);
+            if(this.val == "") return this.$message.warning('发送内容不能为空！')
+            let token = this.$cookie.get('webToken')
+            this.$socket.emit('message', {token, val:this.val});
             this.val=""
+        },
+        getOnline(){
+            let res = this.$http.get('/online')
+            console.log(res)
+            if(res.code == 0){
+                this.count = res.count
+                console.log(this.count)
+            }
         }
     }
 }
@@ -97,11 +127,13 @@ export default {
                     letter-spacing: 5px;
                     padding-bottom: 10px;
                     user-select: none;
+                    font-family: "Microsoft YaHei";
                 }
                 .count{
                     font-size: 14px;
                     color: #fff;
                     user-select: none;
+                    font-family: "Microsoft YaHei";
                 }
             }
             .middle{
@@ -133,21 +165,28 @@ export default {
                     .item-item{
                         display: flex;
                         .user{
-                            // display: inline-block;
+                            width: 80px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
                             background: #ccc;
                             color: #fff;
                             border-radius: 5px;
                             font-size: 14px;
                             cursor: default;
-                            padding: 10px;
-                            height: 20px;
+                            padding: 0 10px;
+                            height: 40px;
+                            text-align: center;
+                            line-height: 40px;
+                            font-family: "Microsoft YaHei";
                         }
                         .text{
-                            // display: inline-block;
+                            max-width: 505px;
                             background: #fff;
                             border-radius: 5px;
                             color: #666;
                             font-size: 14px;
+                            font-family: "Microsoft YaHei";
                             cursor: default;
                             padding: 10px;
                         }
@@ -162,18 +201,31 @@ export default {
                         align-self: flex-end;
                         .text{
                             margin-right: 15px;
+                            background: #00CD66;
+                            color: #fff;
                         }
                     }
-                    
+                    .time{
+                        margin: 0 auto;
+                        margin-top: 15px;
+                        text-align: center;
+                        span{
+                            background: rgba(0,0,0,0.1);
+                            font-size: 12px;
+                            color: #fff;
+                            display: inline-block;
+                            padding: 3px 10px;
+                            border-radius: 3px;
+                            font-family: "Microsoft YaHei";
+                        }
+                    }
                 }
             }
             .bottom{
                 width: 100%;
-                // height: 200px;
                 background: #fff;
                 padding: 15px;
                 box-sizing: border-box;
-                // display: flex;
                 .item:last-child{
                     display: flex;
                     justify-content: flex-end;
@@ -182,7 +234,6 @@ export default {
                 textarea{
                     width: 100%!important;
                     height: 120px!important;
-                    // padding: 15px;
                     overflow: auto;
                     box-sizing: border-box;
                     resize: none;
