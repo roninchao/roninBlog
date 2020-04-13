@@ -5,7 +5,13 @@
         </div>
         <div class="item">
             <div class="chat-room">
+                <span @click="$router.push('/index')">首页</span>
+            </div>
+            <div class="chat-room">
                 <span @click="$router.push('/chatRoom')">聊天室</span>
+            </div>
+            <div class="chat-room">
+                <span @click="$router.push('/personCentre')">个人中心</span>
             </div>
             <div class="users">
                 <span v-if="$cookie.get('webToken')" class="info">
@@ -80,6 +86,7 @@ export default {
         .chat-room{
             font-size: 14px;
             color: #666;
+            margin: 0 15px;
             span{
                 cursor: pointer;
             }

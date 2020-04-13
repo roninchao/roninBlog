@@ -15,3 +15,5 @@ Vue.component('md-ranking', resolve => require(['@/components/ranking'], resolve
 Vue.component('md-footer', resolve => require(['@/components/footer'], resolve))
 //评论
 Vue.component('md-comments', resolve => require(['@/components/comments'], resolve))
+//地址选择
+Vue.component('md-addressPicker', resolve => require(['@/components/addressPicker'], resolve))

@@ -7,6 +7,7 @@ Vue.prototype.$func = func
 const state = {
     // 分类列表
     categoryList:[],
+    abilityList:[],
     //当前选中分类ID
     selectedCateID: 0,
     // 文章列表
@@ -51,6 +52,12 @@ const mutations = {
 	getCategoryList(state, payLoad){
         payLoad.unshift({_id:0, category:"全部"})
         state.categoryList = payLoad
+        state.abilityList = []
+        payLoad.forEach((item, index) => {
+            if(index != 0){
+                state.abilityList.push(item)
+            }
+        }); 
     },
     getCommentsRanking(state, payLoad){
         state.commentsRanking = payLoad

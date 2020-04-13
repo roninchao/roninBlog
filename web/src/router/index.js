@@ -19,7 +19,18 @@ const router =  new Router({
         {   //聊天室
             path:'/chatRoom',
             name:'chatRoom',
+            meta:{
+                requireAuth: true
+            },
             component:() => import('@/views/otherPages/chatRoom'),
+        },
+        {   //个人中心
+            path:'/personCentre',
+            name:'personCentre',
+            meta:{
+                requireAuth: true
+            },
+            component:() => import('@/views/otherPages/personCentre'),
         },
         {
             path:'/',
@@ -42,11 +53,17 @@ const router =  new Router({
         }
     ]
 })
-// router.beforeEach((to, from, next) => {
-//     if(to.meta.requireAuth && !jsCookie.get('token')){
-//         router.push('/login')
-//     }else{
-//         next()
-//     }
-// })
+router.beforeEach((to, from, next) => {
+    if(to.meta.requireAuth && !jsCookie.get('webToken')){
+        Vue.prototype.$confirm('您还没有登录, 是否前往登录?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }).then(() => {
+            router.push('/login')
+        })
+    }else{
+        next()
+    }
+})
 export default router
