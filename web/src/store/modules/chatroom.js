@@ -7,7 +7,8 @@ Vue.prototype.$moment = moment;
 import func from '@/public/js/function'
 Vue.prototype.$func = func
 const state = {
-    chatList:[]
+    chatList:[],
+    isMore:true
 }
 const mutations = {
     addChatItem(state, payLoad){
@@ -31,13 +32,21 @@ const mutations = {
             }
             arr.push(item)
         })
-        state.chatList = arr
+        state.chatList = arr.concat(state.chatList)
     }
 }
 const actions = {
-    async getChatList({commit}){
-        let res = await Vue.prototype.$http.get('/chatList')
+    async getChatList({state,commit}, payLoad){
+        let {currentPage, pageSize} = payLoad
+        if(currentPage == 1) {
+            state.chatList = []
+            state.isMore = true
+        }
+        let res = await Vue.prototype.$http.post('/chatList', {currentPage, pageSize})
         if(res.data.code == 0){
+            if(res.data.chatList.length < pageSize){
+                state.isMore = false
+            }
             commit('getChatList', res.data.chatList)
         }
     }

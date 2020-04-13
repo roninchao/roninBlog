@@ -4,7 +4,7 @@
             <div class="top">
                 <div class="title">在线聊天室</div>
                 <div class="count">
-                    在线人数：{{count}}
+                    <!-- 在线人数：{{count}} -->
                 </div>
             </div>
             <div class="middle" ref="chatContent">
@@ -43,7 +43,8 @@ export default {
         return{
             socket:"",
             val:"",
-            count:""
+            currentPage:1,
+            pageSize:20
         }
     },
     sockets: {
@@ -55,29 +56,37 @@ export default {
         },
         notice (data) {
             this.addChatItem(data)
+            setTimeout(()=>{
+                this.$refs.chatContent.scrollTop = this.$refs.chatContent.scrollHeight
+            },0)
         },
         close(){
             console.log("socket已经断开连接");
         },
-        online(data){
-            console.log(data)
-            this.count = data.count
-        }
     },
     mounted () {
         this.$socket.emit('connection')
-        this.$refs.chatContent.scrollTop = this.$refs.chatContent.scrollHeight
+        setTimeout(() => {
+            this.$refs.chatContent.scrollTop = this.$refs.chatContent.scrollHeight
+        }, 200)
     },
     created(){
-        this.getOnline()
-        this.getChatList()
+        this.getChatList({currentPage:this.currentPage, pageSize:this.pageSize})
+    },
+    updated(){
+        let ele = this.$refs.chatContent
+        ele.onscroll = () => {
+            if(this.$refs.chatContent.scrollTop <= 0 && this.isMore){
+                this.currentPage++
+                this.getChatList({currentPage:this.currentPage, pageSize:this.pageSize})
+            }
+        }
     },
     destroyed(){
-        // this.$http.post('/onlineList',{userId:this.$cookie.get('userID'),username:this.$cookie.get('username'),e:0})
         this.$socket.emit('close')
     },
     computed:{
-        ...mapState('chatroom', ['chatList'])
+        ...mapState('chatroom', ['chatList', 'isMore'])
     },
     methods:{
         ...mapMutations('chatroom', ['addChatItem']),
@@ -88,14 +97,20 @@ export default {
             this.$socket.emit('message', {token, val:this.val});
             this.val=""
         },
-        getOnline(){
-            let res = this.$http.get('/online')
-            console.log(res)
-            if(res.code == 0){
-                this.count = res.count
-                console.log(this.count)
-            }
-        }
+        // scrollBottomOrTop(e) {
+        //     var clients = e.innerHeight || e.clientHeight
+        //     var scrollTop = e.scrollTop;
+        //     // 这里存在兼容问题，会把body当成div来处理，如果用document.body.scrollHeight就得不到正确的高度，用body时需要把doctype后面的html去掉
+        //     // 这里没用body，而是用到documentElement
+        //     var wholeHeight = e.scrollHeight;
+        //     if (clients + scrollTop >= wholeHeight) {
+        //         alert("我到底部了");
+        //         // 在实际应用中可以通过请求后台获取下一页的数据，然后显示到当前位置，就能达到按页加载的效果。
+        //     }
+        //     if (scrollTop == 0) {
+        //         alert("我到顶部了");
+        //     }
+        // }
     }
 }
 </script>

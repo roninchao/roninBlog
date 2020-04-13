@@ -22,7 +22,7 @@
                         <el-button type="info" class="buttons">
                             <div class="flex_box_ad">
                                 <el-avatar size="large" src="@/static/images/avtar.png"></el-avatar>
-                                {{$cookie.get('username') ? $cookie.get('username') : ''}}
+                                {{$cookie.get('mUsername') ? $cookie.get('mUsername') : ''}}
                             </div>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
@@ -67,9 +67,9 @@
             handleClick(data){
                 if(data == 1){
                     // 退出登录
-                    this.$cookie.remove('userId')
-                    this.$cookie.remove('token')
-                    this.$cookie.remove('username')
+                    this.$cookie.remove('mUserID')
+                    this.$cookie.remove('mToken')
+                    this.$cookie.remove('mUsername')
                     this.$message({
                         type:'success',
                         message:'已退出登录！'

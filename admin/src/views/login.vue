@@ -50,13 +50,13 @@ export default {
     methods:{
         //清除密码缓存
         clearDetails(){
-            this.$cookie.remove('password')
+            this.$cookie.remove('mPassword')
         },
         //自动填写表单
         autofill(){
-            let username = this.$cookie.get('username')
-            let password = this.$cookie.get('password')
-            let isKeep = this.$cookie.get('isKeep')
+            let username = this.$cookie.get('mUsername')
+            let password = this.$cookie.get('mPassword')
+            let isKeep = this.$cookie.get('mIsKeep')
             if(!(username == undefined)){
                 this.form.username = username
             }
@@ -83,16 +83,16 @@ export default {
                 type:'warning'
             })
             this.$cookie.set('isKeep', this.isKeep)
-            console.log(this.$cookie.get('isKeep'))
+            console.log(this.$cookie.get('mIsKeep'))
             if(this.isKeep){
-                this.$cookie.set('username', this.form.username)
-                this.$cookie.set('password', this.form.password)
+                this.$cookie.set('mUsername', this.form.username)
+                this.$cookie.set('mPassword', this.form.password)
             }
             let res = await this.$http.post('/login', this.form)
             if(res.data.code == 0){
-                this.$cookie.set('userID', res.data.data.userID)
-                this.$cookie.set('username', res.data.data.username)
-                this.$cookie.set('token', res.data.data.token)
+                this.$cookie.set('mUserID', res.data.data.userID)
+                this.$cookie.set('mUsername', res.data.data.username)
+                this.$cookie.set('mToken', res.data.data.token)
                 this.$router.push('/admin')
             }
         },

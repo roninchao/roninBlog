@@ -6,41 +6,17 @@ module.exports = (app, socketIo) => {
     const router = express.Router()
     app.use('/api/web', router)
 
-    router.get('/chatList', async (req, res) => {
-        let chatList = await chatSchema.find()
+    router.post('/chatList', async (req, res) => {
+        let {currentPage, pageSize} = req.body
+        let chatList = await chatSchema.find().sort({time:-1}).skip((currentPage-1)*pageSize).limit(pageSize)
+        chatList = chatList.sort()
         res.send({
             code:0,
             chatList
         })
     })
-    // let onlineList = []
-    // router.post('/onlineList', (req, res) => {
-    //     let {userId, username, e} = req.body
-    //     let i = onlineList.findIndex((item ,index) => {
-    //         return item.userId == userId
-    //     })
-    //     if(e){
-    //         if(i == -1){
-    //             onlineList.push({userId,username})
-    //         }
-    //     }else{
-    //         onlineList.splice(i,1)
-    //     }
-    //     res.send({
-    //         code:0
-    //     })
-    // })
-    let count = 0
-    router.get('/online', (req, res) => {
-        res.send({
-            code:0,
-            count
-        })
-    })
+
     socketIo.on('connection',function(client){
-        count++
-         // 在线人数
-        socketIo.emit('online', {count:count});
         //接收客户端传过来的数据
         client.on('message',async (data) => {
             let token = data.token
@@ -72,8 +48,6 @@ module.exports = (app, socketIo) => {
         // 客户端断开连接
         client.on('close', () => {
             console.log("断开连接");
-            count--
-            socketIo.emit('online', {count});
         });
     });
 }
