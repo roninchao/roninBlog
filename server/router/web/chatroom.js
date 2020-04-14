@@ -2,11 +2,12 @@ module.exports = (app, socketIo) => {
     const jwt = require('jsonwebtoken');
     const usersSchema = require('../../models/usersModel')
     const chatSchema = require('../../models/chatModle')
+    const midAuth = require('../../middleware/auth')
     const express = require('express')
     const router = express.Router()
     app.use('/api/web', router)
 
-    router.post('/chatList', async (req, res) => {
+    router.post('/chatList', midAuth(), async (req, res) => {
         let {currentPage, pageSize} = req.body
         let chatList = await chatSchema.find().sort({time:-1}).skip((currentPage-1)*pageSize).limit(pageSize)
         chatList = chatList.sort()
@@ -41,9 +42,10 @@ module.exports = (app, socketIo) => {
                 name = user.username,
                 nameId = user._id,
                 content = data.val
-            await chatSchema.create({name,nameId,content,time})
+            let {avatar} = await usersSchema.findOne({_id:nameId})
+            await chatSchema.create({name,nameId,avatar,content,time})
             //向客户端广播数据
-            socketIo.emit('notice', {name,nameId,content,time});
+            socketIo.emit('notice', {name,nameId,avatar,content,time});
         });
         // 客户端断开连接
         client.on('close', () => {

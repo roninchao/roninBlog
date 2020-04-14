@@ -5,19 +5,35 @@
         </div>
         <div class="item">
             <div class="chat-room">
-                <span @click="$router.push('/index')">首页</span>
+                <span @click="go('/index')">首页</span>
             </div>
             <div class="chat-room">
-                <span @click="$router.push('/chatRoom')">聊天室</span>
+                <span @click="go('/chatRoom')">聊天室</span>
             </div>
             <div class="chat-room">
-                <span @click="$router.push('/personCentre')">个人中心</span>
+                <span @click="go('/personCentre')">个人中心</span>
             </div>
             <div class="users">
                 <span v-if="$cookie.get('webToken')" class="info">
-                    <i class="el-icon-user"></i>
-                    <span>{{$cookie.get('username')}}</span>
-                    <span class="exit" @click="exit">[退出]</span>
+                    
+                    <div class="avatar">
+                       
+                        <el-dropdown  @command="exit">
+                            <span class="el-dropdown-link">
+                                <el-avatar :src="$cookie.get('avatar')" v-if="$cookie.get('avatar')"></el-avatar>
+                                <el-avatar icon="el-icon-user-solid" v-else></el-avatar>
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item command="username">
+                                    <span>{{$cookie.get('username')}}</span>
+                                </el-dropdown-item>
+                                <el-dropdown-item command="exit">
+                                    <span>[退出]</span>
+                                </el-dropdown-item>
+                        </el-dropdown-menu>
+                        </el-dropdown>
+                    </div>
+                    
                 </span>
                 <span v-else class="login">
                     <span @click="$router.push('/login')">[登录]</span>
@@ -33,30 +49,34 @@ export default {
     methods:{
         go(e){
             let router = this.$route.path
-            if(router != '/index'){
+            if(router != e){
                 this.$router.push(e)
             }
         },
-        exit(){
-            this.$confirm('此操作将退出登录?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                this.$cookie.remove('userID')
-                // this.$cookie.remove('username')
-                this.$cookie.remove('webToken')
-                this.$message({
-                    type: 'success',
-                    message: '退出登录成功!'
+        exit(e){
+            if(e == "exit"){
+                this.$confirm('此操作将退出登录?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$cookie.remove('userID')
+                    this.$cookie.remove('avatar')
+                    this.$cookie.remove('webToken')
+                    this.$message({
+                        type: 'success',
+                        message: '退出登录成功!'
+                    });
+                    this.$router.go(0)
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消退出登录'
+                    });          
                 });
-                this.$router.go(0)
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消退出登录'
-                });          
-            });
+            }else if(e == "username"){
+                this.go('/personCentre')
+            }
         }
     }
 }
@@ -93,6 +113,16 @@ export default {
         }
         .users{
             padding-left: 15px;
+            .avatar{
+                // width: 40px;
+                // height: 40px;
+                .exit{
+                    cursor: pointer;
+                    &:hover{
+                        text-decoration: underline;
+                    }
+                }
+            }
             .info{
                 font-size: 14px;
                 color: #666;
@@ -108,12 +138,7 @@ export default {
                     padding-left: 5px;
                     cursor: default;
                 }
-                .exit{
-                    cursor: pointer;
-                    &:hover{
-                        text-decoration: underline;
-                    }
-                }
+                
             }
             .login{
                 display: flex;

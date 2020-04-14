@@ -26,6 +26,8 @@ require('./router/web/index')(app)
 require('./router/web/users')(app)
 require('./router/web/comments')(app)
 require('./router/web/chatroom')(app, socketIo)
+require('./router/web/upload')(app)
+
 //全局变量
 app.set('secret', '234d22f33f0ec7a4babb0e610ba6c57fa0e3e557d1fd2358a2600cf1cc55d9c4')
 //静态资源目录

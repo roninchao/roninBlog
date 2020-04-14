@@ -27,3 +27,14 @@ body::-webkit-scrollbar-track{
     max-width: 690px;
     margin: 0 auto;
 }
+
+.person-centre .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+.person-centre .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+}

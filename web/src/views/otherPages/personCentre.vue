@@ -24,6 +24,22 @@
                     </div>
                     <div class="item">
                         <div class="name">
+                            <span>头</span>
+                            <span>像：</span>
+                        </div>
+                        <div class="input">
+                            <el-upload
+                                class="avatar-uploader"
+                                action=""
+                                :show-file-list="false"
+                                :http-request="handleUploadImg">
+                                <img v-if="userInfo.avatar" :src="userInfo.avatar" class="avatar">
+                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                            </el-upload>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="name">
                             <span>性</span>
                             <span>别：</span>
                         </div>
@@ -110,7 +126,8 @@ import areaData from '@/public/js/areaData.js'
 import {mapState, mapMutations, mapActions} from 'vuex'
 export default {
     data(){
-        return{}
+        return{
+        }
     },
     created(){
         this.getCategoryList()
@@ -124,6 +141,15 @@ export default {
         ...mapActions('category', ['getCategoryList']),
         ...mapActions('user', ['getUserInfo','updateUserInfo']),
         ...mapMutations('user', ['editUserInfo']),
+        async handleUploadImg(e) {
+            let file = e.file
+            console.log(file)
+            let formData = new FormData();
+            formData.append("file", file)
+            let res = await this.$http.post('/uploadImage', formData)
+            console.log(res.data.url)
+            this.userInfo.avatar = res.data.url
+        },
         getAddress(e){
             this.userInfo.address = e
         },
@@ -222,5 +248,28 @@ export default {
             justify-content: center;
             align-items: center;
         }
+    }
+    // .avatar-uploader .el-upload {
+    //     border: 1px dashed #d9d9d9;
+    //     border-radius: 6px;
+    //     cursor: pointer;
+    //     position: relative;
+    //     overflow: hidden;
+    // }
+    // .avatar-uploader .el-upload:hover {
+    //     border-color: #409EFF;
+    // }
+    .avatar-uploader-icon {
+        font-size: 24px;
+        color: #999;
+        width: 120px;
+        height: 120px;
+        line-height: 120px;
+        text-align: center;
+    }
+    .avatar {
+        width: 120px;
+        height: 120px;
+        display: block;
     }
 </style>

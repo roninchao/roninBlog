@@ -23,7 +23,7 @@ module.exports = app => {
         })
     })
     //获取评论列表
-    router.post('/commentList', async(req, res) => {
+    router.post('/commentList', midAuth(), async(req, res) => {
         let {articleId, currentPage, pageSize} = req.body
         //获取数据总数
         let total = await commentSchema.countDocuments({articleId})
@@ -32,7 +32,6 @@ module.exports = app => {
             message:'没有评论数据'
         })
         let data = await commentSchema.find({articleId}).populate(['reviewerId','commentatorId']).skip((currentPage-1)*pageSize).limit(pageSize)
-        console.log(data)
         res.send({
             code:0,
             data,

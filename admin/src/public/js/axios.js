@@ -17,8 +17,8 @@ const instance = Axios.create(config)
 instance.interceptors.request.use(
     config => {
         //发送token
-        if(jsCookie.get('token')){
-            config.headers.Authriozation = 'Bearer:'+ jsCookie.get('token')
+        if(jsCookie.get('mToken')){
+            config.headers.Authriozation = 'Bearer:'+ jsCookie.get('mToken')
         }
         console.log(config)
         return config;

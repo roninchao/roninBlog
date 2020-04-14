@@ -6,7 +6,8 @@
                 <div class="head">
                     <div class="left">
                         <div class="image">
-                            <i class="el-icon-user"></i>
+                            <el-avatar :src="$cookie.get('avatar')" v-if="$cookie.get('avatar')"></el-avatar>
+                            <el-avatar icon="el-icon-user-solid" v-else></el-avatar>
                         </div>
                         <div class="username">用户名：{{$cookie.get('username')}}</div>
                     </div>
@@ -28,16 +29,15 @@
                     <div class="item" >
                         <div class="item-item"  v-for="(v,k) in commentsList" :key="k">
                             <div class="item-head">
-                                <div class="image">
-                                    <i class="el-icon-user"></i>
-                                </div>
                                 <div class="username"><span>{{v.reviewerId.username}}</span>
                                     <i v-if="v.commentatorId">
                                         回复 <span>@{{v.commentatorId.username}}</span>
                                     </i>
-                                ：</div>
+                                    ：
+                                </div>
+                                
                             </div>
-                            <div class="item-content">{{v.content}}</div>
+                            <div class="item-content" v-html="v.content"></div>
                             <div class="item-item-bottom">
                                 <div class="time">
                                     <i class="el-icon-timer"></i>
@@ -125,7 +125,7 @@ export default {
         //发表评论
         submitComment() {
             console.log(this.commentsList)
-            if(!this.$cookie.get('token')) return this.$message({
+            if(!this.$cookie.get('webToken')) return this.$message({
                 type:'warning',
                 message:'请登录后再评论'
             })
@@ -182,9 +182,9 @@ export default {
                     display: flex;
                     align-items: center;
                     .image{
-                        border: 1px solid #999;
-                        width: 35px;
-                        height: 35px;
+                        // border: 1px solid #999;
+                        width: 40px;
+                        height: 40px;
                         display: flex;
                         justify-content: center;
                         align-items: center;
@@ -241,7 +241,6 @@ export default {
                             justify-content: space-between;
                             align-items: center;
                             .time{
-                                padding-left: 35px;
                                 font-size: 12px;
                                 color: #999;
                                 cursor: default;
@@ -270,27 +269,15 @@ export default {
                         }
                     }
                     .item-head{
-                        display: inline-block;
+                        display: flex;
+                        // align-items: center;
                         font-size: 16px; 
                         color: #333;
-                        .image{
-                            border: 1px solid #ccc;
-                            width: 25px;
-                            height: 25px;
-                            display: inline-block;
-                            text-align: center;
-                            line-height: 25px;
-                            border-radius: 5px;
-                            display: inline-block;
-                            background: #fff;
-                        }
                         .username{
                             font-size: 14px;
-                            line-height: 25px;
                             display: inline-block;
                             color: #666;
                             box-sizing: border-box;
-                            padding-left: 5px;
                             cursor: default;
                             span{
                                 display: inline-block;
@@ -304,7 +291,7 @@ export default {
                         display: inline;
                         font-size: 14px;
                         color: #666;
-                        line-height: 25px;
+                        // line-height: 25px;
                         word-wrap:break-word;
                         cursor: default;
                     }

@@ -52,7 +52,7 @@ const router =  new Router({
     ]
 })
 router.beforeEach((to, from, next) => {
-    if(to.meta.requireAuth && !jsCookie.get('token')){
+    if(to.meta.requireAuth && !jsCookie.get('mToken')){
         router.push('/loginAdmin')
     }else{
         next()

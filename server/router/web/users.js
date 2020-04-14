@@ -2,6 +2,7 @@ module.exports = app => {
     const express = require('express')
     const router = express.Router()
     const usersSchema = require('../../models/usersModel')
+    const midAuth = require('../../middleware/auth')
     app.use('/api/web', router)
     // 登录
     router.post('/login', async(req, res) => {
@@ -26,6 +27,7 @@ module.exports = app => {
                 data:{
                     userID:user._id,
                     username:user.username,
+                    avatar:user.avatar,
                     token:token
                 }
             })
@@ -52,7 +54,7 @@ module.exports = app => {
         })
     })
     //获取个人信息
-    router.post('/personInfo', async(req, res) => {
+    router.post('/personInfo', midAuth(), async(req, res) => {
         const {userId} = req.body
         let user = await usersSchema.findOne({_id:userId})
         res.send({
@@ -61,9 +63,9 @@ module.exports = app => {
         })
     })
      //修改个人信息
-     router.put('/personInfo/:id', async(req, res) => {
-        const {sex, ability, birthday, address, tel, email} = req.body
-        await usersSchema.findByIdAndUpdate(req.params.id, {sex, ability, birthday, address, tel, email})
+     router.put('/personInfo/:id', midAuth(), async(req, res) => {
+        const {avatar, sex, ability, birthday, address, tel, email} = req.body
+        await usersSchema.findByIdAndUpdate(req.params.id, {avatar, sex, ability, birthday, address, tel, email})
         res.send({
             code:0,
             message:"保存成功"

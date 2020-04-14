@@ -11,10 +11,16 @@
                 <div class="item" v-for="(v,k) in chatList" :key="k">
                     <div class="me item-item" v-if="v.nameId == $cookie.get('userID')">
                         <div class="text">{{v.content}}</div>
-                        <div class="user">{{v.name}}</div>
+                        <div class="user">
+                            <el-avatar :src="v.avatar" v-if="v.avatar" shape="square"></el-avatar>
+                            <el-avatar icon="el-icon-user-solid" v-else shape="square"></el-avatar>
+                        </div>
                     </div>
                     <div class="others item-item" v-else>
-                        <div class="user">{{v.name}}</div>
+                        <div class="user">
+                            <el-avatar :src="v.avatar" v-if="v.avatar" shape="square"></el-avatar>
+                            <el-avatar icon="el-icon-user-solid" v-else shape="square"></el-avatar>
+                        </div>
                         <div class="text">{{v.content}}</div>
                     </div>
                     <div class="time" v-if="v.time">
@@ -97,20 +103,6 @@ export default {
             this.$socket.emit('message', {token, val:this.val});
             this.val=""
         },
-        // scrollBottomOrTop(e) {
-        //     var clients = e.innerHeight || e.clientHeight
-        //     var scrollTop = e.scrollTop;
-        //     // 这里存在兼容问题，会把body当成div来处理，如果用document.body.scrollHeight就得不到正确的高度，用body时需要把doctype后面的html去掉
-        //     // 这里没用body，而是用到documentElement
-        //     var wholeHeight = e.scrollHeight;
-        //     if (clients + scrollTop >= wholeHeight) {
-        //         alert("我到底部了");
-        //         // 在实际应用中可以通过请求后台获取下一页的数据，然后显示到当前位置，就能达到按页加载的效果。
-        //     }
-        //     if (scrollTop == 0) {
-        //         alert("我到顶部了");
-        //     }
-        // }
     }
 }
 </script>
@@ -180,16 +172,10 @@ export default {
                     .item-item{
                         display: flex;
                         .user{
-                            width: 80px;
                             overflow: hidden;
                             text-overflow: ellipsis;
                             white-space: nowrap;
-                            background: #ccc;
-                            color: #fff;
-                            border-radius: 5px;
-                            font-size: 14px;
                             cursor: default;
-                            padding: 0 10px;
                             height: 40px;
                             text-align: center;
                             line-height: 40px;
@@ -199,7 +185,7 @@ export default {
                             max-width: 505px;
                             background: #fff;
                             border-radius: 5px;
-                            color: #666;
+                            color: #333;
                             font-size: 14px;
                             font-family: "Microsoft YaHei";
                             cursor: default;
@@ -216,8 +202,8 @@ export default {
                         align-self: flex-end;
                         .text{
                             margin-right: 15px;
-                            background: #00CD66;
-                            color: #fff;
+                            background: #00d30d;
+                            // color: #333;
                         }
                     }
                     .time{

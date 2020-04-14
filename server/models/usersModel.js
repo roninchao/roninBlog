@@ -20,6 +20,9 @@ const usersSchema = new mongoose.Schema({
     auth:{
         type:Number
     },
+    avatar:{
+        type:String
+    },
     sex:{
         type:Number
     },
