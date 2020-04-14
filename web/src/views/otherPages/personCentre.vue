@@ -19,7 +19,7 @@
                             <span>名：</span>
                         </div>
                         <div class="input">
-                            <el-input v-model="person.username" placeholder="请输入用户名" :disabled="true"></el-input>
+                            <el-input v-model="userInfo.username" placeholder="请输入用户名" :disabled="true"></el-input>
                         </div>
                     </div>
                     <div class="item">
@@ -28,8 +28,8 @@
                             <span>别：</span>
                         </div>
                         <div class="input">
-                            <el-radio v-model="person.sex" label="1">女</el-radio>
-                            <el-radio v-model="person.sex" label="2">男</el-radio>
+                            <el-radio v-model="userInfo.sex" :label="1">女</el-radio>
+                            <el-radio v-model="userInfo.sex" :label="2">男</el-radio>
                         </div>
                     </div>
                     <div class="item">
@@ -38,7 +38,7 @@
                             <span>能：</span>
                         </div>
                         <div class="input">
-                            <el-select v-model="person.ability" multiple placeholder="请选择技能">
+                            <el-select v-model="userInfo.ability" multiple placeholder="请选择技能">
                                 <el-option
                                 v-for="item in abilityList"
                                 :key="item._id"
@@ -57,7 +57,7 @@
                         </div>
                         <div class="input">
                             <el-date-picker
-                            v-model="person.date"
+                            v-model="userInfo.birthday"
                             type="date"
                             placeholder="选择出生日期">
                             </el-date-picker>
@@ -69,7 +69,7 @@
                             <span>址：</span>
                         </div>
                         <div class="input">
-                            <md-addressPicker :defalutAddress="person.address" @change="getAddress"></md-addressPicker>
+                            <md-addressPicker :defalutAddress="userInfo.address" @change="getAddress"></md-addressPicker>
                         </div>
                     </div>
                     <div class="item">
@@ -80,7 +80,7 @@
                             <span>话：</span>
                         </div>
                         <div class="input">
-                            <el-input v-model="person.tel" placeholder="请输入联系电话"></el-input>
+                            <el-input v-model="userInfo.tel" placeholder="请输入联系电话"></el-input>
                         </div>
                     </div>
                     <div class="item">
@@ -89,7 +89,7 @@
                             <span>箱：</span>
                         </div>
                         <div class="input">
-                            <el-input v-model="person.tel" placeholder="请输入邮箱"></el-input>
+                            <el-input v-model="userInfo.email" placeholder="请输入邮箱"></el-input>
                         </div>
                     </div>
                     <div class="item">
@@ -110,33 +110,32 @@ import areaData from '@/public/js/areaData.js'
 import {mapState, mapMutations, mapActions} from 'vuex'
 export default {
     data(){
-        return{
-            person:{
-                username:"",
-                sex:1,
-                ability:[],
-                date:"",
-                address:[],
-                tel:""
-            },
-        }
+        return{}
     },
     created(){
         this.getCategoryList()
+        this.getUserInfo({userId:this.$cookie.get('userID')})
     },
     computed:{
         ...mapState('category', ['abilityList']),
+        ...mapState('user', ['userInfo']),
     },
     methods:{
         ...mapActions('category', ['getCategoryList']),
+        ...mapActions('user', ['getUserInfo','updateUserInfo']),
+        ...mapMutations('user', ['editUserInfo']),
         getAddress(e){
-            this.person.address = e
+            this.userInfo.address = e
         },
         save(){
-            if(this.person.username == "") return this.$message.error("用户名不能为空")
+            if(this.userInfo.username == "") return this.$message.error("用户名不能为空")
             let reg = /^[1][3,4,5,7,8][0-9]{9}$/
-            if(this.person.tel != "" && !reg.test(this.person.tel)) return this.$message.error("电话号码填写不正确")
-            console.log(this.person)
+            if(this.userInfo.tel && this.userInfo.tel != "" && !reg.test(this.userInfo.tel)) return this.$message.error("电话号码填写不正确")
+            let reg2 = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
+            if(this.userInfo.email && this.userInfo.email !="" && !reg2.test(this.userInfo.email)) return this.$message.error("邮箱填写不正确")
+            this.updateUserInfo().then(() => {
+                this.getUserInfo({userId:this.$cookie.get('userID')})
+            })
         }
     }
 }
@@ -177,7 +176,7 @@ export default {
                     display: flex;
                     margin-bottom: 15px;
                     width: 100%;
-                    height: 40px;
+                    // height: 40px;
                     .name{
                         width: 80px;
                         display: flex;

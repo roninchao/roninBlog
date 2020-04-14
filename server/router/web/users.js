@@ -51,4 +51,22 @@ module.exports = app => {
             message:'注册成功'
         })
     })
+    //获取个人信息
+    router.post('/personInfo', async(req, res) => {
+        const {userId} = req.body
+        let user = await usersSchema.findOne({_id:userId})
+        res.send({
+            code:0,
+            user
+        })
+    })
+     //修改个人信息
+     router.put('/personInfo/:id', async(req, res) => {
+        const {sex, ability, birthday, address, tel, email} = req.body
+        await usersSchema.findByIdAndUpdate(req.params.id, {sex, ability, birthday, address, tel, email})
+        res.send({
+            code:0,
+            message:"保存成功"
+        })
+    })
 }

@@ -20,6 +20,24 @@ const usersSchema = new mongoose.Schema({
     auth:{
         type:Number
     },
+    sex:{
+        type:Number
+    },
+    ability:{
+        type:Array
+    },
+    birthday:{
+        type:String
+    },
+    address:{
+        type:Array
+    },
+    tel:{
+        type:String
+    },
+    email:{
+        type:String
+    },
 })
 //把Schema对象转化为数据模型并导出
 module.exports = mongoose.model('users', usersSchema)
