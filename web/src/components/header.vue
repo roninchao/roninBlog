@@ -4,20 +4,23 @@
             <img class="" src="@/assets/logo.png" alt="logo">
         </div>
         <div class="item">
-            <div class="chat-room">
-                <span @click="go('/index')">首页</span>
-            </div>
-            <div class="chat-room">
-                <span @click="go('/chatRoom')">聊天室</span>
-            </div>
-            <div class="chat-room">
-                <span @click="go('/personCentre')">个人中心</span>
+            <div class="menu">
+                <div class="chat-room" :class="$route.path == '/index'?'active':''" @click="go('/index')">
+                    <span>HOME</span>
+                    <span>首页</span>
+                </div>
+                <div class="chat-room" :class="$route.path == '/chatRoom'?'active':''" @click="go('/chatRoom')">
+                    <span>CHATROOM</span>
+                    <span>聊天室</span>
+                </div>
+                <div class="chat-room" :class="$route.path == '/personCentre'?'active':''" @click="go('/personCentre')">
+                    <span>PERSON</span>
+                    <span>个人中心</span>
+                </div>
             </div>
             <div class="users">
                 <span v-if="$cookie.get('webToken')" class="info">
-                    
                     <div class="avatar">
-                       
                         <el-dropdown  @command="exit">
                             <span class="el-dropdown-link">
                                 <el-avatar :src="$cookie.get('avatar')" v-if="$cookie.get('avatar')"></el-avatar>
@@ -89,6 +92,7 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        overflow: hidden;
         .item{
             height: 100%;
             display: flex;
@@ -103,19 +107,44 @@ export default {
                 height: 100%;
             }
         }
-        .chat-room{
-            font-size: 14px;
-            color: #666;
-            margin: 0 15px;
-            span{
+        .menu{
+            // position: relative;
+            display: flex;
+
+            .chat-room{
+                font-size: 14px;
+                color: #666;
+                // margin: 0 15px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                // justify-content: flex-start;
+                overflow: hidden;
+                transition: all 0.3s;
+                padding: 0 10px;
                 cursor: pointer;
+                &:hover{
+                    background: #f0f0f0;
+                    span{
+                        transform: translateY(30px);
+                        color: #ff6600;
+                    }
+                }
+                span{
+                    display: block;
+                    height: 60px;
+                    line-height: 60px;
+                    transition: all 0.3s;
+                    transform: translateY(-30px);
+                }
+            }
+            .active{
+                color: #ff6600;
             }
         }
         .users{
             padding-left: 15px;
             .avatar{
-                // width: 40px;
-                // height: 40px;
                 .exit{
                     cursor: pointer;
                     &:hover{
@@ -129,14 +158,8 @@ export default {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                i{
-                    border-radius: 50%;
-                    border: 1px solid #ccc;
-                    padding: 5px;
-                }
                 span{
-                    padding-left: 5px;
-                    cursor: default;
+                    cursor: pointer;
                 }
                 
             }

@@ -1,43 +1,55 @@
 <template>
     <div class="chat-room">
-        <div class="box">
-            <div class="top">
-                <div class="title">在线聊天室</div>
-                <div class="count">
-                    <!-- 在线人数：{{count}} -->
-                </div>
+         <!-- 页头 -->
+        <div class="header">
+            <div class="content">
+                <md-header></md-header>
             </div>
-            <div class="middle" ref="chatContent">
-                <div class="item" v-for="(v,k) in chatList" :key="k">
-                    <div class="me item-item" v-if="v.nameId == $cookie.get('userID')">
-                        <div class="text">{{v.content}}</div>
-                        <div class="user">
-                            <el-avatar :src="v.avatar" v-if="v.avatar" shape="square"></el-avatar>
-                            <el-avatar icon="el-icon-user-solid" v-else shape="square"></el-avatar>
+        </div>
+        <div class="main">
+            <div class="box">
+                <div class="top">
+                    <div class="title">在线聊天室</div>
+                    <div class="count">
+                        <!-- 在线人数：{{count}} -->
+                    </div>
+                </div>
+                <div class="middle" ref="chatContent">
+                    <div class="item" v-for="(v,k) in chatList" :key="k">
+                        <div class="me item-item" v-if="v.nameId == $cookie.get('userID')">
+                            <div class="text">{{v.content}}</div>
+                            <div class="user">
+                                <el-avatar :src="v.avatar" v-if="v.avatar" shape="square"></el-avatar>
+                                <el-avatar icon="el-icon-user-solid" v-else shape="square"></el-avatar>
+                            </div>
+                        </div>
+                        <div class="others item-item" v-else>
+                            <div class="user">
+                                <el-avatar :src="v.avatar" v-if="v.avatar" shape="square"></el-avatar>
+                                <el-avatar icon="el-icon-user-solid" v-else shape="square"></el-avatar>
+                            </div>
+                            <div class="text">{{v.content}}</div>
+                        </div>
+                        <div class="time" v-if="v.time">
+                            <span>{{v.time}}</span>
                         </div>
                     </div>
-                    <div class="others item-item" v-else>
-                        <div class="user">
-                            <el-avatar :src="v.avatar" v-if="v.avatar" shape="square"></el-avatar>
-                            <el-avatar icon="el-icon-user-solid" v-else shape="square"></el-avatar>
+                </div>
+                <div class="bottom">
+                    <div class="edit">
+                        <div class="item">
+                            <textarea name="" id="" cols="30" rows="5" v-model="val"></textarea>
                         </div>
-                        <div class="text">{{v.content}}</div>
-                    </div>
-                    <div class="time" v-if="v.time">
-                        <span>{{v.time}}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="bottom">
-                <div class="edit">
-                    <div class="item">
-                        <textarea name="" id="" cols="30" rows="5" v-model="val"></textarea>
-                    </div>
-                    <div class="item">
-                        <div class="btn" @click="sendMessage">发送</div>
+                        <div class="item">
+                            <div class="btn" @click="sendMessage">发送</div>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
+         <!-- 页脚 -->
+        <div class="footer">
+            <md-footer></md-footer>
         </div>
     </div>
 </template>
@@ -108,18 +120,45 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
     .chat-room{
         width: 100%;
         height: 100vh;
         background: #fff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        // margin: 0 auto;
+        .header{
+            width: 100%;
+            height: 60px;
+            background: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 3;
+            box-shadow: 0 0 5px #ccc;
+            display: flex;
+            justify-content: center;
+            .content{
+                width: 1200px;
+            }
+        }
+        .main{
+            margin: 15px auto;
+            padding-top: 60px;
+        }
+        .footer{
+            width: 100%;
+            height: 60px;
+            background: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
         .box{
             width: 800px;
             border-radius: 5px;
             overflow: hidden;
             box-shadow: 0 0 5px #ccc;
+            margin: 0 auto;
             .top{
                 width: 100%;
                 height: 85px;
