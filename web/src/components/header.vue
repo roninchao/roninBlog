@@ -108,20 +108,16 @@ export default {
             }
         }
         .menu{
-            // position: relative;
             display: flex;
-
             .chat-room{
+                width: 100px;
                 font-size: 14px;
                 color: #666;
-                // margin: 0 15px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                // justify-content: flex-start;
                 overflow: hidden;
                 transition: all 0.3s;
-                padding: 0 10px;
                 cursor: pointer;
                 &:hover{
                     background: #f0f0f0;

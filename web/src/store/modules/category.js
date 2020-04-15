@@ -20,8 +20,6 @@ const state = {
     pageSize:10,
     // 是否还有更多
     isMore: true,
-    // 是否从详情页回来
-    isFrom:false,
     // 热评榜
     commentsRanking:[],
     // 新增榜
@@ -40,14 +38,17 @@ const mutations = {
         state.isMore = true
         state.selectedCateID = payLoad
     },
+    clearArticleList(state){
+        state.articleList = []
+        state.currentPage = 1
+        state.pageSize = 10
+        state.isMore = true
+    },
     // 设置页面
     setPage(state, payLoad){
         let {currentPage, pageSize} = payLoad
         state.currentPage = currentPage;
         state.pageSize = pageSize;
-    },
-    setIsFrom(state, payLoad){
-        state.isFrom = payLoad
     },
 	getCategoryList(state, payLoad){
         payLoad.unshift({_id:0, category:"全部"})
@@ -117,20 +118,34 @@ const actions = {
     },
     //获取文章列表
     async getArticleList({state, commit}){
+        const loading = Vue.prototype.$loading({
+            lock: true,
+            text: '加载中',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)',
+        });
         let res = await Vue.prototype.$http.post('/articleList', {id:state.selectedCateID, currentPage: state.currentPage, pageSize:state.pageSize})
         if(res.data.code == 0){
             commit('getArticleList',res.data.articleList)
         }
+        loading.close();
     },
     //获取文章详情
     async getArticleDetail({commit}, payLoad){
         let {id, next} = payLoad
         next = next || 0
+        const loading = Vue.prototype.$loading({
+            lock: true,
+            text: '加载中',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)',
+        });
         let res =  await Vue.prototype.$http.post('/article', {id, next})
         if(res.data.code == 0) {
             res.data.article.time = Vue.prototype.$func.getTime(parseInt(res.data.article.time))
             commit('getArticleDetail', res.data.article)
         }
+        loading.close();
     }
 }
 

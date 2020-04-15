@@ -42,6 +42,12 @@ const actions = {
             state.chatList = []
             state.isMore = true
         }
+        const loading = Vue.prototype.$loading({
+            lock: true,
+            text: '加载中',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)',
+        });
         let res = await Vue.prototype.$http.post('/chatList', {currentPage, pageSize})
         if(res.data.code == 0){
             if(res.data.chatList.length < pageSize){
@@ -49,6 +55,7 @@ const actions = {
             }
             commit('getChatList', res.data.chatList)
         }
+        loading.close();
     }
 }
 

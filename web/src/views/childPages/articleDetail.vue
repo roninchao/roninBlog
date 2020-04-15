@@ -22,7 +22,7 @@
                 <div class="item" @click="next(1)">下一篇<i class="el-icon-d-arrow-right icon"></i></div>
             </div> -->
         </div>
-        <div>
+        <div v-if = "isShow">
             <md-comments></md-comments>
         </div>
     </div>
@@ -34,24 +34,41 @@ import {mapState, mapActions} from 'vuex'
 export default {
     data(){
         return{
-            isShow:false
+            isShow:false,
         }
     },
     created(){
         if(this.$route.query.id){
-            this.getArticleDetail({id:this.$route.query.id})
+            this.getArticleDetail({id:this.$route.query.id}).then(() => {
+                this.isShow = true
+            })
         }
         window.scroll(0,0)
     },
     computed:{
         ...mapState('category', ['articleDetail',])
     },
+    watch:{
+        $route(v1, v2){
+            if(v1.query.id != v2.query.id){
+                this.isShow = false
+                this.getArticleDetail({id:v1.query.id}).then(() => {
+                this.isShow = true
+                
+            })
+                window.scroll(0,0)
+            }
+        }
+    },
     methods:{
         ...mapActions('category', ['getArticleDetail']),
-        next(e){
-
-            this.getArticleDetail({id:this.articleDetail._id, next: e})
-        },
+        // next(e){
+        //     this.isShow = false
+        //     this.getArticleDetail({id:this.articleDetail._id, next: e}).then(() => {
+        //         this.isShow = true
+        //     })
+        //     window.scroll(0,0)
+        // },
         goBack() {
             this.$router.go(-1)
         }

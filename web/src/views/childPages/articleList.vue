@@ -34,14 +34,12 @@ export default {
         }
     },
     created(){
-        if(!this.isFrom){
-            this.getArticleList()
-            this.getSwiper()
-        }
-        this.setIsFrom(false)
+        this.clearArticleList()
+        this.getSwiper()
+        this.getArticleList()
     },
     computed:{
-        ...mapState('category', ['categoryList','articleList', 'selectedCateID', 'swiper', 'currentPage', 'pageSize', 'isMore', 'isFrom']),
+        ...mapState('category', ['categoryList','articleList', 'selectedCateID', 'swiper', 'currentPage', 'pageSize', 'isMore',]),
     },
     watch:{
         selectedCateID(v1, v2){
@@ -51,14 +49,13 @@ export default {
         }
     },
     methods:{
+        ...mapMutations('category', ['clearArticleList' ,'setPage']),
         ...mapActions('category', ['getArticleList', 'getSwiper']),
-        ...mapMutations('category', ['setPage','setIsFrom']),
         addMore() {
             if(this.isMore){
                 let currentPage = this.currentPage+1
                 let pageSize =  this.pageSize
                 this.setPage({currentPage, pageSize})
-                // window.scrollTo(0,0)
                 this.getArticleList()
             }else{
                 this.$message({

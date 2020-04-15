@@ -186,7 +186,7 @@ export default {
                 width: 100%;
                 height: 600px;
                 background: #fafafa;
-                overflow: auto;
+                overflow-y: scroll;
                 padding: 15px;
                 box-sizing: border-box;
                 /*定义滚动条的整体样式使其变窄*/

@@ -1,12 +1,16 @@
 html,body{
     margin: 0;
     padding:0;
+    /* overflow-y: scroll; */
 }
 h1,h2,h3,h4,h5,h6,p{
     margin: 0;
     padding:0;
 }
 
+html{
+    overflow-y: scroll;
+}
 /*定义滚动条的整体样式使其变窄*/
 body::-webkit-scrollbar{
     width: 6px;

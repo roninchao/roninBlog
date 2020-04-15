@@ -47,9 +47,9 @@ export default {
         this.getNewRanking()
     },
     watch:{
-        $route(to, from){
-            if(to.path == '/detail'){
-                this.setIsFrom(true)
+        $route(v){
+            if(v){
+                console.log(v)
             }
         }
     },
@@ -58,7 +58,6 @@ export default {
     },
     methods:{
         ...mapActions('category', ['getCommentsRanking', 'getNewRanking']),
-        ...mapMutations('category', ['setIsFrom']),
         selectCate(e) {
             console.log(e,this.selectedCate)
             this.selectedCate = e

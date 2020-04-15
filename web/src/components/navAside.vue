@@ -23,12 +23,9 @@ export default {
         ...mapState('category', ['categoryList', 'selectedCateID'])
     },
     methods:{
-        ...mapMutations('category', ['setSelectedCateID','setIsFrom']),
+        ...mapMutations('category', ['setSelectedCateID']),
         ...mapActions('category', ['getCategoryList']),
         selectCate(e) {
-            if(this.selectedCateID != e){
-                this.setIsFrom(false)
-            }
             this.setSelectedCateID(e)
             // console.log(this.$route)
             if(this.$route.path != '/index'){

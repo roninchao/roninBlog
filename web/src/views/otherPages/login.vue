@@ -95,7 +95,9 @@ export default {
             if(res.data.code == 0){
                 this.$cookie.set('userID', res.data.data.userID)
                 this.$cookie.set('username', res.data.data.username)
-                this.$cookie.set('avatar', res.data.data.avatar)
+                if(res.data.data.avatar){
+                    this.$cookie.set('avatar', res.data.data.avatar)
+                }
                 this.$cookie.set('webToken', res.data.data.token)
                 this.$router.push('/index')
             }
