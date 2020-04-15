@@ -207,7 +207,6 @@ export default {
             }
             .title{
                 font-size: 24px;
-                font-family: "Microsoft YaHei";
                 color: #666;
                 text-align: center;
                 padding: 15px 0;
@@ -226,7 +225,6 @@ export default {
                         align-items: center;
                         font-size: 14px;
                         color: #666;
-                        font-family: "Microsoft YaHei";
                         cursor: default;
                     }
                     .input{
@@ -237,7 +235,6 @@ export default {
                     .btn{
                         background: #f10215;
                         font-size: 16px;
-                        font-family: "Microsoft YaHei";
                         color: #fff;
                         display: flex;
                         justify-content: center;

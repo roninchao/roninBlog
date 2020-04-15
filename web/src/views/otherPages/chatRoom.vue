@@ -121,7 +121,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
     .chat-room{
         width: 100%;
         min-height: 100vh;
@@ -174,13 +173,11 @@ export default {
                     letter-spacing: 5px;
                     padding-bottom: 10px;
                     user-select: none;
-                    font-family: "Microsoft YaHei";
                 }
                 .count{
                     font-size: 14px;
                     color: #fff;
                     user-select: none;
-                    font-family: "Microsoft YaHei";
                 }
             }
             .middle{
@@ -219,7 +216,6 @@ export default {
                             height: 40px;
                             text-align: center;
                             line-height: 40px;
-                            font-family: "Microsoft YaHei";
                         }
                         .text{
                             max-width: 505px;
@@ -227,7 +223,6 @@ export default {
                             border-radius: 5px;
                             color: #333;
                             font-size: 14px;
-                            font-family: "Microsoft YaHei";
                             cursor: default;
                             padding: 10px;
                         }
@@ -257,7 +252,6 @@ export default {
                             display: inline-block;
                             padding: 3px 10px;
                             border-radius: 3px;
-                            font-family: "Microsoft YaHei";
                         }
                     }
                 }
@@ -282,7 +276,6 @@ export default {
                     color: #666;
                     outline: none;
                     border: 0;
-                    font-family: "Microsoft YaHei";
                     letter-spacing: 2px; 
                     /*定义滚动条的整体样式使其变窄*/
                     &::-webkit-scrollbar{

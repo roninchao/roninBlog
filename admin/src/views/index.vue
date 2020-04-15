@@ -139,6 +139,20 @@
                     padding:10px;
                     position: relative;
                     box-sizing: border-box;
+                    &::-webkit-scrollbar{
+                        width: 6px;
+                        height: 1px;
+                    }
+                    /*定义滚动条的滑块的样式有圆角和阴影以及自定义的背景色*/
+                    &::-webkit-scrollbar-thumb{
+                        border-radius: 6px;
+                        background: #ccc;
+                    }
+                    /*定义滚动条所在轨道的样式。有圆角和阴影以及淡色系的背景色*/
+                    &::-webkit-scrollbar-track{
+                        border-radius: 6px;
+                        background: #f0f0f0;
+                    }
                     .routerAnimate-enter{
                         opacity: 0;
                         transform: translate(100%, 0);
