@@ -124,7 +124,7 @@ export default {
 
     .chat-room{
         width: 100%;
-        height: 100vh;
+        min-height: 100vh;
         background: #f0f0f0;
         // margin: 0 auto;
         .header{
@@ -187,7 +187,7 @@ export default {
                 width: 100%;
                 height: 600px;
                 background: #fafafa;
-                overflow-y: scroll;
+                overflow: auto;
                 padding: 15px;
                 box-sizing: border-box;
                 /*定义滚动条的整体样式使其变窄*/
