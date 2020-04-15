@@ -7,109 +7,111 @@
             </div>
         </div>
         <div class="main">
-            <div class="content">
-                <div class="title">
-                    <p>个人中心</p>
-                </div>
-                <div class="form">
-                    <div class="item">
-                        <div class="name">
-                            <span>用</span>
-                            <span>户</span>
-                            <span>名：</span>
-                        </div>
-                        <div class="input">
-                            <el-input v-model="userInfo.username" placeholder="请输入用户名" :disabled="true"></el-input>
-                        </div>
+            <div class="main-box">
+                <div class="content">
+                    <div class="title">
+                        <p>个人中心</p>
                     </div>
-                    <div class="item">
-                        <div class="name">
-                            <span>头</span>
-                            <span>像：</span>
+                    <div class="form">
+                        <div class="item">
+                            <div class="name">
+                                <span>用</span>
+                                <span>户</span>
+                                <span>名：</span>
+                            </div>
+                            <div class="input">
+                                <el-input v-model="userInfo.username" placeholder="请输入用户名" :disabled="true"></el-input>
+                            </div>
                         </div>
-                        <div class="input">
-                            <el-upload
-                                class="avatar-uploader"
-                                action=""
-                                :show-file-list="false"
-                                :http-request="handleUploadImg">
-                                <img v-if="userInfo.avatar" :src="userInfo.avatar" class="avatar">
-                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                            </el-upload>
+                        <div class="item">
+                            <div class="name">
+                                <span>头</span>
+                                <span>像：</span>
+                            </div>
+                            <div class="input">
+                                <el-upload
+                                    class="avatar-uploader"
+                                    action=""
+                                    :show-file-list="false"
+                                    :http-request="handleUploadImg">
+                                    <img v-if="userInfo.avatar" :src="userInfo.avatar" class="avatar">
+                                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                </el-upload>
+                            </div>
                         </div>
-                    </div>
-                    <div class="item">
-                        <div class="name">
-                            <span>性</span>
-                            <span>别：</span>
+                        <div class="item">
+                            <div class="name">
+                                <span>性</span>
+                                <span>别：</span>
+                            </div>
+                            <div class="input">
+                                <el-radio v-model="userInfo.sex" :label="1">女</el-radio>
+                                <el-radio v-model="userInfo.sex" :label="2">男</el-radio>
+                            </div>
                         </div>
-                        <div class="input">
-                            <el-radio v-model="userInfo.sex" :label="1">女</el-radio>
-                            <el-radio v-model="userInfo.sex" :label="2">男</el-radio>
+                        <div class="item">
+                            <div class="name">
+                                <span>技</span>
+                                <span>能：</span>
+                            </div>
+                            <div class="input">
+                                <el-select v-model="userInfo.ability" multiple placeholder="请选择技能">
+                                    <el-option
+                                    v-for="item in abilityList"
+                                    :key="item._id"
+                                    :label="item.category"
+                                    :value="item._id">
+                                    </el-option>
+                                </el-select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="item">
-                        <div class="name">
-                            <span>技</span>
-                            <span>能：</span>
+                        <div class="item">
+                            <div class="name">
+                                <span>出</span>
+                                <span>生</span>
+                                <span>日</span>
+                                <span>期：</span>
+                            </div>
+                            <div class="input">
+                                <el-date-picker
+                                v-model="userInfo.birthday"
+                                type="date"
+                                placeholder="选择出生日期">
+                                </el-date-picker>
+                            </div>
                         </div>
-                        <div class="input">
-                            <el-select v-model="userInfo.ability" multiple placeholder="请选择技能">
-                                <el-option
-                                v-for="item in abilityList"
-                                :key="item._id"
-                                :label="item.category"
-                                :value="item._id">
-                                </el-option>
-                            </el-select>
+                        <div class="item">
+                            <div class="name">
+                                <span>地</span>
+                                <span>址：</span>
+                            </div>
+                            <div class="input">
+                                <md-addressPicker :defalutAddress="userInfo.address" @change="getAddress"></md-addressPicker>
+                            </div>
                         </div>
-                    </div>
-                    <div class="item">
-                        <div class="name">
-                            <span>出</span>
-                            <span>生</span>
-                            <span>日</span>
-                            <span>期：</span>
+                        <div class="item">
+                            <div class="name">
+                                <span>联</span>
+                                <span>系</span>
+                                <span>电</span>
+                                <span>话：</span>
+                            </div>
+                            <div class="input">
+                                <el-input v-model="userInfo.tel" placeholder="请输入联系电话"></el-input>
+                            </div>
                         </div>
-                        <div class="input">
-                            <el-date-picker
-                            v-model="userInfo.birthday"
-                            type="date"
-                            placeholder="选择出生日期">
-                            </el-date-picker>
+                        <div class="item">
+                            <div class="name">
+                                <span>邮</span>
+                                <span>箱：</span>
+                            </div>
+                            <div class="input">
+                                <el-input v-model="userInfo.email" placeholder="请输入邮箱"></el-input>
+                            </div>
                         </div>
-                    </div>
-                    <div class="item">
-                        <div class="name">
-                            <span>地</span>
-                            <span>址：</span>
+                        <div class="item">
+                            <div class="btn" @click="save">保存</div>
                         </div>
-                        <div class="input">
-                            <md-addressPicker :defalutAddress="userInfo.address" @change="getAddress"></md-addressPicker>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="name">
-                            <span>联</span>
-                            <span>系</span>
-                            <span>电</span>
-                            <span>话：</span>
-                        </div>
-                        <div class="input">
-                            <el-input v-model="userInfo.tel" placeholder="请输入联系电话"></el-input>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="name">
-                            <span>邮</span>
-                            <span>箱：</span>
-                        </div>
-                        <div class="input">
-                            <el-input v-model="userInfo.email" placeholder="请输入邮箱"></el-input>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="btn" @click="save">保存</div>
                     </div>
                 </div>
             </div>
@@ -130,6 +132,7 @@ export default {
         }
     },
     created(){
+        window.scroll(0,0)
         this.getCategoryList()
         this.getUserInfo({userId:this.$cookie.get('userID')})
     },
@@ -169,6 +172,7 @@ export default {
 
 <style lang="less" scoped>
     .person-centre{
+        background: #f0f0f0;
         .header{
             width: 100%;
             height: 60px;
@@ -185,10 +189,22 @@ export default {
             }
         }
         .main{
-            width: 500px;
-            min-height: 100vh;
-            margin: 15px auto;
+            width: 1200px;
+            margin: 0px auto 15px;
             padding-top: 60px;
+            .main-box{
+                width: 100%;
+                background: #fff;
+                border-radius: 5px;
+                margin-top: 15px;
+                min-height: 100vh;
+            }
+            .content{
+                width: 500px;
+                margin: 0 auto;
+                padding-top: 15px;
+                box-sizing: border-box;
+            }
             .title{
                 font-size: 24px;
                 font-family: "Microsoft YaHei";

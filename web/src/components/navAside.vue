@@ -52,7 +52,7 @@ export default {
             display: flex;
             align-items: center;
             padding: 0 20px;
-            font-size: 16px;
+            font-size: 14px;
             color: #666;
             user-select: none;
             cursor: pointer;

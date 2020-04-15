@@ -89,6 +89,7 @@ export default {
         }, 200)
     },
     created(){
+        window.scroll(0,0)
         this.getChatList({currentPage:this.currentPage, pageSize:this.pageSize})
     },
     updated(){
@@ -124,7 +125,7 @@ export default {
     .chat-room{
         width: 100%;
         height: 100vh;
-        background: #fff;
+        background: #f0f0f0;
         // margin: 0 auto;
         .header{
             width: 100%;

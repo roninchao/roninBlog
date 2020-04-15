@@ -109,6 +109,8 @@ export default {
         }
         .menu{
             display: flex;
+            align-items: center;
+            position: relative;
             .chat-room{
                 width: 100px;
                 font-size: 14px;
@@ -116,15 +118,16 @@ export default {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                overflow: hidden;
-                transition: all 0.3s;
                 cursor: pointer;
+                user-select: none;
                 &:hover{
-                    background: #f0f0f0;
                     span{
                         transform: translateY(30px);
-                        color: #ff6600;
+                        // color: #fff;
                     }
+                }
+                &:active{
+                    opacity: 0.6;
                 }
                 span{
                     display: block;
