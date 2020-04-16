@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <van-button type="default">默认按钮</van-button>
-        <div class="div">大杀四方</div>
+    <div class="index">
+        <router-view></router-view>
+        <md-tabBar></md-tabBar>
     </div>
 </template>
 
@@ -12,7 +12,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .div{
-        font-size: 1rem;
-    }
+ 
 </style>
