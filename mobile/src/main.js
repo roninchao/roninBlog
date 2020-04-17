@@ -5,7 +5,7 @@ import Vue from 'vue'
 import App from './App'
 import store from './store/index'
 // 引入设置根节点fontsize
-import "@/public/js/setFontSize"
+// import "@/public/js/setFontSize"
 // 引入路由
 import router from './router'
 //引入Vant
@@ -16,6 +16,8 @@ Vue.use(Vant);
 import '@/public/js/components'
 //引入公共CSS
 import '@/public/css/common.css'
+// 把vant px转化为rem
+import 'amfe-flexible/index.js'
 //引入公共方法
 import func from '@/public/js/function'
 Vue.prototype.$func = func
