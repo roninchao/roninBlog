@@ -6,16 +6,6 @@ Vue.use(Router)
 let vueRouter = new Router({
     mode:"hash",
     routes: [
-      // {   //登录
-      //    path:'/login',
-      //    name:'login',
-      //    component:() => import('@/views/otherPages/login'),
-      // },
-      // {   //注册
-      //     path:'/register',
-      //     name:'register',
-      //     component:() => import('@/views/otherPages/register'),
-      // },
         {
             path:'/',
             redirect:{
@@ -67,14 +57,12 @@ let vueRouter = new Router({
             component:() => import('@/views/childPage/index'),
             children:[
                 {
-                    path:'detail',
-                    name:'detail',
-                    component:() => import('@/views/childPage/pages/detail')
-                },
-                {
-                    path:'detail2',
-                    name:'detail2',
-                    component:() => import('@/views/childPage/pages/detail2')
+                    path:'articleDetail',
+                    name:'articleDetail',
+                    meta:{
+                        name:'文章详情'
+                    },
+                    component:() => import('@/views/childPage/pages/articleDetail')
                 }
             ]
         },

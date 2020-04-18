@@ -1,9 +1,7 @@
 <template>
     <div class="header">
         <div class="left item">
-            <slot name="left">
-                <!-- <van-icon name="arrow-left" /> -->
-            </slot>
+            <slot name="left"></slot>
         </div>
         <div class="middle item">
             {{title}}
@@ -50,7 +48,7 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 0.6rem;
+        font-size: 0.5rem;
         color: #666;
         background: #fff;
         box-shadow: 0 0 0.1rem #ccc;

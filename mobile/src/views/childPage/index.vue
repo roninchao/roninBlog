@@ -1,6 +1,10 @@
 <template>
     <div>
-        <div class="header" @click="$router.go(-1)"> back</div>
+        <md-header>
+            <div slot="left" class="btn" @click="$router.go(-1)">
+                <van-icon name="arrow-left" />
+            </div>
+        </md-header>
         <router-view class="router-view"></router-view>
     </div>
 </template>
@@ -15,10 +19,11 @@ export default {
 </script>
 
 <style  lang='less' scpoed>
-    .header{
-        width: 100%;
-        height: 2.5rem;
-        background: skyblue;
+    .router-view{
+        padding-top: 1.2rem;
     }
-   
+    .btn{
+        display: flex;
+        align-items: center;
+    }
 </style>

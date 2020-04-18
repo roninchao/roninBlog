@@ -1,7 +1,7 @@
 <template>
     <div class="tabBar">
-        <div class="item" v-for="(v,k) in tabBarList" :key="k" @click="go(v.path)">
-            <span class="icon"><van-icon :name="v.icon" /></span>
+        <div class="item" :class="v.path == $route.path?'active':''" v-for="(v,k) in tabBarList" :key="k" @click="go(v.path)">
+            <van-icon :name="v.icon" class="icon" />
             <span class="name">{{v.name}}</span>
         </div>
     </div>
@@ -67,11 +67,14 @@ export default {
             &:active{
                 background: #f2f2f2;
             }
+            &.active{
+                color: #ff6600;
+            }
             .icon{
                 font-size: 0.5rem;
             }
             .name{
-                font-size: 0.2rem;
+                font-size: 0.3rem;
             }
         }
     }

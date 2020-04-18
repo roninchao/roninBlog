@@ -1,10 +1,9 @@
 <template>
     <div class="home">
-        <div @click="$router.push('/otherPage/login')">login</div>
         <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
             <van-swipe-item v-for="(v,k) in 4" :key="k">{{v}}</van-swipe-item>
         </van-swipe>
-        <van-tabs animated sticky class="van-tabs">
+        <van-tabs animated sticky class="van-tabs" offset-top="45" color="#ff6600">
             <van-tab v-for="(v, k) in 8" :key="k" :title="'标签 ' + v" 
             >
                 <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
@@ -14,7 +13,9 @@
                         finished-text="没有更多了"
                         @load="onLoad"
                     >
-                         <md-articleDesc v-for="(v2,k2) in list" :key="k2"></md-articleDesc>
+                        <div  v-for="(v2,k2) in list" :key="k2" @click="$router.push('/childPage/articleDetail')">
+                            <md-articleDesc></md-articleDesc>
+                        </div>
                     </van-list>
                 </van-pull-refresh>
                
@@ -66,11 +67,11 @@ export default {
 <style lang="less" scoped>
     .home{
         width: 100%;
-        padding-bottom: 1.5rem;
+        padding: 1.2rem 0;
         .my-swipe .van-swipe-item {
             color: #fff;
             font-size: 0.8rem;
-            line-height: 3rem;
+            line-height: 4rem;
             text-align: center;
             background-color: #39a9ed;
         }

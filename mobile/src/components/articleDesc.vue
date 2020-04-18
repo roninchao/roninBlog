@@ -99,11 +99,12 @@ export default {
                 .icon{
                     display: flex;
                     align-items: center;
-                    font-size: 0.2rem;
+                    font-size: 0.3rem;
                     color: #999;
                     margin-right: 0.2rem;
                     span{
-                        margin-left: 3px;
+                        font-size: 0.2rem;
+                        margin-left: 1px;
                     }
                 }
             }

@@ -1,5 +1,6 @@
 <template>
     <div class="index">
+        <md-header></md-header>
         <router-view></router-view>
         <md-tabBar></md-tabBar>
     </div>
