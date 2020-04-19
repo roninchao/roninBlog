@@ -46,7 +46,7 @@ export default {
 <style lang="less" scoped>
     .tabBar{
         display: flex;
-        height: 1.2rem;
+        height: 1.5rem;
         position: fixed;
         left:0;
 		right:0;
@@ -71,7 +71,7 @@ export default {
                 color: #ff6600;
             }
             .icon{
-                font-size: 0.5rem;
+                font-size: 0.6rem;
             }
             .name{
                 font-size: 0.3rem;

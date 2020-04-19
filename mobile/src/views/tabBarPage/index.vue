@@ -1,7 +1,9 @@
 <template>
     <div class="index">
         <md-header></md-header>
-        <router-view></router-view>
+        <keep-alive>
+            <router-view></router-view>
+        </keep-alive>
         <md-tabBar></md-tabBar>
     </div>
 </template>

@@ -1,12 +1,10 @@
 <template>
     <div class="comments">
-        <div class="title">
-            评论
-        </div>
+        <div class="title">评论</div>
         <div class="edit">
             <van-cell-group :border="false">
                <van-field
-                v-model="commentVal"
+                v-model="commentVal1"
                 rows="2"
                 autosize
                 type="textarea"
@@ -24,7 +22,7 @@
         <div class="comments-list">
             <div class="item" v-for="(v, k) in 10" :key="k">
                 <div class="header">
-                     <div class="avatar">
+                    <div class="avatar">
                     <van-image
                         width="100%"
                         height="100%"
@@ -45,7 +43,7 @@
                 <div class="content">而他也容易人员额ear有二五眼二五眼惹我所业务容易人员额ear有二五眼二五眼惹我所业务容易人员额ear有二五眼二五眼惹我所业务容易人员额ear有二五眼二五眼惹我所业务员首页</div>
                 <div class="bottom">
                     <div class="time">2019-125- 5454645</div>
-                    <div class="btn">回复</div>
+                    <div class="btn" @click="showPopup">回复</div>
                 </div>
             </div>
             <van-pagination
@@ -55,6 +53,26 @@
             force-ellipses
             class="page"
             />
+            <van-popup v-model="show" position="bottom" round closeable >
+                <div class="edit popup">
+                    <van-cell-group :border="false">
+                    <van-field
+                        v-model="commentVal2"
+                        rows="2"
+                        autosize
+                        type="textarea"
+                        maxlength="140"
+                        placeholder="请输入评论内容"
+                        show-word-limit
+                        class="textarea"
+                        :border="false"
+                        />
+                        <div class="btn-wrap">
+                            <van-button class="btn" type="primary" size="normal" color="#1989fa">发表</van-button>
+                        </div>
+                    </van-cell-group>
+                </div>
+            </van-popup>
         </div>
     </div>
 </template>
@@ -63,8 +81,15 @@
 export default {
     data(){
         return {
-            commentVal:"",
-            currentPage:""
+            commentVal1:"",
+            commentVal2:"",
+            currentPage:"",
+            show:false
+        }
+    },
+    methods:{
+        showPopup(){
+            this.show = !this.show
         }
     }
 }
@@ -74,14 +99,16 @@ export default {
     .comments{
         background: #fff;
         .title{
-            font-size: 0.5rem;
+            font-size: 0.45rem;
             color: #666;
             padding: 0.3rem 0.3rem 0;
         }
         .edit{
             padding: 0.3rem;
             box-sizing: border-box;
-            
+            &.popup{
+                margin-top: 1rem;
+            }
             .textarea{
                 font-size: 0.35rem;
                 color: #666;
@@ -137,11 +164,16 @@ export default {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
+                    .time{
+                        color: #999;
+                        font-size: 0.2rem;
+                    }
                     .btn{
                         border-radius: 0.2rem;
                         font-size: 0.3rem;
                         color: #1989fa;
                         padding: 0.2rem 0.3rem;
+                        // cursor: pointer;
                     }
                 }
             }

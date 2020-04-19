@@ -3,24 +3,8 @@
         <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
             <van-swipe-item v-for="(v,k) in 4" :key="k">{{v}}</van-swipe-item>
         </van-swipe>
-        <van-tabs animated sticky class="van-tabs" offset-top="45" color="#ff6600">
-            <van-tab v-for="(v, k) in 8" :key="k" :title="'标签 ' + v" 
-            >
-                <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
-                    <van-list
-                        v-model="loading"
-                        :finished="finished"
-                        finished-text="没有更多了"
-                        @load="onLoad"
-                    >
-                        <div  v-for="(v2,k2) in list" :key="k2" @click="$router.push('/childPage/articleDetail')">
-                            <md-articleDesc></md-articleDesc>
-                        </div>
-                    </van-list>
-                </van-pull-refresh>
-               
-            </van-tab>
-        </van-tabs>
+        <md-ranking rankingName="热评榜" rankingIcon="fire-o"></md-ranking>
+        <md-ranking rankingName="新增榜" rankingIcon="flower-o"></md-ranking>
     </div>
 </template>
 
@@ -67,7 +51,7 @@ export default {
 <style lang="less" scoped>
     .home{
         width: 100%;
-        padding: 1.2rem 0;
+        padding: 1.2rem 0 1.5rem;
         .my-swipe .van-swipe-item {
             color: #fff;
             font-size: 0.8rem;

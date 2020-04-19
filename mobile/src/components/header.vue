@@ -61,7 +61,8 @@ export default {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-size: 0.5rem;
+            font-size: 0.45rem;
+            color: #666;
         }
         .item{
             display: flex;
