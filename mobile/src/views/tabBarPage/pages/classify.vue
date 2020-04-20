@@ -12,7 +12,7 @@
                         offset = 10
                         @load="onLoad"
                     >
-                        <div  v-for="(v2,k2) in articleList" :key="k2" @click="$router.push('/childPage/articleDetail')">
+                        <div  v-for="(v2,k2) in articleList" :key="k2" @click="$router.push({path:'/childPage/articleDetail', query:{id:v2._id}})">
                             <md-articleDesc :article="v2"></md-articleDesc>
                         </div>
                     </van-list>
