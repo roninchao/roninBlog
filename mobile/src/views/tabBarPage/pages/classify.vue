@@ -1,30 +1,29 @@
 <template>
     <div class="classify">
-        <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-            <van-swipe-item v-for="(v,k) in 4" :key="k">{{v}}</van-swipe-item>
-        </van-swipe>
-        <van-tabs animated sticky class="van-tabs" offset-top="45" color="#ff6600">
-            <van-tab v-for="(v, k) in 8" :key="k" :title="'标签 ' + v" 
+        <md-swiper></md-swiper>
+        <van-tabs animated sticky class="van-tabs" offset-top="45" color="#ff6600" @click="changeCate">
+            <van-tab v-for="(v, k) in categoryList" :key="k" :title="v.category"  :name="v._id"
             >
                 <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
                     <van-list
                         v-model="loading"
                         :finished="finished"
                         finished-text="没有更多了"
+                        offset = 10
                         @load="onLoad"
                     >
-                        <div  v-for="(v2,k2) in list" :key="k2" @click="$router.push('/childPage/articleDetail')">
-                            <md-articleDesc></md-articleDesc>
+                        <div  v-for="(v2,k2) in articleList" :key="k2" @click="$router.push('/childPage/articleDetail')">
+                            <md-articleDesc :article="v2"></md-articleDesc>
                         </div>
                     </van-list>
                 </van-pull-refresh>
-               
             </van-tab>
         </van-tabs>
     </div>
 </template>
 
 <script>
+import {mapState, mapMutations, mapActions} from 'vuex'
 export default {
     data() {
         return {
@@ -32,32 +31,49 @@ export default {
             loading: false,
             finished: false,
             refreshing: false,
+            currentPage:1,
+            pageSize:5,
+            currentCateID:0
         };
     },
+    created(){
+        this.getCategoryList()
+    },
+    computed:{
+        ...mapState('article', ['categoryList','articleList','isMore'])
+    },
     methods: {
+        ...mapMutations('article', ['clearArticleList']),
+        ...mapActions('article', ['getCategoryList','getArticleList']),
+        changeCate(name,title){
+            this.currentCateID = name
+            this.onRefresh()
+        },
         onLoad() {
             setTimeout(() => {
                 if (this.refreshing) {
-                this.list = [];
-                this.refreshing = false;
+                    this.clearArticleList()
+                    this.refreshing = false;
                 }
-                for (let i = 0; i < 10; i++) {
-                this.list.push(this.list.length + 1);
+                // console.log(this.currentPage)
+                if(this.isMore){
+                    this.getArticleList({id:this.currentCateID, currentPage:this.currentPage, pageSize:this.pageSize})
+                    this.loading = false
+                    this.currentPage++
+                }else{
+                    this.finished = true
                 }
-                this.loading = false;
-
-                if (this.list.length >= 40) {
-                this.finished = true;
-                }
-            }, 500);
+            }, 1000)
         },
         onRefresh() {
+            this.currentPage = 1
+            this.pageSize = 5
             // 清空列表数据
+            this.clearArticleList()
             this.finished = false;
-
-            // 重新加载数据
             // 将 loading 设置为 true，表示处于加载状态
             this.loading = true;
+            // 重新加载数据
             this.onLoad();
         },
     },

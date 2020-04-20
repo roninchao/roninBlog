@@ -69,10 +69,12 @@
         />
         <van-calendar v-model="showCalendar" @confirm="onConfirm2" />
         <van-button type="danger" size="large">保存</van-button>
+        <van-button type="danger" size="large" @click="exit">退出</van-button>
     </div>
 </template>
 
 <script>
+import {mapState, mapMutations, mapActions } from 'vuex'
 export default {
     data(){
         return{
@@ -84,14 +86,23 @@ export default {
         }
     },
     methods: {
+        ...mapMutations('users', ['logout']),
         onConfirm(values) {
             this.value = values.map((item) => item.name).join('/');
             this.showArea = false;
         },
         onConfirm2(date) {
-        this.value = `${date.getMonth() + 1}/${date.getDate()}`;
-        this.showCalendar = false;
+            this.value = `${date.getMonth() + 1}/${date.getDate()}`;
+            this.showCalendar = false;
         },
+        exit(){
+            this.$dialog.alert({
+                message: '退出登录？',
+            }).then(() => {
+                this.logout()
+            });
+        }
+        
     },
 }
 </script>

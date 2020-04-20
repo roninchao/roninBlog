@@ -1,8 +1,8 @@
 import Vue from 'vue'
-import http from '@/public/js/axios'
-Vue.prototype.$http = http.instance
-import func from '@/public/js/function'
-Vue.prototype.$func = func
+// import http from '@/public/js/axios'
+// Vue.prototype.$http = http.instance
+// import func from '@/public/js/function'
+// Vue.prototype.$func = func
 
 const state = {
     comment:{},

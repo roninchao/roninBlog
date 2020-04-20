@@ -5,7 +5,7 @@ import jsCookie from 'js-cookie'
 
 // 公共axios配置
 const config = {
-    baseURL:'http://localhost:3000/api/web',
+    baseURL:'http://localhost:3000/api/mobile',
     timeout:5000,
     headers:{
         "Content-type": "application/json; charset=utf-8"
@@ -17,8 +17,8 @@ const instance = Axios.create(config)
 instance.interceptors.request.use(
     config => {
         //发送token
-        if(jsCookie.get('webToken')){
-            config.headers.Authriozation = 'Bearer:'+ jsCookie.get('webToken')
+        if(jsCookie.get('mobileToken')){
+            config.headers.Authriozation = 'Bearer:'+ jsCookie.get('mobileToken')
         }
         console.log(config)
         return config;
@@ -35,9 +35,9 @@ instance.interceptors.response.use(
     err => {
         // 对于要登录的状态码统一设置为401
         if(err.response.status === 401){
-            router.push('/login')
+            router.push('/otherPage/other')
         }
-        Vue.prototype.$message(err.response.data.message)
+        Vue.prototype.$notify({ type: 'danger', message: err.response.data.message });
         return Promise.reject(err)
     }
 )

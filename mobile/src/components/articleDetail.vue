@@ -1,22 +1,22 @@
 <template>
     <div class="article">
-        <div class="title">白天的第三方</div>
+        <div class="title">{{article.title}}</div>
         <div class="info">
             <div class="icon">
                 <van-icon name="description" />
-                <span>12415</span>
+                <span>{{article.category.category}}</span>
             </div>
             <div class="icon">
                 <van-icon name="browsing-history-o" />
-                <span>111</span>
+                <span>{{article.visits}}</span>
             </div>
             <div class="icon">
                 <van-icon name="comment-o" />
-                <span>222</span>
+                <span>{{article.comments}}</span>
             </div>  
             <div class="icon">
                 <van-icon name="underway-o" />
-                <span>2019-05-05 01535743</span>
+                <span>{{article.time}}</span>
             </div>
         </div>
         <div class="img" @click="show">
@@ -24,25 +24,24 @@
             width="100%"
             height="100%"
             fit="cover"
-            src="https://img.yzcdn.cn/vant/cat.jpeg"
+            :src="article.imgUrl"
             />
         </div>
-        <div class="content">
-            白天的第三方白天的第三方白天的第三方白天的第三方白天的第三方白天的第三方
-        </div>
+        <div class="content" v-html="article.content"></div>
     </div>
 </template>
 
 <script>
-// import Vue from 'vue';
 import { ImagePreview } from 'vant';
 export default {
     props:{
-        article:{}
+        article:""
     },
     methods:{
         show(){
-            ImagePreview(['https://img.yzcdn.cn/vant/cat.jpeg']);
+            let arr = []
+            arr.push(this.article.imgUrl)
+            ImagePreview(arr);
         }
     }
 }

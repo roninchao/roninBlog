@@ -1,8 +1,8 @@
 import Vue from 'vue'
-import http from '@/public/js/axios'
-Vue.prototype.$http = http.instance
-import func from '@/public/js/function'
-Vue.prototype.$func = func
+// import http from '@/public/js/axios'
+// Vue.prototype.$http = http.instance
+// import func from '@/public/js/function'
+// Vue.prototype.$func = func
 
 const state = {
     // 分类列表
@@ -77,10 +77,10 @@ const mutations = {
         if(payLoad.length < state.pageSize) {
             state.isMore = false
         }
-        let len = 4;
-        if(payLoad.length < 4){
-            len = payLoad.length
-        }
+        // let len = 4;
+        // if(payLoad.length < 4){
+        //     len = payLoad.length
+        // }
         state.articleList = state.articleList.concat(payLoad)
     },
     getArticleDetail(state, payLoad){

@@ -1,11 +1,11 @@
 import Vue from 'vue'
-import http from '@/public/js/axios'
-Vue.prototype.$http = http.instance
+// import http from '@/public/js/axios'
+// Vue.prototype.$http = http.instance
 import moment from 'moment'
 moment.locale('zh-cn');
 Vue.prototype.$moment = moment;
-import func from '@/public/js/function'
-Vue.prototype.$func = func
+// import func from '@/public/js/function'
+// Vue.prototype.$func = func
 const state = {
     chatList:[],
     isMore:true

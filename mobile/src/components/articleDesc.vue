@@ -1,35 +1,35 @@
 <template>
     <div class="article-item">
-        <div class="img-box" @click="go(article._id)">
+        <div class="img-box">
             <van-image
             width="100%"
             height="100%"
             fit="cover"
-            src="https://img.yzcdn.cn/vant/cat.jpeg"
+            :src="article.imgUrl"
             />
             <!-- <div class="img" :style="{backgroundImage:`url(${article.imgUrl})`}"></div>   -->
         </div>
         <div class="article">
             <div class="article-desc">
-                <p class="top" @click="go(article._id)">article.title</p>
-                <p class="bottom">111111111</p>
+                <p class="top">{{article.title}}</p>
+                <p class="bottom">{{article.desc}}</p>
             </div>
             <div class="article-other">
                 <div class="icon">
                     <van-icon name="description" />
-                    <span>category</span>
+                    <span>{{article.category.category}}</span>
                 </div>
                 <div class="icon">
                     <van-icon name="browsing-history-o" />
-                    <span>111</span>
+                    <span>{{article.visits}}</span>
                 </div>
                 <div class="icon">
                     <van-icon name="comment-o" />
-                    <span>222</span>
+                    <span>{{article.comments}}</span>
                 </div>  
                 <div class="icon">
                     <van-icon name="underway-o" />
-                    <span>2019-05-05 01535743</span>
+                    <span>{{article.time}}</span>
                 </div>
             </div>
         </div>
@@ -40,19 +40,8 @@
 
 export default {
     props:{
-        article:{}
+        article:""
     },
-    data() {
-        return {}
-    },
-    mounted(){
-      
-    },
-    methods:{
-        go(e){
-            this.$router.push({path:'/detail', query:{id:e}})
-        }
-    }
 }
 </script>
 
@@ -64,6 +53,7 @@ export default {
         background: #fff;
         border-radius: 0.1rem;
         display: flex;
+        overflow: hidden;
         &:active{
             opacity: 0.6;
         }
@@ -78,6 +68,7 @@ export default {
             justify-content: space-between;
             flex-direction: column;
             margin-left: 0.2rem;
+            width: 6.5rem;
             .article-desc{
                 font-size: 0.3rem;
                 color: #666;
@@ -88,9 +79,11 @@ export default {
                     font-weight: bold;
                 }
                 .bottom{
-                    overflow : hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
+                    overflow:hidden; 
+                    text-overflow:ellipsis;
+                    display:-webkit-box; 
+                    -webkit-box-orient:vertical;
+                    -webkit-line-clamp:2; 
                 }
             }
             .article-other{

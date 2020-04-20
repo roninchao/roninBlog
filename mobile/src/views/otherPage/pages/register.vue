@@ -3,7 +3,7 @@
         <div class="box">
             <van-cell-group class="form">
                 <van-field
-                    v-model="username"
+                    v-model="form.username"
                     label="用户名"
                     clearable
                     required
@@ -13,7 +13,7 @@
                     class="input"
                 />
                 <van-field
-                    v-model="password1"
+                    v-model="form.password1"
                     clearable
                     required
                     label="密码"
@@ -25,7 +25,7 @@
                     class="input"
                 />
                  <van-field
-                    v-model="password2"
+                    v-model="form.password2"
                     clearable
                     required
                     label="密码"
@@ -37,30 +37,44 @@
                     class="input"
                 />
             </van-cell-group>
-            <van-button class="btn" type="primary" size="large" color="#1989fa">注册</van-button>
+            <van-button class="btn" type="primary" size="large" color="#1989fa" @click="submit">注册</van-button>
         </div>
     </div>
 </template>
 
 <script>
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
     data(){
         return{
-            username:'',
-            password1:'',
-            password2:'',
+            form:{
+                username:'',
+                password1:'',
+                password2:'',
+            },
             isShowPwd1: false,
             isShowPwd2: false,
             isKeep:false
         }
     },
     methods:{
+        ...mapActions('users', ['register']),
         showPwd(e){
             if(e == 1){
                 this.isShowPwd1 = !this.isShowPwd1
             }else if(e == 2) {
                 this.isShowPwd2 = !this.isShowPwd2
             }
+        },
+        submit() {
+            if(this.form.username == '') return this.$notify({ type: 'danger', message: '请输入用户名' });
+            let reg = /^[A-Za-z0-9]{6,20}$/
+            if(this.form.password1 == '') return this.$notify({ type: 'danger', message: '请输入密码' });
+            if(!reg.test(this.form.password1)) return this.$notify({ type: 'danger', message: '密码为6~20位数字字母下划线' });
+            if(this.form.password2 == '') return this.$notify({ type: 'danger', message: '请再次输入密码' });
+            if(!reg.test(this.form.password2)) return this.$notify({ type: 'danger', message: '密码为6~20位数字字母下划线' });
+            if(this.form.password1 !== this.form.password2) return this.$notify({ type: 'danger', message: '两次输入密码不一致' });
+            this.register({username:this.form.username,password:this.form.password2})
         }
     }
 }

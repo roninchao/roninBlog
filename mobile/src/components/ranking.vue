@@ -5,8 +5,8 @@
             <span>{{rankingName}}</span>
         </div>
         <div class="ranking-list">
-            <div class="item" v-for="(v,k) in 10" :key="k" @click="$router.push('/childPage/articleDetail')">
-                <md-articleDesc></md-articleDesc>
+            <div class="item" v-for="(v,k) in rankingList" :key="k"  @click="$router.push({path:'/childPage/articleDetail', query:{id:v._id}})">
+                <md-articleDesc :article="v"></md-articleDesc>
             </div>
         </div>
     </div>
@@ -17,8 +17,8 @@ export default {
     props:{
         rankingName:"",
         rankingIcon:"",
-        rankingList:[]
-    }
+        rankingList:""
+    },
 }
 </script>
 

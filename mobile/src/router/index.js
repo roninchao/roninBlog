@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import jsCookie from 'js-cookie'
 Vue.use(Router)
+import { Dialog } from 'vant';
 
+// 全局注册
+Vue.use(Dialog);
 let vueRouter = new Router({
     mode:"hash",
     routes: [
@@ -37,7 +40,8 @@ let vueRouter = new Router({
                     path:'chatroom',
                     name:'chatroom',
                     meta:{
-                        name:'聊天室'
+                        name:'聊天室',
+                        requireAuth: true
                     },
                     component:() => import('@/views/tabBarPage/pages/chatroom')
                 },
@@ -45,7 +49,8 @@ let vueRouter = new Router({
                     path:'personCentre',
                     name:'personCentre',
                     meta:{
-                        name:'设置'
+                        name:'设置',
+                        requireAuth: true
                     },
                     component:() => import('@/views/tabBarPage/pages/personCentre')
                 }
@@ -91,10 +96,23 @@ let vueRouter = new Router({
         },
     ]
 })
+// 导航守卫
+vueRouter.beforeEach((to, from, next) => {
+    if(to.meta.requireAuth && !jsCookie.get('mobileToken')){
+        Vue.prototype.$dialog.confirm({
+            message: '您还没有登录, 是否前往登录?',
+        })
+        .then(() => {
+            vueRouter.push('/otherPage/login')
+        })
+        .catch(() =>{})
+    }else{
+        next()
+    }
+})
 //防止多次点击报错
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 }
-
 export default vueRouter

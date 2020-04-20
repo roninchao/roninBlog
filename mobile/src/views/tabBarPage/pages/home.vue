@@ -1,49 +1,26 @@
 <template>
     <div class="home">
-        <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-            <van-swipe-item v-for="(v,k) in 4" :key="k">{{v}}</van-swipe-item>
-        </van-swipe>
-        <md-ranking rankingName="热评榜" rankingIcon="fire-o"></md-ranking>
-        <md-ranking rankingName="新增榜" rankingIcon="flower-o"></md-ranking>
+        <md-swiper></md-swiper>
+        <md-ranking rankingName="热评榜" rankingIcon="fire-o" :rankingList="hotRanking"></md-ranking>
+        <md-ranking rankingName="新增榜" rankingIcon="flower-o" :rankingList="newRanking"></md-ranking>
     </div>
 </template>
 
 <script>
+import { mapState, mapActions} from 'vuex'
 export default {
     data() {
-        return {
-            list: [],
-            loading: false,
-            finished: false,
-            refreshing: false,
-        };
+        return {}
+    },
+    created(){
+        this.getHotRanking()
+        this.getNewRanking()
+    },
+    computed:{
+        ...mapState('article', ['hotRanking', 'newRanking'])
     },
     methods: {
-        onLoad() {
-            setTimeout(() => {
-                if (this.refreshing) {
-                this.list = [];
-                this.refreshing = false;
-                }
-                for (let i = 0; i < 10; i++) {
-                this.list.push(this.list.length + 1);
-                }
-                this.loading = false;
-
-                if (this.list.length >= 40) {
-                this.finished = true;
-                }
-            }, 1000);
-        },
-        onRefresh() {
-            // 清空列表数据
-            this.finished = false;
-
-            // 重新加载数据
-            // 将 loading 设置为 true，表示处于加载状态
-            this.loading = true;
-            this.onLoad();
-        },
+        ...mapActions('article', ['getHotRanking', 'getNewRanking'])
     },
 }
 </script>
@@ -52,12 +29,5 @@ export default {
     .home{
         width: 100%;
         padding: 1.2rem 0 1.5rem;
-        .my-swipe .van-swipe-item {
-            color: #fff;
-            font-size: 0.8rem;
-            line-height: 4rem;
-            text-align: center;
-            background-color: #39a9ed;
-        }
     }
 </style>

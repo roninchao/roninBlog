@@ -7,6 +7,8 @@ Vue.component('md-tabBar', resolve => require(['@/components/tabBar'], resolve))
 Vue.component('md-articleDesc', resolve => require(['@/components/articleDesc'], resolve))
 // 公共头部
 Vue.component('md-header', resolve => require(['@/components/header'], resolve))
+// 轮播图
+Vue.component('md-swiper', resolve => require(['@/components/swiper'], resolve))
 // 排行榜
 Vue.component('md-ranking', resolve => require(['@/components/ranking'], resolve))
 // 文章详情
