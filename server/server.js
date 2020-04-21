@@ -43,6 +43,7 @@ app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 // 端口
 const port = 3000
 //监听
+// app.set('host','192.168.50.80');
 server.listen(port, () => {
-    console.log('服务器已开启,http://localhost:'+ port);
+    console.log(app);
 });

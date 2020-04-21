@@ -1,7 +1,7 @@
 <template>
     <div class="chatroom">
         <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-            <div class="chat-list" ref="chatList">
+            <div class="chat-list"  id="chatList" ref="chatList">
                 <div class="item" v-for="(v,k) in chatList" :key="k">
                     <div class="me"  v-if="v.nameId == $cookie.get('userID')">
                         <div class="content" v-html="v.content"></div>
@@ -29,7 +29,7 @@
                         </div>
                         <div class="content" v-html="v.content"></div>
                     </div>
-                    <div class="time">{{v.time}}</div>
+                    <div class="time" v-if="v.time">{{v.time}}</div>
                 </div>
             </div>
         </van-pull-refresh>
@@ -55,19 +55,18 @@ export default {
         return{
             val:"",
             currentPage:1,
-            pageSize:15,
+            pageSize:10,
             isLoading:false
         }
     },
     created(){
         this.getChatList({currentPage:this.currentPage, pageSize:this.pageSize}).then(() => {
-            this.$refs.chatList.scrollTop = this.$refs.chatList.scrollHeight
+           this.scrollToBottom()
         })
     },
     computed:{
         ...mapState('chatroom', ['chatList', 'isMore'])
     },
-    
     sockets: {
         connection () {
             console.log('socket已经连接');
@@ -77,7 +76,7 @@ export default {
         },
         notice (data) {
             this.addChatItem(data)
-            this.$refs.chatList.scrollTop = this.$refs.chatList.scrollHeight
+            this.scrollToBottom()
         },
         close(){
             console.log("socket已经断开连接");
@@ -85,9 +84,7 @@ export default {
     },
     mounted () {
         this.$socket.emit('connection')
-        setTimeout(() => {
-            this.$refs.chatList.scrollTop = this.$refs.chatList.scrollHeight
-        }, 200)
+        this.scrollToBottom()
     },
     destroyed(){
         this.$socket.emit('close')
@@ -118,6 +115,12 @@ export default {
             this.$socket.emit('message', {token, val:this.val});
             this.val=""
         },
+        scrollToBottom() {
+            this.$nextTick(() => {
+                var container = this.$refs.chatList;
+                container.scrollTop = container.scrollHeight;
+            })
+        }
     }
 }
 </script>
@@ -128,10 +131,10 @@ export default {
         padding: 1.2rem 0 3rem;
         .chat-list{
             width: 100%;
-            height: 100%;
+            height: calc(100vh - 4.2rem);
             background: #f0f0f0;
             padding: 0.3rem;
-            // padding-bottom: 1.5rem;
+            overflow: auto;
             box-sizing: border-box;
             .item{
                 .avatar{
