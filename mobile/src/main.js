@@ -27,7 +27,12 @@ Vue.prototype.$cookie = jsCookie
 //引入axios
 import http from '@/public/js/axios'
 Vue.prototype.$http = http.instance
-
+//引入vue-socket.io
+import VueSocketIO from 'vue-socket.io'
+Vue.use(new VueSocketIO({
+    debug:false,
+    connection: 'http://localhost:3000',  //
+}))
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

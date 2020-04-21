@@ -19,9 +19,6 @@ export default {
             title:''
         }
     },
-    created(){
-        console.log(this.$route.meta)
-    },
     watch:{
         $route:{
             handler(to, from){

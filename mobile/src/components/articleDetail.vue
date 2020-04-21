@@ -4,7 +4,7 @@
         <div class="info">
             <div class="icon">
                 <van-icon name="description" />
-                <span>{{article.category.category}}</span>
+                <span>{{article.category?article.category.category:''}}</span>
             </div>
             <div class="icon">
                 <van-icon name="browsing-history-o" />
@@ -53,7 +53,7 @@ export default {
         box-sizing: border-box;
         background: #fff;
         .title{
-            font-size: 0.5rem;
+            font-size: 0.45rem;
             color: #666;
             text-align: center;
             overflow: hidden;

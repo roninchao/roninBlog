@@ -1,35 +1,41 @@
 <template>
     <div class="chatroom">
-        <div class="chat-list">
-            <div class="item" v-for="(v,k) in 20" :key="k">
-                <div class="other">
-                    <div class="avatar">
-                        <van-image
-                            width="100%"
-                            height="100%"
-                            fit="cover"
-                            src="https://img.yzcdn.cn/vant/cat.jpeg"
-                            />
+        <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+            <div class="chat-list" ref="chatList">
+                <div class="item" v-for="(v,k) in chatList" :key="k">
+                    <div class="me"  v-if="v.nameId == $cookie.get('userID')">
+                        <div class="content" v-html="v.content"></div>
+                        <div class="avatar">
+                            <van-image
+                                width="100%"
+                                height="100%"
+                                fit="cover"
+                                :src="v.avatar"
+                                v-if="v.avatar"
+                                />
+                            <van-icon name="user-o" v-else/>
+                        </div>
                     </div>
-                    <div class="content">{{v}}sdafsaddsg对方过后闪电发货</div>
-                </div>
-                <div class="me">
-                    <div class="content">sdafsaddsg对方过后sadf sageagea tgawet迪桑特热人头儿童问题儿童热闪电发货</div>
-                    <div class="avatar">
-                        <van-image
-                            width="100%"
-                            height="100%"
-                            fit="cover"
-                            src="https://img.yzcdn.cn/vant/cat.jpeg"
-                            />
+                    <div class="other" v-else>
+                        <div class="avatar">
+                            <van-image
+                                width="100%"
+                                height="100%"
+                                fit="cover"
+                                :src="v.avatar"
+                                v-if="v.avatar"
+                                />
+                            <van-icon name="user-o" v-else/>
+                        </div>
+                        <div class="content" v-html="v.content"></div>
                     </div>
+                    <div class="time">{{v.time}}</div>
                 </div>
-                <div class="time">2016-10-22 125554</div>
             </div>
-        </div>
+        </van-pull-refresh>
         <div class="edit">
             <van-field
-            v-model="message"
+            v-model="val"
             rows="1"
             autosize
             :border="false"
@@ -37,17 +43,81 @@
             class="textarea"
             maxlength="140"
             />
-            <van-button class="btn" type="primary"  size="normal" color="#1989fa">发表</van-button>
+            <van-button class="btn" type="primary"  size="normal" color="#1989fa" @click="send">发表</van-button>
         </div>
     </div>
 </template>
 
 <script>
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
     data(){
         return{
-            message:""
+            val:"",
+            currentPage:1,
+            pageSize:15,
+            isLoading:false
         }
+    },
+    created(){
+        this.getChatList({currentPage:this.currentPage, pageSize:this.pageSize}).then(() => {
+            this.$refs.chatList.scrollTop = this.$refs.chatList.scrollHeight
+        })
+    },
+    computed:{
+        ...mapState('chatroom', ['chatList', 'isMore'])
+    },
+    
+    sockets: {
+        connection () {
+            console.log('socket已经连接');
+        },
+        message (data) {
+            this.$socket.emit('message', data);
+        },
+        notice (data) {
+            this.addChatItem(data)
+            this.$refs.chatList.scrollTop = this.$refs.chatList.scrollHeight
+        },
+        close(){
+            console.log("socket已经断开连接");
+        },
+    },
+    mounted () {
+        this.$socket.emit('connection')
+        setTimeout(() => {
+            this.$refs.chatList.scrollTop = this.$refs.chatList.scrollHeight
+        }, 200)
+    },
+    destroyed(){
+        this.$socket.emit('close')
+    },
+    methods:{
+        ...mapMutations('chatroom', ['addChatItem']),
+        ...mapActions('chatroom', ['getChatList']),
+        onRefresh(){
+            if(this.isMore){
+                this.$toast.loading({
+                    message: '加载中...',
+                    forbidClick: true,
+                });
+                this.currentPage++
+                this.isLoading = true
+                this.getChatList({currentPage:this.currentPage, pageSize:this.pageSize}).then(() => {
+                    this.isLoading = false
+                    this.$toast.clear()
+                })
+            }else{
+                this.$notify({ type: 'primary', message: '没有更多数据' });
+                this.isLoading = false
+            }
+        },
+        send(){
+            if(this.val == "") return this.$notify({ type: 'warning', message: '发送内容不能为空！' })
+            let token = this.$cookie.get('mobileToken')
+            this.$socket.emit('message', {token, val:this.val});
+            this.val=""
+        },
     }
 }
 </script>
@@ -61,6 +131,7 @@ export default {
             height: 100%;
             background: #f0f0f0;
             padding: 0.3rem;
+            // padding-bottom: 1.5rem;
             box-sizing: border-box;
             .item{
                 .avatar{
@@ -68,6 +139,14 @@ export default {
                     height: 1rem;
                     border-radius: 0.1rem;
                     overflow: hidden;
+                    background: #fff;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    .van-icon{
+                        font-size: 0.6rem;
+                        color: #666;
+                    }
                 }
                 .content{
                     max-width: 6.2rem;

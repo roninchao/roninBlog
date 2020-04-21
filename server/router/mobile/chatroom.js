@@ -3,7 +3,7 @@ module.exports = (app) => {
     const midAuth = require('../../middleware/auth')
     const express = require('express')
     const router = express.Router()
-    app.use('/api/web', router)
+    app.use('/api/mobile', router)
 
     router.post('/chatList', midAuth(), async (req, res) => {
         let {currentPage, pageSize} = req.body

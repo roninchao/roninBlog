@@ -19,7 +19,6 @@ let mutations = {
             item.time = Vue.prototype.$func.getTime(parseInt(item.time))
         })
         state.hotRanking = payLoad
-        console.log(state.hotRanking)
     },
     getNewRanking(state, payLoad) {
         payLoad.map(item => {
@@ -73,7 +72,6 @@ let actions = {
         let res = await Vue.prototype.$http.post('article', {id})
         if(res.data.code == 0) {
             commit('getArticle', res.data.article)
-            console.log(res.data.article)
         }
     },
     async getCategoryList({commit}){

@@ -5,6 +5,8 @@ Vue.use(Vuex)
 
 import users from './modules/users'
 import article from './modules/article'
+import comments from './modules/comments'
+import chatroom from './modules/chatroom'
 
 const store = new Vuex.Store({
     modules:{
@@ -15,6 +17,14 @@ const store = new Vuex.Store({
         article:{
             namespaced: true,
             ...article
+        },
+        comments:{
+            namespaced: true,
+            ...comments
+        },
+        chatroom:{
+            namespaced:true,
+            ...chatroom
         }
     }
 })
