@@ -7,6 +7,7 @@ let state = {
     swiper:[],
     article:{},
     categoryList:[],
+    abilityList:[],
     isMore:true
 }
 let mutations = {
@@ -33,6 +34,12 @@ let mutations = {
     getCategoryList(state,payLoad){
         payLoad.unshift({_id:0, category:"全部"})
         state.categoryList = payLoad
+        state.abilityList = []
+        payLoad.forEach((item, index) => {
+            if(index != 0){
+                state.abilityList.push(item)
+            }
+        }); 
     },
     getArticleList(state,payLoad){
         if(payLoad.data.length < payLoad.pageSize){
@@ -56,23 +63,38 @@ let actions = {
         }
     },
     async getHotRanking({commit}){
+        Vue.prototype.$toast.loading({
+            message: '加载中...',
+            forbidClick: true,
+          });
         let res = await Vue.prototype.$http('commentsRanking')
         if(res.data.code  == 0){
             commit('getHotRanking', res.data.commentsRanking)
         }
+        Vue.prototype.$toast.clear()
     },
     async getNewRanking({commit}) {
+        Vue.prototype.$toast.loading({
+            message: '加载中...',
+            forbidClick: true,
+          });
         let res = await Vue.prototype.$http('newRanking')
         if(res.data.code  == 0){
             commit('getNewRanking', res.data.newRanking)
         }
+        Vue.prototype.$toast.clear()
     },
     async getArticle({commit},payLoad){
         let {id} = payLoad
+        Vue.prototype.$toast.loading({
+            message: '加载中...',
+            forbidClick: true,
+          });
         let res = await Vue.prototype.$http.post('article', {id})
         if(res.data.code == 0) {
             commit('getArticle', res.data.article)
         }
+         Vue.prototype.$toast.clear()
     },
     async getCategoryList({commit}){
         let res = await Vue.prototype.$http.get('category')
