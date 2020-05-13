@@ -39,6 +39,7 @@ const actions = {
         let res = await Vue.prototype.$http.put(`/personInfo/${userInfo._id}`, userInfo)
         if(res.data.code == 0){
             Vue.prototype.$message.success(res.data.message)
+            Vue.prototype.$cookie.set('avatar', state.userInfo.avatar)
         }
         loading.close();
     }
