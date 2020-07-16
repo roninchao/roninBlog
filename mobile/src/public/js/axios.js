@@ -35,7 +35,7 @@ instance.interceptors.response.use(
     err => {
         // 对于要登录的状态码统一设置为401
         if(err.response.status === 401){
-            router.push('/otherPage/other')
+            router.push('/otherPage/login')
         }
         Vue.prototype.$notify({ type: 'danger', message: err.response.data.message });
         return Promise.reject(err)
